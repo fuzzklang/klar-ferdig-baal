@@ -14,7 +14,7 @@ class API {
     val period = "period=2019-05"
 
     fun fetchData() {
-        CoroutineScope(Dispatchers.IO).launch {
+        /*CoroutineScope(Dispatchers.IO).launch {
             val APITAG = "API fetching: "
             try {
                 val url = "$endpoint?$params&$period"
@@ -23,7 +23,7 @@ class API {
             } catch (exception: Exception) {
                 Log.w(APITAG, "A network request exception was thrown: ${exception.message}")
             }
-        }
+        }*/
     }
 }
 

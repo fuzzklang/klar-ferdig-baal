@@ -13,7 +13,7 @@ class APITest {
         val period = "period=2019-05"
         val otherParams = "show=all"
 
-        /*runBlocking {
+        runBlocking {
             try {
                 val url = "$endpoint?$eventType&$period"
                 println("URL: $url")
@@ -24,6 +24,6 @@ class APITest {
                 println("${exception.cause}")
                 //println("${exception.stackTrace}")
             }
-        }*/
+        }
     }
 }
