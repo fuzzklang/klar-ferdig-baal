@@ -37,9 +37,9 @@ class API {
 // Data class for items in RSS-feed fetched from MetAlerts
 // Each item directs to an alert (via link)
 data class RssItem (
-    val title: String,
-    val description: String,
-    val link: String
+    val title: String?,
+    val description: String?,
+    val link: String?
 )
 
 // Source: https://api.met.no/weatherapi/metalerts/1.1/documentation#DESCRIPTION
