@@ -27,6 +27,8 @@ class APITest {
         }
     }
 
+    // TODO: This test must be moved to AndroidTest
+    // since XmlPullParser relies on the Android Platform
     @Test
     fun testLocalXmlFiles() {
         val projectRoot = File("").absolutePath
