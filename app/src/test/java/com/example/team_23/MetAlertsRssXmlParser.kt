@@ -1,8 +1,6 @@
 package com.example.team_23
 
-import android.content.ClipData
 import android.util.Xml
-import androidx.core.text.parseAsHtml
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
@@ -14,6 +12,7 @@ private val ns: String? = null
 class MetAlertsRssXmlParser {
     @Throws(XmlPullParserException::class, IOException::class)
     fun parse(inputStream: InputStream): List<*> {
+        println("Input stream available: ${inputStream.available()}")
         inputStream.use { inputStream ->
             val parser: XmlPullParser = Xml.newPullParser()
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
