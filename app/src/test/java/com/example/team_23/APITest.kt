@@ -4,6 +4,8 @@ import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.coroutines.awaitString
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
+import java.io.File
+import java.io.InputStream
 
 class APITest {
     @Test
@@ -25,5 +27,20 @@ class APITest {
                 //println("${exception.stackTrace}")
             }
         }
+    }
+
+    fun testLocalXmlFiles() {
+        testLocalXmlFile("./in2000/Team-23/xmlTestFiles/getResponseNoAlert")  // Should be empty/print nothing
+        testLocalXmlFile("./in2000/Team-23/xmlTestFiles/getResponse_05_2019") // Should contain items/print info
+    }
+
+    fun testLocalXmlFile(path: String) {
+        // Read XML from file
+
+        val inputStream: InputStream = File(path).inputStream().readBytes().toString(Charsets.UTF_8).byteInputStream()
+        println(inputStream)
+        // Parse with parser
+
+        // Print output
     }
 }
