@@ -1,7 +1,36 @@
 package com.example.team_23
 
+import android.util.Log
+import com.github.kittinunf.fuel.Fuel
+import com.github.kittinunf.fuel.coroutines.awaitString
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
 class API {
-    // Fetch data from API-proxy
+    // Fetch data from API-proxy, Coroutine Scope for asynchronous data fetching
+    val endpoint = "https://in2000-apiproxy.ifi.uio.no/weatherapi/metalerts/1.1/"
+    val params = "?event=forestFire&show=all"
+    val period = "&2019-05"
+
+    fun fetchData() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val APITAG = "API fetching"
+            try {
+                val url = "$endpoint$params$period"
+                val httpResponse = Fuel.get(url).awaitString()
+                Log.d(APITAG, httpResponse)
+            } catch (exception: Exception) {
+                Log.w(APITAG, "A network request exception was thrown: ${exception.message}")
+            }
+        }
+    }
+
+    fun parseXml() {
+        return
+    }
+
+
 
     // Parse XML content
 }
