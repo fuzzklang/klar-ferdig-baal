@@ -1,7 +1,5 @@
 package com.example.team_23
 
-import com.github.kittinunf.fuel.Fuel
-import com.github.kittinunf.fuel.coroutines.awaitString
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import java.io.File
@@ -18,9 +16,9 @@ class APITest {
         runBlocking {
             try {
                 val url = "$endpoint?$eventType&$period"
-                println("URL: $url")
-                val httpResponse = Fuel.get("https://in2000-apiproxy.ifi.uio.no/weatherapi/metalerts/1.1/").awaitString()
-                println(httpResponse)
+                //println("URL: $url")
+                //val httpResponse = Fuel.get("https://in2000-apiproxy.ifi.uio.no/weatherapi/metalerts/1.1/").awaitString()
+                //println(httpResponse)
             } catch (exception: Exception) {
                 println("A network request exception was thrown: ${exception.message}")
                 println("${exception.cause}")
@@ -29,18 +27,15 @@ class APITest {
         }
     }
 
+    @Test
     fun testLocalXmlFiles() {
-        testLocalXmlFile("./in2000/Team-23/xmlTestFiles/getResponseNoAlert")  // Should be empty/print nothing
-        testLocalXmlFile("./in2000/Team-23/xmlTestFiles/getResponse_05_2019") // Should contain items/print info
-    }
-
-    fun testLocalXmlFile(path: String) {
-        // Read XML from file
-
-        val inputStream: InputStream = File(path).inputStream().readBytes().toString(Charsets.UTF_8).byteInputStream()
-        println(inputStream)
+        val projectRoot = File("").absolutePath
+        val xmlTestFilesDirectory = File("$projectRoot/src/test/rssTestFiles_toBeDeleted")
+        val file1 = "getResponse_05_2019.xml"
+        val file2 = "getResponseNoAlert.xml"
+        val path = "$xmlTestFilesDirectory/$file1"
+        val inputStream: InputStream = File(path).inputStream()
         // Parse with parser
-
-        // Print output
+        MetAlertsRssXmlParser().parse(inputStream)
     }
 }
