@@ -9,8 +9,8 @@ import kotlinx.coroutines.launch
 
 class API {
     // Fetch data from API-proxy, Coroutine Scope for asynchronous data fetching
-    val endpoint = "https://in2000-apiproxy.ifi.uio.no/weatherapi/metalerts/1.1/"
-    val params = "?event=forestFire&show=all"
+    private val endpoint = "https://in2000-apiproxy.ifi.uio.no/weatherapi/metalerts/1.1/"
+    private val params = "?event=forestFire&show=all"
     val period = "&2019-05"
 
     fun fetchData() {
