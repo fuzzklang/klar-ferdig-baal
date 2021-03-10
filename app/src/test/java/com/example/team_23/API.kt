@@ -25,14 +25,6 @@ class API {
             }
         }
     }
-
-    fun parseXml() {
-        return
-    }
-
-
-
-    // Parse XML content
 }
 
 // Source: https://api.met.no/weatherapi/metalerts/1.1/documentation#DESCRIPTION
