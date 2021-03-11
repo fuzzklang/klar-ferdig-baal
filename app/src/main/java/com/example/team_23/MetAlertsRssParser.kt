@@ -1,5 +1,6 @@
 package com.example.team_23
 
+import android.util.Log
 import android.util.Xml
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
@@ -9,30 +10,52 @@ import java.io.InputStream
 private val ns: String? = null
 
 // Based on Android Developer tutorial: https://developer.android.com/training/basics/network-ops/xml
-class MetAlertsRssXmlParser {
+class MetAlertsRssParser {
     @Throws(XmlPullParserException::class, IOException::class)
     fun parse(inputStream: InputStream): List<*> {
-        println("Input stream available: ${inputStream.available()}")
+        val tag = "RssParser.parse"
         inputStream.use { inputStream ->
             val parser: XmlPullParser = Xml.newPullParser()
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
             parser.setInput(inputStream, null)
             parser.nextTag()
+            Log.d(tag, "Current XML-tag: ${parser.name}")
             return readRssFeed(parser)
         }
     }
 
     @Throws(XmlPullParserException::class, IOException::class)
-    private fun readRssFeed(parser: XmlPullParser): List<RssItem> {
-        val entries = mutableListOf<RssItem>()
-
+    private fun readRssFeed(parser: XmlPullParser): List<*> {
+        val tag = "RssParser.readRssFeed"
         parser.require(XmlPullParser.START_TAG, ns, "rss")
-        // Ignores the first rss-tags (title, desc, lang, ...)
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.eventType != XmlPullParser.START_TAG) {
+                Log.d(tag, "Current XML-tag: ${parser.name}")
+                continue
+            }
+            if (parser.name == "channel") {
+                // Currently assumes only one channel in RSS-feed!
+                // Double check requirements for CAP-alerts from MET
+                break
+                // readChannel(parser)  // Read each channel. Requires collecting of sorts
+            }
+        }
+        return readChannel(parser)
+    }
+
+    @Throws(XmlPullParserException::class, IOException::class)
+    private fun readChannel(parser: XmlPullParser): List<*> {
+        val tag = "RssParser.readChannel"
+        val entries = mutableListOf<RssItem>()
+        Log.d(tag, "readChannel CALLED")
+        parser.require(XmlPullParser.START_TAG, ns, "channel")
+        while (parser.next() != XmlPullParser.END_TAG) {
+            if (parser.eventType != XmlPullParser.START_TAG) {
+                Log.d(tag, "Continues")
                 continue
             }
             // Starts by looking for the item tag
+            Log.d(tag, "parser.name: ${parser.name}")
             if (parser.name == "item") {
                 entries.add(readRssItem(parser))
             } else {
@@ -46,7 +69,8 @@ class MetAlertsRssXmlParser {
     // to their respective "read" methods for processing. Otherwise, skips the tag.
     @Throws(XmlPullParserException::class, IOException::class)
     private fun readRssItem(parser: XmlPullParser): RssItem {
-        parser.require(XmlPullParser.START_TAG, ns, "entry")
+        val tag = "RssParser.readRssItem"
+        parser.require(XmlPullParser.START_TAG, ns, "item")
         var title: String? = null
         var description: String? = null
         var link: String? = null
@@ -61,6 +85,7 @@ class MetAlertsRssXmlParser {
                 else -> skip(parser)
             }
         }
+        //Log.d(tag, "RSS-ITEM:\n          title: $title\n          description: $description\n          link: $link")
         return RssItem(title, description, link)
     }
 
@@ -70,13 +95,16 @@ class MetAlertsRssXmlParser {
             result = parser.text
             parser.nextTag()
         }
-        //return result // convert HTML Entities to UTF-8 codepoints here? I.e "&#xE5;" to "ø"
+        //return result // TODO convert HTML Entities to UTF-8 codepoints here? I.e "&#xE5;" to "ø"?
         return result
     }
 
     @Throws(XmlPullParserException::class, IOException::class)
     private fun skip(parser: XmlPullParser) {
+        val tag = "RssParser.skip"
+        Log.d(tag, "skip CALLED")
         if (parser.eventType != XmlPullParser.START_TAG) {
+            Log.d(tag, "THROWING EXCEPTION")
             throw IllegalStateException()
         }
         var depth = 1
