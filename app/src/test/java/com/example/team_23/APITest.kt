@@ -39,18 +39,4 @@ class APITest {
             }
         }
     }
-
-    // TODO: This test must be moved to AndroidTest
-    // since XmlPullParser relies on the Android Platform
-    @Test
-    fun testLocalXmlFiles() {
-        val projectRoot = File("").absolutePath
-        val xmlTestFilesDirectory = File("$projectRoot/src/test/rssTestFiles_toBeDeleted")
-        val file1 = "getResponse_05_2019.xml"
-        val file2 = "getResponseNoAlert.xml"
-        val path = "$xmlTestFilesDirectory/$file1"
-        val inputStream: InputStream = File(path).inputStream()
-        // Parse with parser
-        //MetAlertsRssXmlParser().parse(inputStream)
-    }
 }
