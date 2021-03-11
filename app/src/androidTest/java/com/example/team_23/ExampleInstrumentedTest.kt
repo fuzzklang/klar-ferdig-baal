@@ -22,6 +22,7 @@ class ExampleInstrumentedTest {
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         assertEquals("com.example.team_23", appContext.packageName)
     }*/
+
     @Test
     fun testFetchRSSFromAPI() {
         val tag = "testFetchRSSFromAPI"
@@ -35,8 +36,12 @@ class ExampleInstrumentedTest {
         val otherParams = "show=all"
         val url = "$endpoint?$eventType&$period"
 
-        testParseRSS(rssFeedString)  // Simulated API-call
+        Log.d(tag, "Calling Parser. Expecting no RSS items")
+        testParseRSS(rssFeedStringNoAlert)   // Simulated API-call. No alerts.
+        Log.d(tag, "Calling Parser. Expecting several RSS items")
+        testParseRSS(rssFeedString)          // Simulated API-call. Alerts from May 2019.
 
+        // Use to test when we can access API-Proxy
         /*runBlocking {
             try {
                 Log.d(tag, "URL: $url")
@@ -60,17 +65,18 @@ class ExampleInstrumentedTest {
         //val inputStream: InputStream = rssFeed.byteInputStream()  // Not working?
         val inputStream: InputStream = rssFeed.byteInputStream()
         // Parses RSS feed and returns list of RssItem
-        MetAlertsRssParser().parse(inputStream)
+        val rssItems: List<RssItem> = MetAlertsRssParser().parse(inputStream) as List<RssItem>
 
-        /*val rssItems: List<RssItem> = MetAlertsRssXmlParser().parse(inputStream) as List<RssItem>
+        Log.d(tag, "PRINTING ALL RSS-ITEMS:")
+        Log.d(tag,"Size rssItems-list: ${rssItems.size}")
         for (i in rssItems) {
             Log.d(tag, "RSS-Item: $i")
-        }*/
+        }
     }
 }
 
 
-// For testing purposes, to avoid accessing MET too many times. (as we wait for proxy-fix)
+// For testing purposes, to avoid accessing MET too many times (while waiting for proxy-fix)
 // Data from May 2019.
 val rssFeedString = """
     <?xml version="1.0"?>
@@ -136,6 +142,8 @@ val rssFeedString = """
           <guid>2.49.0.1.578.0.190517064153070.1904</guid>
           <pubDate>Fri, 17 May 2019 06:41:53 +0000</pubDate>
         </item>
+      </channel>
+    </rss>
 """.trimIndent().trimStart()
 
 
