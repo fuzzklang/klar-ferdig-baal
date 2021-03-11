@@ -10,6 +10,9 @@ import java.io.InputStream
 private val ns: String? = null
 
 // Based on Android Developer tutorial: https://developer.android.com/training/basics/network-ops/xml
+// Currently vulnerable for wrongly formatted XML-files
+// Throws no exceptions in case of missing end-tags.
+// Should add test checking for valid XML-formatting.
 class MetAlertsRssParser {
     @Throws(XmlPullParserException::class, IOException::class)
     fun parse(inputStream: InputStream): List<*> {
@@ -19,7 +22,7 @@ class MetAlertsRssParser {
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
             parser.setInput(inputStream, null)
             parser.nextTag()
-            Log.d(tag, "Current XML-tag: ${parser.name}")
+            //Log.d(tag, "Current XML-tag: ${parser.name}")
             return readRssFeed(parser)
         }
     }
@@ -30,7 +33,7 @@ class MetAlertsRssParser {
         parser.require(XmlPullParser.START_TAG, ns, "rss")
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.eventType != XmlPullParser.START_TAG) {
-                Log.d(tag, "Current XML-tag: ${parser.name}")
+                //Log.d(tag, "Current XML-tag: ${parser.name}")
                 continue
             }
             if (parser.name == "channel") {
@@ -47,15 +50,12 @@ class MetAlertsRssParser {
     private fun readChannel(parser: XmlPullParser): List<*> {
         val tag = "RssParser.readChannel"
         val entries = mutableListOf<RssItem>()
-        Log.d(tag, "readChannel CALLED")
         parser.require(XmlPullParser.START_TAG, ns, "channel")
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.eventType != XmlPullParser.START_TAG) {
-                Log.d(tag, "Continues")
                 continue
             }
             // Starts by looking for the item tag
-            Log.d(tag, "parser.name: ${parser.name}")
             if (parser.name == "item") {
                 entries.add(readRssItem(parser))
             } else {
@@ -102,7 +102,6 @@ class MetAlertsRssParser {
     @Throws(XmlPullParserException::class, IOException::class)
     private fun skip(parser: XmlPullParser) {
         val tag = "RssParser.skip"
-        Log.d(tag, "skip CALLED")
         if (parser.eventType != XmlPullParser.START_TAG) {
             Log.d(tag, "THROWING EXCEPTION")
             throw IllegalStateException()
