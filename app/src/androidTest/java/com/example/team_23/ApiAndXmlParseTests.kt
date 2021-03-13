@@ -33,9 +33,10 @@ class ApiAndXmlParseTests {
         assertEquals("com.example.team_23", appContext.packageName)
     }*/
 
+    @Ignore ("Ignore testing for now")
     @Test
     fun testParsingLocalRssFiles() {
-        val tag = "testParsingLocalXmlFiles"
+        val tag = "testParsingLocalRssFiles"
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         var input: InputStream
@@ -123,7 +124,7 @@ class ApiAndXmlParseTests {
     }
 
     private fun parseRss(rssFeed: String) {
-        val tag = "testParseRss"
+        val tag = "parseRss"
         Log.d(tag, "running testParseRSS")
         val inputStream: InputStream = rssFeed.byteInputStream()
         // Parses RSS feed and returns list of RssItem
@@ -137,12 +138,11 @@ class ApiAndXmlParseTests {
     }
 
     private fun parseCap(capAlert: String) {
-        val tag = "testParseCap"
+        val tag = "parseCap"
         Log.d(tag, "running testParseCap")
-        //val inputStream: InputStream = rssFeed.byteInputStream()  // Not working?
         val inputStream: InputStream = capAlert.byteInputStream()
-        // Parses RSS feed and returns list of RssItem
+        // Parses CAP alert and returns Alert instance
         val alert: Alert = CapParser().parse(inputStream)
-        Log.d(tag, "ALERT: ${alert}")
+        Log.d(tag, "[AFTER PARSING] ALERT: $alert")
     }
 }
