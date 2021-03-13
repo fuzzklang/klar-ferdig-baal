@@ -7,13 +7,14 @@ import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
 import java.io.InputStream
 
-private val ns: String? = null
-
 // Based on Android Developer tutorial: https://developer.android.com/training/basics/network-ops/xml
 // Currently vulnerable for wrongly formatted XML-files
 // Throws no exceptions in case of missing end-tags.
 // Should add test checking for valid XML-formatting.
 class MetAlertsRssParser {
+
+    private val ns: String? = null
+
     @Throws(XmlPullParserException::class, IOException::class)
     fun parse(inputStream: InputStream): List<*> {
         val tag = "RssParser.parse"
