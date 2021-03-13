@@ -8,15 +8,23 @@ import java.io.IOException
 import java.io.InputStream
 
 // Based on Android Developer tutorial: https://developer.android.com/training/basics/network-ops/xml
+//
+// Returns list of RSS-items:
+// data class RssItem (
+//    val title: String?,
+//    val description: String?,
+//    val link: String?
+// )
+//
 // Currently vulnerable for wrongly formatted XML-files
 // Throws no exceptions in case of missing end-tags.
-// Should add test checking for valid XML-formatting.
+// TODO: Should add test checking for valid XML-formatting.
 class MetAlertsRssParser {
 
     private val ns: String? = null
 
     @Throws(XmlPullParserException::class, IOException::class)
-    fun parse(inputStream: InputStream): List<*> {
+    fun parse(inputStream: InputStream): List<RssItem> {
         val tag = "RssParser.parse"
         inputStream.use { inputStream ->
             val parser: XmlPullParser = Xml.newPullParser()
@@ -29,7 +37,7 @@ class MetAlertsRssParser {
     }
 
     @Throws(XmlPullParserException::class, IOException::class)
-    private fun readRssFeed(parser: XmlPullParser): List<*> {
+    private fun readRssFeed(parser: XmlPullParser): List<RssItem> {
         val tag = "RssParser.readRssFeed"
         parser.require(XmlPullParser.START_TAG, ns, "rss")
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -48,7 +56,7 @@ class MetAlertsRssParser {
     }
 
     @Throws(XmlPullParserException::class, IOException::class)
-    private fun readChannel(parser: XmlPullParser): List<*> {
+    private fun readChannel(parser: XmlPullParser): List<RssItem> {
         val tag = "RssParser.readChannel"
         val entries = mutableListOf<RssItem>()
         parser.require(XmlPullParser.START_TAG, ns, "channel")
