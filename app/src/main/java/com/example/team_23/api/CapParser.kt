@@ -38,6 +38,7 @@ class CapParser {
         var sent: String? = null
         var status: String? = null
         var msgType: String? = null
+        var info: Info? = null
 
         parser.require(XmlPullParser.START_TAG, ns, "alert")
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -50,23 +51,12 @@ class CapParser {
                 "sent" -> sent = readText(parser)
                 "status" -> status = readText(parser)
                 "msgType" -> msgType = readText(parser)
+                // Ugly hack below to read only the first (Norwegian) Info item.
+                // Should be fixed, i.e. Info items should be placed in a tuple.
+                "info" -> {info = readInfo(parser); break}
                 else -> skip(parser)
             }
         }
-        parser.require(XmlPullParser.START_TAG, ns, "info")
-        while (parser.next() != XmlPullParser.END_TAG) {
-            if (parser.eventType != XmlPullParser.START_TAG) {
-                //Log.d(tag, "Current XML-tag: ${parser.name}")
-                continue
-            }
-            if (parser.name == "info") {
-                // Currently only reads first info-block (Norwegian)
-                // Double check the validity of doing it this way!
-                break
-                // readInfo(parser) // Option. Read each info block, check lang-attribute within
-            }
-        }
-        val info = readInfo(parser)
         return Alert(identifier, sent, status, msgType, info)
     }
 
@@ -85,6 +75,7 @@ class CapParser {
         var onset: String? = null
         var expires: String? = null*/
         var instruction: String? = null
+        var area: Area? = null
 
         parser.require(XmlPullParser.START_TAG, ns, "info")
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -96,12 +87,44 @@ class CapParser {
                 "event" -> event = readText(parser)
                 "responseType" -> responseType = readText(parser)
                 "instruction" -> instruction = readText(parser)
+                "area" -> area = readArea(parser)
                 else -> skip(parser)
             }
         }
-        return Info(event, responseType, instruction)
+        return Info(event, responseType, instruction, area)
     }
 
+    @Throws(XmlPullParserException::class, IOException::class)
+    private fun readArea(parser: XmlPullParser): Area {
+        val tag = "CapParser.readArea"
+
+        // Below are temporary variables while creating instance of Area data class.
+        // This is to keep Area non-mutable (using val-declarations)
+        var areaDesc: String? = null
+        var polygon: String? = null  // Now: string containing comma-separated tuples of values. Change to a Polygon data type?
+
+        parser.require(XmlPullParser.START_TAG, ns, "area")
+        while (parser.next() != XmlPullParser.END_TAG) {
+            if (parser.eventType != XmlPullParser.START_TAG) {
+                //Log.d(tag, "Current XML-tag: ${parser.name}")
+                continue
+            }
+            when (parser.name) {
+                "areaDesc" -> areaDesc = readText(parser)
+                "polygon" -> polygon = readText(parser)
+                else -> skip(parser)
+            }
+        }
+        return Area(areaDesc, polygon)
+    }
+
+    // Add method to read parameters in info-block
+    /*@Throws(XmlPullParserException::class, IOException::class)
+    private fun readParameter(parser: XmlPullParser, type: Enum) {
+        return param
+    }*/
+
+    @Throws(XmlPullParserException::class, IOException::class)
     private fun readText(parser: XmlPullParser): String {
         var result = ""
         if (parser.next() == XmlPullParser.TEXT) {
