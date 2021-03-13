@@ -14,7 +14,7 @@ class APITest {
         val eventType = "event=forestFire"
         val period = "period=2019-05"
         val otherParams = "show=all"
-        val url = "$endpoint?$eventType&$period" */
+        val url = "$endpoint?$eventType&$period"*/
 
         /*val endpoint = "https://api01.nve.no/hydrology/forecast/landslide/v1.0.8/api/CAP/Feed" // This one works. Also CAP-feed
         val periodFrom = "2020-11-01"
