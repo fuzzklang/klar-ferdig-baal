@@ -4,6 +4,8 @@ import android.util.Log
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.team_23.api.Alert
+import com.example.team_23.api.CapParser
+import com.example.team_23.api.MetAlertsRssParser
 import com.example.team_23.api.RssItem
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.Headers

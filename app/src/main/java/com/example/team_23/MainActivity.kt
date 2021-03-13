@@ -2,8 +2,8 @@ package com.example.team_23
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.TextView
+import com.example.team_23.api.MetAlertsRssParser
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
