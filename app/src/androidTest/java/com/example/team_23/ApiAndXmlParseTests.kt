@@ -20,7 +20,7 @@ import java.io.InputStream
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 @RunWith(AndroidJUnit4::class)
-class ExampleInstrumentedTest {
+class ApiAndXmlParseTests {
     // From Example file:
     /*@Test
     fun useAppContext() {
@@ -107,8 +107,7 @@ class ExampleInstrumentedTest {
                 Log.d(tag, "URL: $url")
                 // Must add non-generic User-Agent to Get-request Header to access MetAlerts API
                 // as described in Terms of Service. Not necessary towards IN2000-proxy
-                //val httpResponse = Fuel.get(url).awaitString()
-
+                //val httpResponse = Fuel.get(url).awaitString()  // Alternative
                 val httpResponse = Fuel.get(url)
                         .header(Headers.USER_AGENT, "Team23-IN2000_IFI_V2021 fuzzklang@gmail.com").awaitString()
                 Log.d(tag, httpResponse)
