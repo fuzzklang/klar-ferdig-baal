@@ -1,8 +1,10 @@
 package com.example.team_23
 
+import android.content.res.AssetManager
 import android.util.Log
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.junit.Ignore
 
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -23,8 +25,10 @@ class ExampleInstrumentedTest {
         assertEquals("com.example.team_23", appContext.packageName)
     }*/
 
+    @Ignore  ("Skip RSS parsing for now")
     @Test
     fun testFetchRSSFromAPI() {
+        // TODO: implement actual API call
         val tag = "testFetchRSSFromAPI"
 
         // Context of the app under test.
@@ -37,9 +41,10 @@ class ExampleInstrumentedTest {
         val url = "$endpoint?$eventType&$period"
 
         Log.d(tag, "Calling Parser. Expecting no RSS items")
-        testParseRSS(rssFeedStringNoAlert)   // Simulated API-call. No alerts.
+        //val rssFeedStringNoAlert = assets.
+        //testParseRss()   // Simulated API-call. No alerts.
         Log.d(tag, "Calling Parser. Expecting several RSS items")
-        testParseRSS(rssFeedString)          // Simulated API-call. Alerts from May 2019.
+        //testParseRss(rssFeedString)          // Simulated API-call. Alerts from May 2019.
 
         // Use to test when we can access API-Proxy
         /*runBlocking {
@@ -59,8 +64,8 @@ class ExampleInstrumentedTest {
         }*/
     }
 
-    fun testParseRSS(rssFeed: String) {
-        val tag = "testParseRSS"
+    fun testParseRss(rssFeed: String) {
+        val tag = "testParseRss"
         Log.d(tag, "running testParseRSS")
         //val inputStream: InputStream = rssFeed.byteInputStream()  // Not working?
         val inputStream: InputStream = rssFeed.byteInputStream()
@@ -73,100 +78,48 @@ class ExampleInstrumentedTest {
             Log.d(tag, "RSS-Item: $i")
         }
     }
+
+    // Fetches CAP-alert from links given in RSS-feed items
+    @Test
+    fun testFetchCapFromApi() {
+        val tag = "testFetchCapFromApi"
+
+        // Context of the app under test.
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+
+        Log.d(tag, "Calling Parser. Expecting ")
+        //testParseCap(capAlert)          // Simulated API-call. Alerts from May 2019.
+
+        // Use to test when we can access API-Proxy
+        /*runBlocking {
+            try {
+                Log.d(tag, "URL: $url")
+                // Must add non-generic User-Agent to Get-request Header to access MetAlerts API
+                // as described in Terms of Service. Not necessary towards IN2000-proxy
+                //val httpResponse = Fuel.get(url).awaitString()
+
+                val httpResponse = Fuel.get(url)
+                        .header(Headers.USER_AGENT, "Team23-IN2000_IFI_V2021 fuzzklang@gmail.com").awaitString()
+                Log.d(tag, httpResponse)
+                testParseRSS(httpResponse)
+            } catch (exception: Exception) {
+                Log.d(tag,"A network request exception was thrown: ${exception.message}")
+            }
+        }*/
+    }
+
+    fun testParseCap(capAlert: String) {
+        val tag = "testParseCap"
+        Log.d(tag, "running testParseCap")
+        //val inputStream: InputStream = rssFeed.byteInputStream()  // Not working?
+        val inputStream: InputStream = capAlert.byteInputStream()
+        // Parses RSS feed and returns list of RssItem
+        val rssItems: List<RssItem> = MetAlertsRssParser().parse(inputStream) as List<RssItem>
+
+        Log.d(tag, "PRINTING ALL RSS-ITEMS:")
+        Log.d(tag,"Size rssItems-list: ${rssItems.size}")
+        for (i in rssItems) {
+            Log.d(tag, "RSS-Item: $i")
+        }
+    }
 }
-
-
-// For testing purposes, to avoid accessing MET too many times (while waiting for proxy-fix)
-// Data from May 2019.
-val rssFeedString = """
-    <?xml version="1.0"?>
-    <rss version="2.0">
-      <channel>
-        <title>MET farevarsel 2019-05</title>
-        <link>https://api.met.no/?period=2019-05</link>
-        <description>Farevarsler fra Meteorologisk institutt</description>
-        <language>no</language>
-        <copyright>Copyright The Norwegian Meteorological Institute, licensed under Norwegian license for public data (NLOD) and Creative Commons 4.0 BY</copyright>
-        <pubDate>Thu, 11 Mar 2021 15:27:55 +0000</pubDate>
-        <lastBuildDate>Thu, 11 Mar 2021 15:27:55 +0000</lastBuildDate>
-        <category>Met</category>
-        <generator>XML::LibXML::Generator 0.1</generator>
-        <docs>http://blogs.law.harvard.edu/tech/rss</docs>
-        <image>
-          <title>MET farevarsel</title>
-          <link>https://api.met.no</link>
-          <url>https://api.met.no/images/logo_2013_no.png</url>
-        </image>
-        <item>
-          <title>Skogbrannfare, gult niv&#xE5;, Hordaland, 19 May 07:00 UTC til 22 May 06:00 UTC.</title>
-          <description>Update: Det er lokal skogbrannfare inntil det kommer nedb&#xF8;r av betydning. </description>
-          <link>https://api.met.no/weatherapi/metalerts/1.1?cap=2.49.0.1.578.0.190521063816855.1909&amp;period=2019-05</link>
-          <author>post@met.no (The Norwegian Meteorological Institute)</author>
-          <category>Met</category>
-          <guid>2.49.0.1.578.0.190521063816855.1909</guid>
-          <pubDate>Tue, 21 May 2019 06:38:16 +0000</pubDate>
-        </item>
-        <item>
-          <title>Skogbrannfare, gult niv&#xE5;, Sogn og Fjordane, 19 May 07:00 UTC til 22 May 22:00 UTC.</title>
-          <description>Update: Det er lokal skogbrannfare inntil det kommer nedb&#xF8;r av betydning.</description>
-          <link>https://api.met.no/weatherapi/metalerts/1.1?cap=2.49.0.1.578.0.190519070744754.1907&amp;period=2019-05</link>
-          <author>post@met.no (The Norwegian Meteorological Institute)</author>
-          <category>Met</category>
-          <guid>2.49.0.1.578.0.190519070744754.1907</guid>
-          <pubDate>Sun, 19 May 2019 07:07:44 +0000</pubDate>
-        </item>
-        <item>
-          <title>Skogbrannfare, gult niv&#xE5;, Hordaland, 19 May 07:00 UTC til 22 May 22:00 UTC.</title>
-          <description>Update: Det er lokal skogbrannfare inntil det kommer nedb&#xF8;r av betydning. </description>
-          <link>https://api.met.no/weatherapi/metalerts/1.1?cap=2.49.0.1.578.0.190519070524042.1906&amp;period=2019-05</link>
-          <author>post@met.no (The Norwegian Meteorological Institute)</author>
-          <category>Met</category>
-          <guid>2.49.0.1.578.0.190519070524042.1906</guid>
-          <pubDate>Sun, 19 May 2019 07:05:24 +0000</pubDate>
-        </item>
-        <item>
-          <title>Skogbrannfare, gult niv&#xE5;, Hordaland, 18 May 09:00 UTC til 20 May 09:00 UTC.</title>
-          <description>Alert: Det er lokal skogbrannfare inntil det kommer nedb&#xF8;r av betydning. </description>
-          <link>https://api.met.no/weatherapi/metalerts/1.1?cap=2.49.0.1.578.0.190518091251397.1905&amp;period=2019-05</link>
-          <author>post@met.no (The Norwegian Meteorological Institute)</author>
-          <category>Met</category>
-          <guid>2.49.0.1.578.0.190518091251397.1905</guid>
-          <pubDate>Sat, 18 May 2019 09:12:51 +0000</pubDate>
-        </item>
-        <item>
-          <title>Skogbrannfare, gult niv&#xE5;, Sogn og Fjordane, 17 May 07:00 UTC til 20 May 09:00 UTC.</title>
-          <description>Alert: Det er lokal skogbrannfare inntil det kommer nedb&#xF8;r av betydning</description>
-          <link>https://api.met.no/weatherapi/metalerts/1.1?cap=2.49.0.1.578.0.190517064153070.1904&amp;period=2019-05</link>
-          <author>post@met.no (The Norwegian Meteorological Institute)</author>
-          <category>Met</category>
-          <guid>2.49.0.1.578.0.190517064153070.1904</guid>
-          <pubDate>Fri, 17 May 2019 06:41:53 +0000</pubDate>
-        </item>
-      </channel>
-    </rss>
-""".trimIndent().trimStart()
-
-
-// RSS feed with no alerts
-val rssFeedStringNoAlert = """
-    <?xml version="1.0"?>
-    <rss version="2.0">
-      <channel>
-        <title>MET farevarsel</title>
-        <link>https://api.met.no</link>
-        <description>Farevarsler fra Meteorologisk institutt</description>
-        <language>no</language>
-        <copyright>Copyright The Norwegian Meteorological Institute, licensed under Norwegian license for public data (NLOD) and Creative Commons 4.0 BY</copyright>
-        <pubDate>Thu, 11 Mar 2021 15:45:37 +0000</pubDate>
-        <lastBuildDate>Thu, 11 Mar 2021 15:45:37 +0000</lastBuildDate>
-        <category>Met</category>
-        <generator>XML::LibXML::Generator 0.1</generator>
-        <docs>http://blogs.law.harvard.edu/tech/rss</docs>
-        <image>
-          <title>MET farevarsel</title>
-          <link>https://api.met.no</link>
-          <url>https://api.met.no/images/logo_2013_no.png</url>
-        </image>
-      </channel>
-    </rss>
-""".trimIndent().trimStart()
