@@ -49,7 +49,7 @@ class MetAlertsRssParser {
                 // Currently assumes only one channel in RSS-feed!
                 // Double check requirements for CAP-alerts from MET
                 break
-                // readChannel(parser)  // Read each channel. Requires collecting of sorts
+                // readChannel(parser) // Read each channel. Requires collecting of sorts
             }
         }
         return readChannel(parser)
