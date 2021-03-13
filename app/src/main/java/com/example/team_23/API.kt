@@ -7,6 +7,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+// TODO: Refactor, each class should have it's own file!
+
 class API {
     // Fetch data from API-proxy, Coroutine Scope for asynchronous data fetching
     private val endpoint = "https://in2000-apiproxy.ifi.uio.no/weatherapi/metalerts/1.1/"
