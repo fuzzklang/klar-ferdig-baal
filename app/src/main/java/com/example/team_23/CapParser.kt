@@ -2,6 +2,8 @@ package com.example.team_23
 
 import android.util.Log
 import android.util.Xml
+import com.example.team_23.api.Alert
+import com.example.team_23.api.Info
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
@@ -34,9 +36,9 @@ class CapParser {
 
         // Below are temporary variables while creating instance of Alert data class.
         // This is to keep Alert non-mutable (using val-declarations)
-        var identifier: String? = null;
-        var sent: String? = null;
-        var status: String? = null;
+        var identifier: String? = null
+        var sent: String? = null
+        var status: String? = null
         var msgType: String? = null
 
         parser.require(XmlPullParser.START_TAG, ns, "alert")
@@ -53,7 +55,6 @@ class CapParser {
                 else -> skip(parser)
             }
         }
-        var info: Info? = null
         parser.require(XmlPullParser.START_TAG, ns, "info")
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.eventType != XmlPullParser.START_TAG) {
@@ -67,7 +68,7 @@ class CapParser {
                 // readInfo(parser) // Option. Read each info block, check lang-attribute within
             }
         }
-        info = readInfo(parser)
+        val info = readInfo(parser)
         return Alert(identifier, sent, status, msgType, info)
     }
 
@@ -77,9 +78,9 @@ class CapParser {
 
         // Below are temporary variables while creating instance of Info data class.
         // This is to keep Info non-mutable (using val-declarations)
-        var event: String? = null;
-        var responseType: String? = null;
-        /*var urgency: String? = null;
+        var event: String? = null
+        var responseType: String? = null
+        /*var urgency: String? = null
         var severity: String? = null
         var certainty: String? = null
         var effective: String? = null
@@ -115,7 +116,7 @@ class CapParser {
 
     @Throws(XmlPullParserException::class, IOException::class)
     private fun skip(parser: XmlPullParser) {
-        val tag = "RssParser.skip"
+        val tag = "CapParser.skip"
         if (parser.eventType != XmlPullParser.START_TAG) {
             Log.d(tag, "THROWING EXCEPTION")
             throw IllegalStateException()

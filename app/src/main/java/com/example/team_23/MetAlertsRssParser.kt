@@ -2,6 +2,7 @@ package com.example.team_23
 
 import android.util.Log
 import android.util.Xml
+import com.example.team_23.api.RssItem
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException

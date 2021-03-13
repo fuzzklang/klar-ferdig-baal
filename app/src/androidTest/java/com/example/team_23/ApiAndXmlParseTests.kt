@@ -3,6 +3,8 @@ package com.example.team_23
 import android.util.Log
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.team_23.api.Alert
+import com.example.team_23.api.RssItem
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.Headers
 import com.github.kittinunf.fuel.coroutines.awaitString
@@ -123,7 +125,7 @@ class ApiAndXmlParseTests {
         Log.d(tag, "running testParseRSS")
         val inputStream: InputStream = rssFeed.byteInputStream()
         // Parses RSS feed and returns list of RssItem
-        val rssItems: List<RssItem> = MetAlertsRssParser().parse(inputStream) as List<RssItem>
+        val rssItems: List<RssItem> = MetAlertsRssParser().parse(inputStream)
 
         Log.d(tag, "PRINTING ALL RSS-ITEMS:")
         Log.d(tag,"Size rssItems-list: ${rssItems.size}")
