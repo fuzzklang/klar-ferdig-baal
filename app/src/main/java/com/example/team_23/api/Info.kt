@@ -7,10 +7,10 @@ data class Info (
         // val urgency: String,     // 'Future', 'Immediate'. Unsure if actually used by MetAlerts
         //val severity: String,     // 'Extreme', 'Severe', 'Moderate', 'Minor'.
         //val certainty: String,    // 'Likely', 'Possible', 'Observed'.
-        //val effective: String,    // Message is valid from this time
-        //val onset: String,        // Starting time of event
-        //val expires: String,      // Message is valid until this time
-        val instruction: String?    // Description of recommended action
+        //val effective: String,    // Message is valid from this time.
+        //val onset: String,        // Starting time of event.
+        //val expires: String,      // Message is valid until this time.
+        val instruction: String?,    // Description of recommended action.
         // + much more
-        //val area: Area
+        val area: Area?
 )
