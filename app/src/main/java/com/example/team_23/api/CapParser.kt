@@ -26,7 +26,7 @@ class CapParser {
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
             parser.setInput(inputStream, null)
             parser.nextTag()
-            Log.d(tag, "Current XML-tag: ${parser.name}")
+            //Log.d(tag, "Current XML-tag: ${parser.name}")
             return readCap(parser)
         }
     }
