@@ -3,15 +3,13 @@ package com.example.team_23
 import android.util.Log
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.team_23.api.Alert
+import com.example.team_23.api.dataclasses.Alert
 import com.example.team_23.api.CapParser
 import com.example.team_23.api.MetAlertsRssParser
-import com.example.team_23.api.RssItem
+import com.example.team_23.api.dataclasses.RssItem
 import com.github.kittinunf.fuel.Fuel
-import com.github.kittinunf.fuel.core.Headers
 import com.github.kittinunf.fuel.coroutines.awaitString
 import kotlinx.coroutines.runBlocking
-import org.junit.Ignore
 
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -33,99 +31,94 @@ class ApiAndXmlParseTests {
         assertEquals("com.example.team_23", appContext.packageName)
     }*/
 
-    @Ignore ("Ignore testing for now")
+    // Test parsing on XML files in assets-folder.
+    // These are exact copies of what would be returned by an API-call to MetAlerts
+    // (depending on parameters given)
     @Test
     fun testParsingLocalRssFiles() {
         val tag = "testParsingLocalRssFiles"
         // Context of the app under test.
+        // Necessary to access assets-folder.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         var input: InputStream
 
         input = appContext.assets.open("minimalRssTest.xml")
         val rssFeedStringMinTest = input.bufferedReader().use { it.readText() }
         Log.d(tag, "Calling Parser on Minimal Test. Expecting no RSS items")
-        parseRss(rssFeedStringMinTest)
+        parseAndPrintRss(rssFeedStringMinTest)
 
         // Simulated API-call. From March 2021 (no alerts)
         input = appContext.assets.open("rssFeedNoAlert.xml")
         val rssFeedStringNoAlert = input.bufferedReader().use { it.readText() }
         Log.d(tag, "Calling Parser. Expecting no RSS items")
-        parseRss(rssFeedStringNoAlert)
+        parseAndPrintRss(rssFeedStringNoAlert)
 
         // Simulated API-call. Alerts from May 2019.
         input = appContext.assets.open("rssFeedWithAlerts.xml")
         val rssFeedStringWithAlerts = input.bufferedReader().use { it.readText() }
         Log.d(tag, "Calling Parser. Expecting several RSS items")
-        parseRss(rssFeedStringWithAlerts)
+        parseAndPrintRss(rssFeedStringWithAlerts)
     }
 
+    // Parses local CAP-alert (XML-file). Does not make connection to network/API.
     @Test
     fun testParsingLocalCapFiles() {
         val tag = "testParsingLocalCapFiles"
         // Context of the app under test.
+        // Necessary to access assets-folder.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
 
         val input = appContext.assets.open("capAlert.xml")
         val capAlertString = input.bufferedReader().use { it.readText() }
         Log.d(tag, "Calling Parser CAP Alert. Expecting corresponding objects")
-        parseCap(capAlertString)
+        parseAndPrintCap(capAlertString)
     }
 
-    @Ignore  ("Skip fetching from API for now")
+    // Fetches RSS feed from proxy (network), parses feed and prints content.
+    // If there are any alerts, the RSS feed contains an item for each alert,
+    // and each item contains a link to a detailed alert in CAP-format (also XML).
     @Test
     fun testFetchRSSFromAPI() {
-        // TODO: implement actual API call
         val tag = "testFetchRSSFromAPI"
 
-        val endpoint = "https://api.met.no/weatherapi/metalerts/1.1/"
+        val endpoint = "https://in2000-apiproxy.ifi.uio.no/weatherapi/metalerts/1.1/"
         val eventType = "event=forestFire"
-        val period = "2019-05"
+        val period = "period=2019-05"
         val otherParams = "show=all"
-        val url = "$endpoint?$eventType&$period"
+        val url = "$endpoint?$eventType&$period&$otherParams"
 
-        // Use to test when we can access API-Proxy
+        // Access data from API
         runBlocking {
             try {
                 Log.d(tag, "URL: $url")
-                // Must add non-generic User-Agent to Get-request Header to access MetAlerts API
-                // as described in Terms of Service. Not necessary towards IN2000-proxy
-                //val httpResponse = Fuel.get(url).awaitString()
-
-                val httpResponse = Fuel.get(url)
-                        .header(Headers.USER_AGENT, "Team23-IN2000_IFI_V2021 fuzzklang@gmail.com").awaitString()
-                Log.d(tag, httpResponse)
-                parseRss(httpResponse)
+                val httpResponse = Fuel.get(url).awaitString()
+                parseAndPrintRss(httpResponse) // parses and prints Rss-items
             } catch (exception: Exception) {
                 Log.d(tag,"A network request exception was thrown: ${exception.message}")
             }
         }
     }
 
-    // Fetches CAP-alert from links given in RSS-feed items
-    @Ignore ("Skip fetching from API for now")
+    // Fetches a CAP-alert from links given in RSS-feed items
     @Test
     fun testFetchCapFromApi() {
         val tag = "testFetchCapFromApi"
-        val url = "https://api.met.no/weatherapi/metalerts/1.1?cap=2.49.0.1.578.0.190521063816855.1909&period=2019-05"
+        // endpoint currently hard-coded:
+        val url = "https://in2000-apiproxy.ifi.uio.no/weatherapi/metalerts/1.1?cap=2.49.0.1.578.0.190521063816855.1909&period=2019-05"
         runBlocking {
             try {
                 Log.d(tag, "URL: $url")
-                // Must add non-generic User-Agent to Get-request Header to access MetAlerts API
-                // as described in Terms of Service. Not necessary towards IN2000-proxy
-                //val httpResponse = Fuel.get(url).awaitString()  // Alternative
-                val httpResponse = Fuel.get(url)
-                        .header(Headers.USER_AGENT, "Team23-IN2000_IFI_V2021 fuzzklang@gmail.com").awaitString()
-                Log.d(tag, httpResponse)
-                parseCap(httpResponse)
+                val httpResponse = Fuel.get(url).awaitString()  // Alternative
+                parseAndPrintCap(httpResponse)  // parses and prints Cap-alert
             } catch (exception: Exception) {
                 Log.d(tag,"A network request exception was thrown: ${exception.message}")
             }
         }
     }
 
-    private fun parseRss(rssFeed: String) {
+    // Helper function
+    private fun parseAndPrintRss(rssFeed: String) {
         val tag = "parseRss"
-        Log.d(tag, "running testParseRSS")
         val inputStream: InputStream = rssFeed.byteInputStream()
         // Parses RSS feed and returns list of RssItem
         val rssItems: List<RssItem> = MetAlertsRssParser().parse(inputStream)
@@ -137,12 +130,11 @@ class ApiAndXmlParseTests {
         }
     }
 
-    private fun parseCap(capAlert: String) {
+    // Helper function
+    private fun parseAndPrintCap(capAlert: String) {
         val tag = "parseCap"
-        Log.d(tag, "running testParseCap")
         val inputStream: InputStream = capAlert.byteInputStream()
-        // Parses CAP alert and returns Alert instance
-        val alert: Alert = CapParser().parse(inputStream)
+        val alert: Alert = CapParser().parse(inputStream) // Parses CAP alert and returns Alert instance
         Log.d(tag, "[AFTER PARSING] ALERT: $alert")
     }
 }
