@@ -1,4 +1,4 @@
-package com.example.team_23.api
+package com.example.team_23.api.dataclasses
 
 // Contains more detailed information on an Alert
 data class Info (
@@ -12,5 +12,5 @@ data class Info (
         //val expires: String,      // Message is valid until this time.
         val instruction: String?,    // Description of recommended action.
         // + much more
-        val area: Area?
+        val area: Area
 )

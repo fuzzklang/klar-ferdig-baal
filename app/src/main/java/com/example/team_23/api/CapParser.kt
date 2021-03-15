@@ -2,6 +2,9 @@ package com.example.team_23.api
 
 import android.util.Log
 import android.util.Xml
+import com.example.team_23.api.dataclasses.Alert
+import com.example.team_23.api.dataclasses.Area
+import com.example.team_23.api.dataclasses.Info
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
@@ -38,7 +41,7 @@ class CapParser {
         var sent: String? = null
         var status: String? = null
         var msgType: String? = null
-        var info: Info? = null
+        var info: Info = Info(null, null, null, Area(null, null))
 
         parser.require(XmlPullParser.START_TAG, ns, "alert")
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -75,7 +78,7 @@ class CapParser {
         var onset: String? = null
         var expires: String? = null*/
         var instruction: String? = null
-        var area: Area? = null
+        var area: Area = Area(null, null)
 
         parser.require(XmlPullParser.START_TAG, ns, "info")
         while (parser.next() != XmlPullParser.END_TAG) {

@@ -1,4 +1,4 @@
-package com.example.team_23.api
+package com.example.team_23.api.dataclasses
 
 // Data class for items in RSS-feed fetched from MetAlerts
 // Each item directs to an alert (via link)
