@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         titleView.text = "Alert fra mai 2019"
 
         Log.d(tag, "Calling API")
-        API().fetchAllAlerts()
+        API().fetchAllAlerts()  // Should not be done here when using MVVM
 
         // Read from local XML test file
         // Show info (text) on screen
