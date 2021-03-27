@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<rss version="2.0">
+    <channel>
+        <title>MET farevarsel 2019-05</title>
+        <link>https://api.met.no/?period=2019-05</link>
+        <description>Farevarsler fra Meteorologisk institutt</description>
+        <language>no</language>
+        <copyright>Copyright The Norwegian Meteorological Institute, licensed under Norwegian license for public data (NLOD) and Creative Commons 4.0 BY</copyright>
+        <pubDate>Thu, 11 Mar 2021 15:27:55 +0000</pubDate>
+        <lastBuildDate>Thu, 11 Mar 2021 15:27:55 +0000</lastBuildDate>
+        <category>Met</category>
+        <generator>XML::LibXML::Generator 0.1</generator>
+        <docs>http://blogs.law.harvard.edu/tech/rss</docs>
+        <image>
+            <title>MET farevarsel</title>
+            <link>https://api.met.no</link>
+            <url>https://api.met.no/images/logo_2013_no.png</url>
+        </image>
+        <item>
+            <title>Skogbrannfare, gult niv&#xE5;, Hordaland, 19 May 07:00 UTC til 22 May 06:00 UTC.</title>
+            <description>Update: Det er lokal skogbrannfare inntil det kommer nedb&#xF8;r av betydning. </description>
+            <link>https://api.met.no/weatherapi/metalerts/1.1?cap=2.49.0.1.578.0.190521063816855.1909&amp;period=2019-05</link>
+            <author>post@met.no (The Norwegian Meteorological Institute)</author>
+            <category>Met</category>
+            <guid>2.49.0.1.578.0.190521063816855.1909</guid>
+            <pubDate>Tue, 21 May 2019 06:38:16 +0000</pubDate>
+        </item>
+        <item>
+            <title>Skogbrannfare, gult niv&#xE5;, Sogn og Fjordane, 19 May 07:00 UTC til 22 May 22:00 UTC.</title>
+            <description>Update: Det er lokal skogbrannfare inntil det kommer nedb&#xF8;r av betydning.</description>
+            <link>https://api.met.no/weatherapi/metalerts/1.1?cap=2.49.0.1.578.0.190519070744754.1907&amp;period=2019-05</link>
+            <author>post@met.no (The Norwegian Meteorological Institute)</author>
+            <category>Met</category>
+            <guid>2.49.0.1.578.0.190519070744754.1907</guid>
+            <pubDate>Sun, 19 May 2019 07:07:44 +0000</pubDate>
+        </item>
+        <item>
+            <title>Skogbrannfare, gult niv&#xE5;, Hordaland, 19 May 07:00 UTC til 22 May 22:00 UTC.</title>
+            <description>Update: Det er lokal skogbrannfare inntil det kommer nedb&#xF8;r av betydning. </description>
+            <link>https://api.met.no/weatherapi/metalerts/1.1?cap=2.49.0.1.578.0.190519070524042.1906&amp;period=2019-05</link>
+            <author>post@met.no (The Norwegian Meteorological Institute)</author>
+            <category>Met</category>
+            <guid>2.49.0.1.578.0.190519070524042.1906</guid>
+            <pubDate>Sun, 19 May 2019 07:05:24 +0000</pubDate>
+        </item>
+        <item>
+            <title>Skogbrannfare, gult niv&#xE5;, Hordaland, 18 May 09:00 UTC til 20 May 09:00 UTC.</title>
+            <description>Alert: Det er lokal skogbrannfare inntil det kommer nedb&#xF8;r av betydning. </description>
+            <link>https://api.met.no/weatherapi/metalerts/1.1?cap=2.49.0.1.578.0.190518091251397.1905&amp;period=2019-05</link>
+            <author>post@met.no (The Norwegian Meteorological Institute)</author>
+            <category>Met</category>
+            <guid>2.49.0.1.578.0.190518091251397.1905</guid>
+            <pubDate>Sat, 18 May 2019 09:12:51 +0000</pubDate>
+        </item>
+        <item>
+            <title>Skogbrannfare, gult niv&#xE5;, Sogn og Fjordane, 17 May 07:00 UTC til 20 May 09:00 UTC.</title>
+            <description>Alert: Det er lokal skogbrannfare inntil det kommer nedb&#xF8;r av betydning</description>
+            <link>https://api.met.no/weatherapi/metalerts/1.1?cap=2.49.0.1.578.0.190517064153070.1904&amp;period=2019-05</link>
+            <author>post@met.no (The Norwegian Meteorological Institute)</author>
+            <category>Met</category>
+            <guid>2.49.0.1.578.0.190517064153070.1904</guid>
+            <pubDate>Fri, 17 May 2019 06:41:53 +0000</pubDate>
+        </item>
+    </channel>
+</rss>

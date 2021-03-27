@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<rss version="2.0">
+    <channel>
+        <title>MET farevarsel</title>
+        <link>https://api.met.no</link>
+        <description>Farevarsler fra Meteorologisk institutt</description>
+        <language>no</language>
+        <copyright>Copyright The Norwegian Meteorological Institute, licensed under Norwegian license for public data (NLOD) and Creative Commons 4.0 BY</copyright>
+        <pubDate>Thu, 11 Mar 2021 15:45:37 +0000</pubDate>
+        <lastBuildDate>Thu, 11 Mar 2021 15:45:37 +0000</lastBuildDate>
+        <category>Met</category>
+        <generator>XML::LibXML::Generator 0.1</generator>
+        <docs>http://blogs.law.harvard.edu/tech/rss</docs>
+        <image>
+            <title>MET farevarsel</title>
+            <link>https://api.met.no</link>
+            <url>https://api.met.no/images/logo_2013_no.png</url>
+        </image>
+    </channel>
+</rss>
