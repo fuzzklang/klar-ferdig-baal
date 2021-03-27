@@ -1,4 +1,3 @@
-# XML fetch and parse
+# Team 23 - Farevarsling av skogbrann
 
-Hvis vi merger denne med master bør ikke .gradle-filer etc merges,
-kun API-klassene, og evt. tillegg til manifest og dependencies.
+Beskrivelse av kode/app her.
