@@ -106,6 +106,7 @@ class ApiAndXmlParseTests {
         // endpoint currently hard-coded:
         val url = "https://in2000-apiproxy.ifi.uio.no/weatherapi/metalerts/1.1?cap=2.49.0.1.578.0.190521063816855.1909&period=2019-05"
         runBlocking {
+            // TODO: gjør om til CoroutineScope/asynkront kall? Eller beholde som blokkerende kall?
             try {
                 Log.d(tag, "URL: $url")
                 val httpResponse = Fuel.get(url).awaitString()  // Alternative

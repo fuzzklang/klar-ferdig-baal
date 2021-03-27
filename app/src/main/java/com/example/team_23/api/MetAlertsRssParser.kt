@@ -10,7 +10,7 @@ import java.io.InputStream
 
 // Based on Android Developer tutorial: https://developer.android.com/training/basics/network-ops/xml
 //
-// Returns list of RSS-items:
+// Returns list of RSS-items som ser slik ut:
 // data class RssItem (
 //    val title: String?,
 //    val description: String?,

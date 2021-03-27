@@ -11,11 +11,6 @@ import java.io.IOException
 import java.io.InputStream
 
 class CapParser {
-    /*init {
-        var alert: Alert
-        var info: Info
-        var area: Area
-    }*/
     private val ns: String? = null
 
     @Throws(XmlPullParserException::class, IOException::class)
@@ -41,7 +36,7 @@ class CapParser {
         var sent: String? = null
         var status: String? = null
         var msgType: String? = null
-        var info: Info = Info(null, null, null, Area(null, null))
+        var info = Info(null, null, null, Area(null, null))
 
         parser.require(XmlPullParser.START_TAG, ns, "alert")
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -78,7 +73,7 @@ class CapParser {
         var onset: String? = null
         var expires: String? = null*/
         var instruction: String? = null
-        var area: Area = Area(null, null)
+        var area = Area(null, null)
 
         parser.require(XmlPullParser.START_TAG, ns, "info")
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -122,6 +117,7 @@ class CapParser {
     }
 
     // Add method to read parameters in info-block
+    // Trengs til senere
     /*@Throws(XmlPullParserException::class, IOException::class)
     private fun readParameter(parser: XmlPullParser, type: Enum) {
         return param
