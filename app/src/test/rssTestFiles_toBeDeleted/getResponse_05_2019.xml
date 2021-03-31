@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+<rss version="2.0">
+    <channel>
+        <title>MET farevarsel 2019-05</title>
+        <link>https://in2000-apiproxy.ifi.uio.no/?period=2019-05</link>
+        <description>Farevarsler fra Meteorologisk institutt</description>
+        <language>no</language>
+        <copyright>Copyright The Norwegian Meteorological Institute, licensed under Norwegian license for public data (NLOD) and Creative Commons 4.0 BY</copyright>
+        <pubDate>Wed, 10 Mar 2021 17:44:54 +0000</pubDate>
+        <lastBuildDate>Wed, 10 Mar 2021 17:44:54 +0000</lastBuildDate>
+        <category>Met</category>
+        <generator>XML::LibXML::Generator 0.1</generator>
+        <docs>http://blogs.law.harvard.edu/tech/rss</docs>
+        <image>
+            <title>MET farevarsel</title>
+            <link>https://aa031pag95akoa22u.api.met.no</link>
+            <url>https://in2000-apiproxy.ifi.uio.no/images/logo_2013_no.png</url>
+        </image>
+        <item>
+            <title>Skogbrannfare, gult niv&#xE5;, Hordaland, 19 May 07:00 UTC til 22 May 06:00 UTC.</title>
+            <description>Update: Det er lokal skogbrannfare inntil det kommer nedb&#xF8;r av betydning. </description>
+            <link>https://in2000-apiproxy.ifi.uio.no/weatherapi/metalerts/1.1?cap=2.49.0.1.578.0.190521063816855.1909&amp;period=2019-05</link>
+            <author>post@met.no (The Norwegian Meteorological Institute)</author>
+            <category>Met</category>
+            <guid>2.49.0.1.578.0.190521063816855.1909</guid>
+            <pubDate>Tue, 21 May 2019 06:38:16 +0000</pubDate>
+        </item>
+        <item>
+            <title>Skogbrannfare, gult niv&#xE5;, Sogn og Fjordane, 19 May 07:00 UTC til 22 May 22:00 UTC.</title>
+            <description>Update: Det er lokal skogbrannfare inntil det kommer nedb&#xF8;r av betydning.</description>
+            <link>https://in2000-apiproxy.ifi.uio.no/weatherapi/metalerts/1.1?cap=2.49.0.1.578.0.190519070744754.1907&amp;period=2019-05</link>
+            <author>post@met.no (The Norwegian Meteorological Institute)</author>
+            <category>Met</category>
+            <guid>2.49.0.1.578.0.190519070744754.1907</guid>
+            <pubDate>Sun, 19 May 2019 07:07:44 +0000</pubDate>
+        </item>
+        <item>
+            <title>Skogbrannfare, gult niv&#xE5;, Hordaland, 19 May 07:00 UTC til 22 May 22:00 UTC.</title>
+            <description>Update: Det er lokal skogbrannfare inntil det kommer nedb&#xF8;r av betydning. </description>
+            <link>https://in2000-apiproxy.ifi.uio.no/weatherapi/metalerts/1.1?cap=2.49.0.1.578.0.190519070524042.1906&amp;period=2019-05</link>
+            <author>post@met.no (The Norwegian Meteorological Institute)</author>
+            <category>Met</category>
+            <guid>2.49.0.1.578.0.190519070524042.1906</guid>
+            <pubDate>Sun, 19 May 2019 07:05:24 +0000</pubDate>
+        </item>
+        <item>
+            <title>Skogbrannfare, gult niv&#xE5;, Hordaland, 18 May 09:00 UTC til 20 May 09:00 UTC.</title>
+            <description>Alert: Det er lokal skogbrannfare inntil det kommer nedb&#xF8;r av betydning. </description>
+            <link>https://in2000-apiproxy.ifi.uio.no/weatherapi/metalerts/1.1?cap=2.49.0.1.578.0.190518091251397.1905&amp;period=2019-05</link>
+            <author>post@met.no (The Norwegian Meteorological Institute)</author>
+            <category>Met</category>
+            <guid>2.49.0.1.578.0.190518091251397.1905</guid>
+            <pubDate>Sat, 18 May 2019 09:12:51 +0000</pubDate>
+        </item>
+        <item>
+            <title>Skogbrannfare, gult niv&#xE5;, Sogn og Fjordane, 17 May 07:00 UTC til 20 May 09:00 UTC.</title>
+            <description>Alert: Det er lokal skogbrannfare inntil det kommer nedb&#xF8;r av betydning</description>
+            <link>https://in2000-apiproxy.ifi.uio.no/weatherapi/metalerts/1.1?cap=2.49.0.1.578.0.190517064153070.1904&amp;period=2019-05</link>
+            <author>post@met.no (The Norwegian Meteorological Institute)</author>
+            <category>Met</category>
+            <guid>2.49.0.1.578.0.190517064153070.1904</guid>
+            <pubDate>Fri, 17 May 2019 06:41:53 +0000</pubDate>
+        </item>
+        <item>
+            <title>Skogbrannfare, gult niv&#xE5;, Hordaland, 16 May 14:00 UTC til 18 May 04:00 UTC.</title>
+            <description>Alert: Det er lokal skogbrannfare inntil det kommer nedb&#xF8;r av betydning.</description>
+            <link>https://in2000-apiproxy.ifi.uio.no/weatherapi/metalerts/1.1?cap=2.49.0.1.578.0.190516150827657.1901&amp;period=2019-05</link>
+            <author>post@met.no (The Norwegian Meteorological Institute)</author>
+            <category>Met</category>
+            <guid>2.49.0.1.578.0.190516150827657.1901</guid>
+            <pubDate>Thu, 16 May 2019 15:08:27 +0000</pubDate>
+        </item>
+        <item>
+            <title>Stor skogbrannfare, oransje niv&#xE5;, Oppland og Hedmark, 04 May 11:00 UTC til 06 May 12:00 UTC.</title>
+            <description>Update: Lokalt stor fare for gress- og lyngbrann i sn&#xF8;frie omr&#xE5;der inntil det kommer nedb&#xF8;r av betydning.</description>
+            <link>https://in2000-apiproxy.ifi.uio.no/weatherapi/metalerts/1.1?cap=2.49.0.1.578.0.190504111103701.1813&amp;period=2019-05</link>
+            <author>post@met.no (The Norwegian Meteorological Institute)</author>
+            <category>Met</category>
+            <guid>2.49.0.1.578.0.190504111103701.1813</guid>
+            <pubDate>Sat,  4 May 2019 11:11:03 +0000</pubDate>
+        </item>
+        <item>
+            <title>Stor skogbrannfare, oransje niv&#xE5;, &#xD8;stfold, Akershus og Oslo, 04 May 11:00 UTC til 06 May 12:00 UTC.</title>
+            <description>Update: Lokalt stor fare for gress- og lyngbrann inntil det kommer nedb&#xF8;r av betydning.</description>
+            <link>https://in2000-apiproxy.ifi.uio.no/weatherapi/metalerts/1.1?cap=2.49.0.1.578.0.190504110910229.1812&amp;period=2019-05</link>
+            <author>post@met.no (The Norwegian Meteorological Institute)</author>
+            <category>Met</category>
+            <guid>2.49.0.1.578.0.190504110910229.1812</guid>
+            <pubDate>Sat,  4 May 2019 11:09:10 +0000</pubDate>
+        </item>
+        <item>
+            <title>Stor skogbrannfare, oransje niv&#xE5;, &#xD8;stfold og Akershus, 30 April 08:00 UTC til 04 May 20:00 UTC.</title>
+            <description>Update: Lokalt stor fare for gress- og lyngbrann inntil det kommer nedb&#xF8;r av betydning, s&#xE6;rlig i &#xD8;stfold og lengst &#xF8;st i Akershus.</description>
+            <link>https://in2000-apiproxy.ifi.uio.no/weatherapi/metalerts/1.1?cap=2.49.0.1.578.0.190503100038487.1795&amp;period=2019-05</link>
+            <author>post@met.no (The Norwegian Meteorological Institute)</author>
+            <category>Met</category>
+            <guid>2.49.0.1.578.0.190503100038487.1795</guid>
+            <pubDate>Fri,  3 May 2019 10:00:38 +0000</pubDate>
+        </item>
+        <item>
+            <title>Stor skogbrannfare, oransje niv&#xE5;, &#xD8;stfold og Akershus, 30 April 08:00 UTC til 04 May 20:00 UTC.</title>
+            <description>Update: Lokalt stor fare for gress- og lyngbrann inntil det kommer nedb&#xF8;r av betydning.</description>
+            <link>https://in2000-apiproxy.ifi.uio.no/weatherapi/metalerts/1.1?cap=2.49.0.1.578.0.190502115310214.1775&amp;period=2019-05</link>
+            <author>post@met.no (The Norwegian Meteorological Institute)</author>
+            <category>Met</category>
+            <guid>2.49.0.1.578.0.190502115310214.1775</guid>
+            <pubDate>Thu,  2 May 2019 11:53:10 +0000</pubDate>
+        </item>
+    </channel>
+</rss>

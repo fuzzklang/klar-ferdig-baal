@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<rss version="2.0">
+    <channel>
+        <title>Test</title>
+        <link>https://www.blank.com</link>
+        <description>Test</description>
+        <language>no</language>
+        <copyright></copyright>
+        <pubDate>Now</pubDate>
+        <lastBuildDate>Now</lastBuildDate>
+        <category>Test</category>
+        <generator>XML::LibXML::Generator 0.1</generator>
+        <docs>blank</docs>
+        <!--<image>
+            <title>MET farevarsel</title>
+            <link>https://api.met.no</link>
+            <url>https://api.met.no/images/logo_2013_no.png</url>
+        </image>-->
+    </channel>
+</rss>
