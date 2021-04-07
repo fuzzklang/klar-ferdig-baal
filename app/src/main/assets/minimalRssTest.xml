@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
 <rss version="2.0">
     <channel>
-        <title>Test</title>
-        <link>https://www.blank.com</link>
-        <description>Test</description>
+        <title>TestTittel1</title>
+        <link>https://www.testside1.com</link>
+        <description>TestBeskrivelse1</description>
         <language>no</language>
         <copyright></copyright>
-        <pubDate>Now</pubDate>
-        <lastBuildDate>Now</lastBuildDate>
+        <pubDate>01.01.2021</pubDate>
+        <lastBuildDate>01.01.2021</lastBuildDate>
         <category>Test</category>
         <generator>XML::LibXML::Generator 0.1</generator>
-        <docs>blank</docs>
+        <docs>noTestDocs</docs>
         <!--<image>
             <title>MET farevarsel</title>
             <link>https://api.met.no</link>

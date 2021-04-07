@@ -19,7 +19,6 @@ import java.io.InputStream
 //
 // Currently vulnerable for wrongly formatted XML-files
 // Throws no exceptions in case of missing end-tags.
-// TODO: Should add test checking for valid XML-formatting.
 class MetAlertsRssParser {
 
     private val ns: String? = null
