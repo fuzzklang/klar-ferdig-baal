@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<rss version="2.0">
+    <channel>
+        <title>MET farevarsel 2019-05</title>
+        <link>https://in2000-apiproxy.ifi.uio.no/?period=2019-05</link>
+        <description>Farevarsler fra Meteorologisk institutt</description>
+        <language>no</language>
+        <copyright>Copyright The Norwegian Meteorological Institute, licensed under Norwegian license for public data (NLOD) and Creative Commons 4.0 BY</copyright>
+        <pubDate>Wed,  7 Apr 2021 13:41:39 +0000</pubDate>
+        <lastBuildDate>Wed,  7 Apr 2021 13:41:39 +0000</lastBuildDate>
+        <category>Met</category>
+        <generator>XML::LibXML::Generator 0.1</generator>
+        <docs>http://blogs.law.harvard.edu/tech/rss</docs>
+        <image>
+            <title>MET farevarsel</title>
+            <link>https://aa031pag95akoa22u.api.met.no</link>
+            <url>https://in2000-apiproxy.ifi.uio.no/images/logo_2013_no.png</url>
+        </image>
+        <item>
+            <title>Test Item-tittel 1</title>
+            <description>Test beskrivelse 1</description>
+            <link>https://in2000-apiproxy.ifi.uio.no/weatherapi/metalerts/1.1?cap=2.49.0.1.578.0.190521063816855.1909&amp;period=2019-05</link>
+            <author>post@met.no (The Norwegian Meteorological Institute)</author>
+            <category>Met</category>
+            <guid>2.49.0.1.578.0.190521063816855.1909</guid>
+            <pubDate>Tue, 21 May 2019 06:38:16 +0000</pubDate>
+        </item>
+        <item>
+            <title>Test Item-tittel 2</title>
+            <description>Test beskrivelse 2</description>
+            <link>https://in2000-apiproxy.ifi.uio.no/weatherapi/metalerts/1.1?cap=2.49.0.1.578.0.190519070744754.1907&amp;period=2019-05</link>
+            <author>post@met.no (The Norwegian Meteorological Institute)</author>
+            <category>Met</category>
+            <guid>2.49.0.1.578.0.190519070744754.1907</guid>
+            <pubDate>Sun, 19 May 2019 07:07:44 +0000</pubDate>
+        </item>
+        <item>
+            <title>Test Item-tittel 3</title>
+            <description>Test beskrivelse 3</description>
+            <link>https://in2000-apiproxy.ifi.uio.no/weatherapi/metalerts/1.1?cap=2.49.0.1.578.0.190519070524042.1906&amp;period=2019-05</link>
+            <author>post@met.no (The Norwegian Meteorological Institute)</author>
+            <category>Met</category>
+            <guid>2.49.0.1.578.0.190519070524042.1906</guid>
+            <pubDate>Sun, 19 May 2019 07:05:24 +0000</pubDate>
+        </item>
+    </channel>
+</rss>
