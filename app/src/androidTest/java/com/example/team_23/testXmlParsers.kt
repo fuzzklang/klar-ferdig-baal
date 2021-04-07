@@ -3,7 +3,11 @@ package com.example.team_23
 import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.example.team_23.api.CapParser
 import com.example.team_23.api.MetAlertsRssParser
+import com.example.team_23.api.dataclasses.Alert
+import com.example.team_23.api.dataclasses.Area
+import com.example.team_23.api.dataclasses.Info
 import com.example.team_23.api.dataclasses.RssItem
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -27,28 +31,10 @@ class testXmlParsers {
      * ===== RSS-parser-tester =====
      * =============================
      */
-    @Test
-    fun testParseRssFeedEmptyStream() {
-        val input: InputStream = appContext.assets.open("testEmptyFile.xml")
-        var exceptionThrown = false
-        try {
-            MetAlertsRssParser().parse(input)
-        } catch (exception: XmlPullParserException) {
-            exceptionThrown = true
-        }
-        assertTrue(exceptionThrown)
-    }
-
-    @Test
-    fun testParseRssFeedNoItems() {
-        val input: InputStream = appContext.assets.open("testRssFeedNoItems.xml")
-        val rssItems: List<RssItem> = MetAlertsRssParser().parse(input)
-        assertEquals(0, rssItems.size)
-    }
 
     @Test
     fun testParseRssFeedWithItems() {
-        // Mulig at denne testen inneholder og bør kortes ned.
+        // Mulig at denne testen inneholder for mye og bør splittes opp i flere tester
         val input: InputStream = appContext.assets.open("testRssFeedWithAlerts.xml")
         val rssItems: List<RssItem> = MetAlertsRssParser().parse(input)
         assertEquals(3, rssItems.size)
@@ -70,8 +56,27 @@ class testXmlParsers {
     }
 
     @Test
+    fun testParseRssFeedEmptyStream() {
+        val input: InputStream = appContext.assets.open("testEmptyFile.xml")
+        var exceptionThrown = false
+        try {
+            MetAlertsRssParser().parse(input)
+        } catch (exception: XmlPullParserException) {
+            exceptionThrown = true
+        }
+        assertTrue(exceptionThrown)
+    }
+
+    @Test
+    fun testParseRssFeedNoItems() {
+        val input: InputStream = appContext.assets.open("testRssFeedNoItems.xml")
+        val rssItems: List<RssItem> = MetAlertsRssParser().parse(input)
+        assertEquals(0, rssItems.size)
+    }
+
+    @Test
     fun testParseRssFeedMissingEndTag() {
-        // Forventer XmlPullParserException?
+        // Forventer XmlPullParserException
         val input: InputStream = appContext.assets.open("testRssFeedMissingEndTag.xml")
         var exceptionThrown = false
         try {
@@ -102,31 +107,99 @@ class testXmlParsers {
      */
     @Test
     fun testParseCapEmptyStream() {
-
-    }
-
-    @Test
-    fun testParseCapFeedNoItems() {
-
-    }
-
-    @Test
-    fun testParseCapFeedWithItems() {
-
+        val input: InputStream = appContext.assets.open("testEmptyFile.xml")
+        var exceptionThrown = false
+        try {
+            CapParser().parse(input)
+        } catch (exception: XmlPullParserException) {
+            exceptionThrown = true
+        }
+        assertTrue(exceptionThrown)
     }
 
     @Test
     fun testParseCapFeedMissingEndTag() {
-
+        // Forventer XmlPullParserException
+        val input: InputStream = appContext.assets.open("testCapAlertMissingEndTag.xml")
+        var exceptionThrown = false
+        try {
+            CapParser().parse(input)
+        } catch (exception: XmlPullParserException) {
+            exceptionThrown = true
+        }
+        assertTrue(exceptionThrown)
     }
 
     @Test
-    fun testParseCapOneInfoPerLanguage() {
-
+    fun testParseCapFeedCheckAttributes() {
+        val input: InputStream = appContext.assets.open("testCapAlert.xml")
+        val capAlert: Alert = CapParser().parse(input)
+        assertEquals("test identifier 2.49.0.1.578.0.190521063816855.1909", capAlert.identifier)
+        assertEquals("Test 2019-05-21T06:38:16+00:00", capAlert.sent)
+        assertEquals("Test Actual", capAlert.status)
+        assertEquals("Test Update", capAlert.msgType)
     }
 
     @Test
-    fun testParseCapSeveralInfoPerLanguage() {
+    fun testParseCapFeedCheckInfoCount() {
+        val input: InputStream = appContext.assets.open("testCapAlert.xml")
+        val capAlert: Alert = CapParser().parse(input)
+        assertEquals(1, capAlert.infoItemsNo.size)
+        assertEquals(1, capAlert.infoItemsEn.size)
+    }
 
+    @Test
+    fun testParseCapFeedCheckAttributesInfoNorwegian() {
+        val input: InputStream = appContext.assets.open("testCapAlert.xml")
+        val capAlert: Alert = CapParser().parse(input)
+        val info: Info = capAlert.infoItemsNo[0]
+        assertEquals("no", info.lang)
+        assertEquals("Skogbrannfare", info.event)
+        assertEquals("Monitor", info.responseType)
+        assertEquals("Vær forsiktig med åpen ild.", info.instruction)
+    }
+
+    @Test
+    fun testParseCapFeedCheckAttributesInfoEnglish() {
+        val input: InputStream = appContext.assets.open("testCapAlert.xml")
+        val capAlert: Alert = CapParser().parse(input)
+        val info: Info = capAlert.infoItemsEn[0]
+        assertEquals("en-GB", info.lang)
+        assertEquals("Forest fire danger", info.event)
+        assertEquals("Monitor", info.responseType)
+        assertEquals("Be careful with open fire.", info.instruction)
+    }
+
+    @Test
+    fun testParseCapFeedCheckAreaAttributes() {
+        // Tester kun Area i info-elementet som er på norsk.
+        // Tester for øyeblikket ikke area.polygon
+        val input: InputStream = appContext.assets.open("testCapAlert.xml")
+        val capAlert: Alert = CapParser().parse(input)
+        val info: Info = capAlert.infoItemsNo[0]
+        val area: Area = info.area
+        assertEquals("Hordaland", area.areaDesc)
+    }
+
+    @Test
+    fun testParseCapSeveralInfosNorwegian() {
+        val input: InputStream = appContext.assets.open("testCapAlertSeveralInfoElements.xml")
+        val capAlert: Alert = CapParser().parse(input)
+        val info: Info = capAlert.infoItemsNo[1]
+        assertEquals("no", info.lang)
+        assertEquals("Test Skogbrannfare 2", info.event)
+        assertEquals("Monitor", info.responseType)
+        assertEquals("Vær forsiktig med åpen ild.", info.instruction)
+    }
+
+    @Test
+    fun testParseCapSeveralInfosEnglish() {
+        val input: InputStream = appContext.assets.open("testCapAlertSeveralInfoElements.xml")
+        val capAlert: Alert = CapParser().parse(input)
+        val info: Info = capAlert.infoItemsEn[1]
+        assertEquals("en-GB", info.lang)
+        assertEquals("Test Forest fire danger 2", info.event)
+        assertEquals("Monitor", info.responseType)
+        assertEquals("Be careful with open fire.", info.instruction)
     }
 }

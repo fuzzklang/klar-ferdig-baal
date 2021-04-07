@@ -56,7 +56,8 @@ class CapParser {
                     val info: Info = readInfo(parser)
                     when (info.lang) {
                         "no" -> infoItemsNo.add(info)
-                        "en" -> infoItemsEn.add(info)
+                        // "en" -> infoItemsEn.add(info)  // Trengs denne?
+                        "en-GB" -> infoItemsEn.add(info)
                         else -> Log.w(tag, "Ukjent språk (lang) for info-element")  // Kommer forhåpentligvis aldri hit.
                     }
                 }
