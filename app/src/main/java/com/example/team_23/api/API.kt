@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 import org.w3c.dom.Text
 
 /*
+* TODO: delete this file and replace with repository/ApiService from MVVM
 * Code is really messy at the moment.
 * Need to figure out how to fetch data asynchronously (Coroutine Scope) and return values
 * in a well-structured manner.
