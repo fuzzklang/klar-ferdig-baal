@@ -1,4 +1,4 @@
-package com.example.team_23.api.dataclasses
+package com.example.team_23.model.api.dataclasses
 
 // Contains more detailed information on an Alert
 data class Info (

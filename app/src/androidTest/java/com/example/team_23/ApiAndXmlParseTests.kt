@@ -3,10 +3,10 @@ package com.example.team_23
 import android.util.Log
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.team_23.api.dataclasses.Alert
-import com.example.team_23.api.CapParser
-import com.example.team_23.api.MetAlertsRssParser
-import com.example.team_23.api.dataclasses.RssItem
+import com.example.team_23.model.api.dataclasses.Alert
+import com.example.team_23.model.api.CapParser
+import com.example.team_23.model.api.MetAlertsRssParser
+import com.example.team_23.model.api.dataclasses.RssItem
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.coroutines.awaitString
 import kotlinx.coroutines.runBlocking

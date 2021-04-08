@@ -1,19 +1,12 @@
-package com.example.team_23.api
+package com.example.team_23.model.api
 
 import android.util.Log
-import android.widget.TextView
-import com.example.team_23.MainActivity
-import com.example.team_23.api.MetAlertsRssParser
-import com.example.team_23.api.dataclasses.Alert
-import com.example.team_23.api.dataclasses.Info
-import com.example.team_23.api.dataclasses.RssItem
+import com.example.team_23.model.api.dataclasses.RssItem
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.coroutines.awaitByteArray
-import com.github.kittinunf.fuel.coroutines.awaitString
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.w3c.dom.Text
 
 /*
 * Code is really messy at the moment.

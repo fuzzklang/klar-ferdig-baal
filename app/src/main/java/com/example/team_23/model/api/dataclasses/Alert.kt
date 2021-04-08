@@ -1,4 +1,4 @@
-package com.example.team_23.api.dataclasses
+package com.example.team_23.model.api.dataclasses
 
 // Source: https://api.met.no/weatherapi/metalerts/1.1/documentation#DESCRIPTION
 // Corresponds to Alert described in MET report
