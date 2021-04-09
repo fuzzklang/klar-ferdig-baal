@@ -6,11 +6,13 @@ import kotlin.random.Random
 // Implementasjon av ApiService-grensesnittet
 class ApiServiceImpl: ApiService {
 
-    // Metoden simulerer et nettverkskall, blokkerer i et sekund (med 'delay')
-    // Returnerer en streng med en tilfeldig tallverdi.
-    override suspend fun fetchData(endpoint: String): String {
-        val randVal = Random.nextInt(0,1000)
-        delay(1000)
-        return "Hei Team 23 $randVal"
+    /* Metode gjør http-request, returnerer en streng.
+     * @param url : String
+     * @return String
+     */
+    override suspend fun fetchData(endpoint: String, options : List<String>): String {
+        val httpResponse = ""
+
+        return httpResponse
     }
 }
