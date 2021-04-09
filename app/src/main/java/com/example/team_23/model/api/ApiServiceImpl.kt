@@ -12,7 +12,9 @@ class ApiServiceImpl: ApiService {
      */
     override suspend fun fetchData(endpoint: String, options : List<String>): String {
         val httpResponse = ""
-
+        // Kall med OkHttp
+        // Try/catch?
+        // Returner streng
         return httpResponse
     }
 }

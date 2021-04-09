@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 
 /*
 * TODO: delete this file and replace with repository/ApiService from MVVM
+* TODO: SLETT FIL
 * Code is really messy at the moment.
 * Need to figure out how to fetch data asynchronously (Coroutine Scope) and return values
 * in a well-structured manner.
