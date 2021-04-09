@@ -1,6 +1,5 @@
 package com.example.team_23
 
-import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.team_23.api.CapParser
@@ -14,7 +13,6 @@ import org.junit.runner.RunWith
 import org.junit.Assert.*
 import org.xmlpull.v1.XmlPullParserException
 import java.io.InputStream
-import java.lang.IllegalStateException
 
 /* Kjører tester på parserne (MetAlertsRssParser og CapParser).
  * Henter XML-testfiler fra assets-mappen.
@@ -34,7 +32,7 @@ class testXmlParsers {
     @Test
     fun testParseRssFeedWithItems() {
         // Mulig at denne testen inneholder for mye og bør splittes opp i flere tester
-        val input: InputStream = appContext.assets.open("testRssFeedWithAlerts.xml")
+        val input: InputStream = appContext.assets.open("testRssFeedWithAlerts.xml.test")
         val rssItems: List<RssItem> = MetAlertsRssParser().parse(input)
         assertEquals(3, rssItems.size)
         val rssItem1 = rssItems[0]
@@ -56,7 +54,7 @@ class testXmlParsers {
 
     @Test
     fun testParseRssFeedEmptyStream() {
-        val input: InputStream = appContext.assets.open("testEmptyFile.xml")
+        val input: InputStream = appContext.assets.open("testEmptyFile.xml.test")
         var exceptionThrown = false
         try {
             MetAlertsRssParser().parse(input)
@@ -68,7 +66,7 @@ class testXmlParsers {
 
     @Test
     fun testParseRssFeedNoItems() {
-        val input: InputStream = appContext.assets.open("testRssFeedNoItems.xml")
+        val input: InputStream = appContext.assets.open("testRssFeedNoItems.xml.test")
         val rssItems: List<RssItem> = MetAlertsRssParser().parse(input)
         assertEquals(0, rssItems.size)
     }
@@ -76,7 +74,7 @@ class testXmlParsers {
     @Test
     fun testParseRssFeedMissingEndTag() {
         // Forventer XmlPullParserException
-        val input: InputStream = appContext.assets.open("testRssFeedMissingEndTag.xml")
+        val input: InputStream = appContext.assets.open("testRssFeedMissingEndTag.xml.test")
         var exceptionThrown = false
         try {
             MetAlertsRssParser().parse(input)
@@ -89,7 +87,7 @@ class testXmlParsers {
     @Test
     fun testParseRssFeedMalformattedXml() {
         // Forventer XmlPullParserException
-        val input: InputStream = appContext.assets.open("testMalformattedRssFeed.xml")
+        val input: InputStream = appContext.assets.open("testMalformattedRssFeed.xml.test")
         var exceptionThrown = false
         try {
             MetAlertsRssParser().parse(input)
@@ -106,7 +104,7 @@ class testXmlParsers {
      */
     @Test
     fun testParseCapEmptyStream() {
-        val input: InputStream = appContext.assets.open("testEmptyFile.xml")
+        val input: InputStream = appContext.assets.open("testEmptyFile.xml.test")
         var exceptionThrown = false
         try {
             CapParser().parse(input)
@@ -119,7 +117,7 @@ class testXmlParsers {
     @Test
     fun testParseCapFeedMissingEndTag() {
         // Forventer XmlPullParserException
-        val input: InputStream = appContext.assets.open("testCapAlertMissingEndTag.xml")
+        val input: InputStream = appContext.assets.open("testCapAlertMissingEndTag.xml.test")
         var exceptionThrown = false
         try {
             CapParser().parse(input)
@@ -131,7 +129,7 @@ class testXmlParsers {
 
     @Test
     fun testParseCapFeedCheckAttributes() {
-        val input: InputStream = appContext.assets.open("testCapAlert.xml")
+        val input: InputStream = appContext.assets.open("testCapAlert.xml.test")
         val capAlert: Alert = CapParser().parse(input)
         assertEquals("test identifier 2.49.0.1.578.0.190521063816855.1909", capAlert.identifier)
         assertEquals("Test 2019-05-21T06:38:16+00:00", capAlert.sent)
@@ -141,7 +139,7 @@ class testXmlParsers {
 
     @Test
     fun testParseCapFeedCheckInfoCount() {
-        val input: InputStream = appContext.assets.open("testCapAlert.xml")
+        val input: InputStream = appContext.assets.open("testCapAlert.xml.test")
         val capAlert: Alert = CapParser().parse(input)
         assertEquals(1, capAlert.infoItemsNo.size)
         assertEquals(1, capAlert.infoItemsEn.size)
@@ -149,7 +147,7 @@ class testXmlParsers {
 
     @Test
     fun testParseCapFeedCheckAttributesInfoNorwegian() {
-        val input: InputStream = appContext.assets.open("testCapAlert.xml")
+        val input: InputStream = appContext.assets.open("testCapAlert.xml.test")
         val capAlert: Alert = CapParser().parse(input)
         val info: Info = capAlert.infoItemsNo[0]
         assertEquals("no", info.lang)
@@ -160,7 +158,7 @@ class testXmlParsers {
 
     @Test
     fun testParseCapFeedCheckAttributesInfoEnglish() {
-        val input: InputStream = appContext.assets.open("testCapAlert.xml")
+        val input: InputStream = appContext.assets.open("testCapAlert.xml.test")
         val capAlert: Alert = CapParser().parse(input)
         val info: Info = capAlert.infoItemsEn[0]
         assertEquals("en-GB", info.lang)
@@ -173,7 +171,7 @@ class testXmlParsers {
     fun testParseCapFeedCheckAreaAttributes() {
         // Tester kun Area i info-elementet som er på norsk.
         // Tester for øyeblikket ikke area.polygon
-        val input: InputStream = appContext.assets.open("testCapAlert.xml")
+        val input: InputStream = appContext.assets.open("testCapAlert.xml.test")
         val capAlert: Alert = CapParser().parse(input)
         val info: Info = capAlert.infoItemsNo[0]
         val area: Area = info.area
@@ -182,7 +180,7 @@ class testXmlParsers {
 
     @Test
     fun testParseCapSeveralInfosNorwegian() {
-        val input: InputStream = appContext.assets.open("testCapAlertSeveralInfoElements.xml")
+        val input: InputStream = appContext.assets.open("testCapAlertSeveralInfoElements.xml.test")
         val capAlert: Alert = CapParser().parse(input)
         val info: Info = capAlert.infoItemsNo[1]
         assertEquals("no", info.lang)
@@ -193,7 +191,7 @@ class testXmlParsers {
 
     @Test
     fun testParseCapSeveralInfosEnglish() {
-        val input: InputStream = appContext.assets.open("testCapAlertSeveralInfoElements.xml")
+        val input: InputStream = appContext.assets.open("testCapAlertSeveralInfoElements.xml.test")
         val capAlert: Alert = CapParser().parse(input)
         val info: Info = capAlert.infoItemsEn[1]
         assertEquals("en-GB", info.lang)
