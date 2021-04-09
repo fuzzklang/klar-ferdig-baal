@@ -6,9 +6,6 @@ gradle.xml
 .gradle
 .idea/
 /local.properties
-/.idea/workspace.xml
-/.idea/libraries
-.idea/libraries*
 .DS_Store
 /build
 /captures
