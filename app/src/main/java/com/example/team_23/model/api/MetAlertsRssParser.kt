@@ -8,25 +8,26 @@ import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
 import java.io.InputStream
 
-// Based on Android Developer tutorial: https://developer.android.com/training/basics/network-ops/xml
+// Basert på Android Developer tutorial: https://developer.android.com/training/basics/network-ops/xml
 //
-// Returns list of RSS-items som ser slik ut:
+// Returner en liste med RSS-items. Hvert item ser slik ut:
 // data class RssItem (
 //    val title: String?,
 //    val description: String?,
 //    val link: String?
 // )
 //
-// Currently vulnerable for wrongly formatted XML-files
-// Throws no exceptions in case of missing end-tags.
-// TODO: Should add test checking for valid XML-formatting.
+// OBS: Ignorerer alle attributter til RSS-feeden, leser kun item-ene i feeden.
+//
+// Testene viser at den kaster XmlPullParserException ved feilformatert XML-data.
+// Usikker på hva som kan føre til at den kaster IllegalStateException (Terje 21.04.07)
 class MetAlertsRssParser {
 
     private val ns: String? = null
 
     @Throws(XmlPullParserException::class, IOException::class)
     fun parse(inputStream: InputStream): List<RssItem> {
-        val tag = "RssParser.parse"
+        //val tag = "RssParser.parse"
         inputStream.use { inputStream ->
             val parser: XmlPullParser = Xml.newPullParser()
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
@@ -39,7 +40,7 @@ class MetAlertsRssParser {
 
     @Throws(XmlPullParserException::class, IOException::class)
     private fun readRssFeed(parser: XmlPullParser): List<RssItem> {
-        val tag = "RssParser.readRssFeed"
+        //val tag = "RssParser.readRssFeed"
         parser.require(XmlPullParser.START_TAG, ns, "rss")
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.eventType != XmlPullParser.START_TAG) {
@@ -58,7 +59,7 @@ class MetAlertsRssParser {
 
     @Throws(XmlPullParserException::class, IOException::class)
     private fun readChannel(parser: XmlPullParser): List<RssItem> {
-        val tag = "RssParser.readChannel"
+        //val tag = "RssParser.readChannel"
         val entries = mutableListOf<RssItem>()
         parser.require(XmlPullParser.START_TAG, ns, "channel")
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -75,11 +76,11 @@ class MetAlertsRssParser {
         return entries
     }
 
-    // Parses the contents of an item. If it encounters a title, description, or link tag, hands them off
-    // to their respective "read" methods for processing. Otherwise, skips the tag.
+    // Parses the contents of an item. If it encounters a title, description, or link tag, hands
+    // them off to their respective "read" methods for processing. Otherwise, skips the tag.
     @Throws(XmlPullParserException::class, IOException::class)
     private fun readRssItem(parser: XmlPullParser): RssItem {
-        val tag = "RssParser.readRssItem"
+        //val tag = "RssParser.readRssItem"
         parser.require(XmlPullParser.START_TAG, ns, "item")
         var title: String? = null
         var description: String? = null
@@ -105,7 +106,6 @@ class MetAlertsRssParser {
             result = parser.text
             parser.nextTag()
         }
-        //return result // TODO convert HTML Entities to UTF-8 codepoints here? I.e "&#xE5;" to "ø"?
         return result
     }
 
