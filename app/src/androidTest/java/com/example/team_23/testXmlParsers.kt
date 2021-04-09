@@ -31,7 +31,6 @@ class testXmlParsers {
      * ===== RSS-parser-tester =====
      * =============================
      */
-
     @Test
     fun testParseRssFeedWithItems() {
         // Mulig at denne testen inneholder for mye og bør splittes opp i flere tester
