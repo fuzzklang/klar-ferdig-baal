@@ -15,11 +15,6 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        // TODO: Remove this later. Needed for testing XmlPullParser
-        testOptions {
-            unitTests.returnDefaultValues = true
-        }
     }
 
     buildTypes {

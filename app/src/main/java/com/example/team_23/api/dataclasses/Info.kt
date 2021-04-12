@@ -2,6 +2,7 @@ package com.example.team_23.api.dataclasses
 
 // Contains more detailed information on an Alert
 data class Info (
+        val lang: String?,          // Språk: norsk ('no') eller engelsk ('en')
         val event: String?,         // In our project only 'forestFire' relevant
         val responseType: String?,  // 'Monitor': act according to <instruction>. 'AllClear': danger ended.
         // val urgency: String,     // 'Future', 'Immediate'. Unsure if actually used by MetAlerts
