@@ -17,7 +17,7 @@ class KartViewModel {
 
    // fun visBaalplasser()
 
-    fun hentVarsler() {
+    fun hentAlleVarsler() {
         Log.d("kartViewModel", "Henter varsler!")
         CoroutineScope(Dispatchers.IO).launch {
             val rssItems = repo.getRssFeed()
@@ -38,13 +38,21 @@ class KartViewModel {
         }
     }
 
-    //fun finnRuterFraTil()
+    fun hentVarslerForSted(lat: String, lon: String) {
 
-    //fun hentPos()
+    }
 
-   // fun hentVarselHeleKart()
+    fun finnRuterFraTil() {
 
-    // fun hentVarselForAngittRute()
+    }
+
+    fun hentPos() {
+
+    }
+
+    fun hentVarselForAngittRute() {
+
+    }
 
 
 }
