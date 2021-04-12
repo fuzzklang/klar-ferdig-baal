@@ -2,6 +2,7 @@ package com.example.team_23.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.example.team_23.model.MainRepository
 import com.example.team_23.model.api.dataclasses.Alert
 import kotlinx.coroutines.CoroutineScope
@@ -9,9 +10,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class KartViewModel {
+class KartViewModel(private val repo: MainRepository): ViewModel() {
     // todo: Repo bør instansieres annetsteds, slik at det kun fins én av den!
-    val repo = MainRepository()
     val varselListe = mutableListOf<Alert>()
     val liveDataVarsler = MutableLiveData<MutableList<Alert>>()
 
