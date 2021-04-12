@@ -4,13 +4,12 @@ import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.*
-import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import java.io.IOException
 
 // Implementasjon av ApiService-grensesnittet
 class ApiServiceImpl: ApiService {
-    val tag = "ApiServiceImpl"
-    val client = OkHttpClient()
+    private val tag = "ApiServiceImpl"
+    private val client = OkHttpClient()
 
     /* Metode gjør http-request, returnerer en streng.
      * @param endpoint : String, options : liste av strenger som blir inkludert i request-url
