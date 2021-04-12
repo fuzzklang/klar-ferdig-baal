@@ -20,7 +20,7 @@ import java.io.InputStream
  * XML-testfilene er basert på RSS-feeden og CAP-varslene fra MetAlerts, og noen er gjort ugyldige/feilformatert.
  *
  * Testfilene har endingen .test kun for å unngå at Android Studio ga masse feilmeldinger under kompilering.
- * Med filendingen .xml tolket Android Studio testfilene som feilformatert XML og klagde på dette.
+ * Med filendingen .xml tolket Android Studio testfilene som feilformatert XML og klager på dette.
  */
 @RunWith(AndroidJUnit4::class)
 class TestXmlParsers {
