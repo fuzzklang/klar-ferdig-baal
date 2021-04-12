@@ -11,30 +11,30 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class KartViewModel(private val repo: MainRepository): ViewModel() {
-    // todo: Repo bør instansieres annetsteds, slik at det kun fins én av den!
-    val varselListe = mutableListOf<Alert>()
-    val liveDataVarsler = MutableLiveData<MutableList<Alert>>()
+    val varsler = MutableLiveData<MutableList<Alert>>()
 
    // fun visBaalplasser()
 
     fun hentAlleVarsler() {
+        // Terje: veldig usikker på hvordan gjøre/bruke Coroutines og asynkrone kall.
         Log.d("kartViewModel", "Henter varsler!")
-        CoroutineScope(Dispatchers.IO).launch {
+        val varselListe = mutableListOf<Alert>()
+        CoroutineScope(Dispatchers.Default).launch {
             val rssItems = repo.getRssFeed()
 
             // Dårlig idé med nøstede Coroutines? Men hvordan gjøre hver Alert-fetch asynkron?
-            CoroutineScope(Dispatchers.IO).launch {
+            withContext(Dispatchers.Default) {
                 rssItems?.forEach {
                     val alert = repo.getCapAlert(it.link!!)
                     if (alert != null) {
                         varselListe.add(alert)
-                        liveDataVarsler.postValue(varselListe)
                     }
                 }
-                varselListe.forEach {
+                /*varselListe.forEach {
                     Log.d("viewmodel", "Alert: $it")
-                }
+                }*/
             }
+            varsler.postValue(varselListe)
         }
     }
 
@@ -53,6 +53,4 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
     fun hentVarselForAngittRute() {
 
     }
-
-
 }

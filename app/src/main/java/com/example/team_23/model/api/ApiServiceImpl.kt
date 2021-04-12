@@ -1,6 +1,8 @@
 package com.example.team_23.model.api
 
 import android.util.Log
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import java.io.IOException
@@ -27,25 +29,20 @@ class ApiServiceImpl: ApiService {
      */
     @Throws(IOException::class)
     override suspend fun fetchData(url: String): String? {
-        // Bygg Request med OkHttp
-        val request = Request.Builder()
-            .url(url)
-            .build()
-        // Deklarer response
-        var response : Response
-        try {
-            // Gjør nettverkskall
-            response = client.newCall(request).execute()
-        } catch (ex: IOException) {
-            // Fang opp eventuell exception
-            Log.w(tag, "Feil under nettverkskall:\n$ex")
-            // Kast videre til håndtering
-            throw ex
+        return withContext(Dispatchers.IO) {
+            val request = Request.Builder() // Bygg Request med OkHttp
+                    .url(url)
+                    .build()
+            val response : Response // Deklarer response
+            try {
+                response = client.newCall(request).execute()       // Gjør nettverkskall
+            } catch (ex: IOException) {
+                Log.w(tag, "Feil under nettverkskall:\n$ex") // Fang opp eventuell exception
+                throw ex                                           // og kast videre til håndtering
+            }
+            val responseString = response.body?.string()
+            response.close() // Lukk Response-objektet
+            responseString   // responseString kan være null
         }
-        val responseString = response.body?.string()
-        // Lukk Response-objektet
-        response.close()
-        // responseString kan være null
-        return responseString
     }
 }
