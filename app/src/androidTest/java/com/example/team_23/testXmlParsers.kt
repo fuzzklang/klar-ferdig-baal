@@ -15,8 +15,11 @@ import org.xmlpull.v1.XmlPullParserException
 import java.io.InputStream
 
 /* Kjører tester på parserne (MetAlertsRssParser og CapParser).
- * Henter XML-testfiler fra assets-mappen.
- * Disse er basert på RSS-feeden og CAP-varslene fra MetAlerts
+ * Henter XML-testfiler fra assets-mappen (debug), og parser disse med parserne.
+ * XML-testfilene er basert på RSS-feeden og CAP-varslene fra MetAlerts, og noen er gjort ugyldige/feilformatert.
+ *
+ * Testfilene har endingen .test kun for å unngå at Android Studio ga masse feilmeldinger under kompilering.
+ * Med filendingen .xml tolket Android Studio testfilene som feilformatert XML og klagde på dette.
  */
 @RunWith(AndroidJUnit4::class)
 class testXmlParsers {
@@ -30,8 +33,9 @@ class testXmlParsers {
      */
     @Test
     fun testParseRssFeedWithItems() {
-        // TODO: legg til kort beskrivelse
-        // Mulig at denne testen inneholder for mye og bør splittes opp i flere tester
+        // Input: gyldig formatert RSS-feed med varselinformasjon.
+        // Forventer: ingen feil fra parser, objekter (flere rssItem) hvor klasse-attributter er satt riktig.
+        // [Mulig at denne testen inneholder for mye og bør splittes opp i flere tester]
         val input: InputStream = appContext.assets.open("testRssFeedWithAlerts.xml.test")
         val rssItems: List<RssItem> = MetAlertsRssParser().parse(input)
         assertEquals(3, rssItems.size)
@@ -54,7 +58,8 @@ class testXmlParsers {
 
     @Test
     fun testParseRssFeedEmptyStream() {
-        // TODO: legg til kort beskrivelse
+        // Input: tom XML-fil.
+        // Forventer: at XmlPullParserException kastes fra Parser.
         val input: InputStream = appContext.assets.open("testEmptyFile.xml.test")
         var exceptionThrown = false
         try {
@@ -67,7 +72,8 @@ class testXmlParsers {
 
     @Test
     fun testParseRssFeedNoItems() {
-        // TODO: legg til kort beskrivelse
+        // Input: RssFeed uten Item (altså gyldig RSS-feed uten varsler).
+        // Forventer: Tom liste i retur, ingen feilmeldinger.
         val input: InputStream = appContext.assets.open("testRssFeedNoItems.xml.test")
         val rssItems: List<RssItem> = MetAlertsRssParser().parse(input)
         assertEquals(0, rssItems.size)
@@ -75,8 +81,8 @@ class testXmlParsers {
 
     @Test
     fun testParseRssFeedMissingEndTag() {
-        // TODO: legg til kort beskrivelse
-        // Forventer XmlPullParserException
+        // Input: feilformatert XML (manglende end-tags).
+        // Forventer: at XmlPullParserException kastes.
         val input: InputStream = appContext.assets.open("testRssFeedMissingEndTag.xml.test")
         var exceptionThrown = false
         try {
@@ -89,8 +95,8 @@ class testXmlParsers {
 
     @Test
     fun testParseRssFeedMalformattedXml() {
-        // TODO: legg til kort beskrivelse
-        // Forventer XmlPullParserException
+        // Input: feilformatert XML (rot-tag 'rss' er ikke lukket, '>' mangler).
+        // Forventer: at XmlPullParserException kastes.
         val input: InputStream = appContext.assets.open("testMalformattedRssFeed.xml.test")
         var exceptionThrown = false
         try {
@@ -108,7 +114,8 @@ class testXmlParsers {
      */
     @Test
     fun testParseCapEmptyStream() {
-        // TODO: legg til kort beskrivelse
+        // Input: tom XML-fil.
+        // Forventer: at XmlPullParserException kastes fra Parser.
         val input: InputStream = appContext.assets.open("testEmptyFile.xml.test")
         var exceptionThrown = false
         try {
@@ -121,8 +128,8 @@ class testXmlParsers {
 
     @Test
     fun testParseCapFeedMissingEndTag() {
-        // TODO: legg til kort beskrivelse
-        // Forventer XmlPullParserException
+        // Input: feilformatert XML, mangler end-tags.
+        // Forventer: at XmlPullParserException kastes.
         val input: InputStream = appContext.assets.open("testCapAlertMissingEndTag.xml.test")
         var exceptionThrown = false
         try {
@@ -135,7 +142,8 @@ class testXmlParsers {
 
     @Test
     fun testParseCapFeedCheckAttributes() {
-        // TODO: legg til kort beskrivelse
+        // Input: gyldig XML (Cap-varsel)
+        // Sjekker at parser setter varselets attributter korrekt ('identifier', 'sent', 'status' og 'msgType')
         val input: InputStream = appContext.assets.open("testCapAlert.xml.test")
         val capAlert: Alert = CapParser().parse(input)
         assertEquals("test identifier 2.49.0.1.578.0.190521063816855.1909", capAlert.identifier)
@@ -146,7 +154,9 @@ class testXmlParsers {
 
     @Test
     fun testParseCapFeedCheckInfoCount() {
-        // TODO: legg til kort beskrivelse
+        // Input: Gyldig varsel med ett info-element på hvert språk (norsk/engelsk).
+        // Det engelske Info-elementet er en oversettelse av det norske Info-elementet og ellers identisk.
+        // Forventer: at hver info-liste, (capAlert.infoItemsNo/En) inneholder nøyaktig ett element.
         val input: InputStream = appContext.assets.open("testCapAlert.xml.test")
         val capAlert: Alert = CapParser().parse(input)
         assertEquals(1, capAlert.infoItemsNo.size)
@@ -155,7 +165,8 @@ class testXmlParsers {
 
     @Test
     fun testParseCapFeedCheckAttributesInfoNorwegian() {
-        // TODO: legg til kort beskrivelse
+        // Input: gyldig varsel.
+        // Sjekker at attributtene i Info-elementet (norsk) settes korrekt av parser.
         val input: InputStream = appContext.assets.open("testCapAlert.xml.test")
         val capAlert: Alert = CapParser().parse(input)
         val info: Info = capAlert.infoItemsNo[0]
@@ -167,7 +178,8 @@ class testXmlParsers {
 
     @Test
     fun testParseCapFeedCheckAttributesInfoEnglish() {
-        // TODO: legg til kort beskrivelse
+        // Input: gyldig varsel.
+        // Sjekker at attributtene i Info-elementet (engelsk) settes korrekt av parser.
         val input: InputStream = appContext.assets.open("testCapAlert.xml.test")
         val capAlert: Alert = CapParser().parse(input)
         val info: Info = capAlert.infoItemsEn[0]
@@ -179,9 +191,10 @@ class testXmlParsers {
 
     @Test
     fun testParseCapFeedCheckAreaAttributes() {
-        // TODO: legg til kort beskrivelse
-        // Tester kun Area i info-elementet som er på norsk.
-        // Tester for øyeblikket ikke area.polygon
+        // Input: gyldig varsel.
+        // Sjekker at Area-attributter settes korrekt av parser.
+        // Tester kun Area i Info-elementet som er på norsk nå.
+        // Tester for øyeblikket ikke area.polygon (streng med koordinater)
         val input: InputStream = appContext.assets.open("testCapAlert.xml.test")
         val capAlert: Alert = CapParser().parse(input)
         val info: Info = capAlert.infoItemsNo[0]
@@ -191,7 +204,8 @@ class testXmlParsers {
 
     @Test
     fun testParseCapSeveralInfosNorwegian() {
-        // TODO: legg til kort beskrivelse
+        // Input: gyldig varsel med mer enn ett Info-element på hvert språk.
+        // Sjekker at det andre Info-elementet i Info-listen (norsk) settes korrekt av parser.
         val input: InputStream = appContext.assets.open("testCapAlertSeveralInfoElements.xml.test")
         val capAlert: Alert = CapParser().parse(input)
         val info: Info = capAlert.infoItemsNo[1]
@@ -203,7 +217,8 @@ class testXmlParsers {
 
     @Test
     fun testParseCapSeveralInfosEnglish() {
-        // TODO: legg til kort beskrivelse
+        // Input: gyldig varsel med mer enn ett Info-element på hvert språk.
+        // Sjekker at det andre Info-elementet i Info-listen (engelsk) settes korrekt av parser.
         val input: InputStream = appContext.assets.open("testCapAlertSeveralInfoElements.xml.test")
         val capAlert: Alert = CapParser().parse(input)
         val info: Info = capAlert.infoItemsEn[1]
