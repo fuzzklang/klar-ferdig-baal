@@ -9,15 +9,13 @@ import com.example.team_23.model.api.dataclasses.RssItem
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
 
-class MainRepository {
-    val tag = "MainRepository"
-    // TODO: flytt instansiering av ApiServiceImpl til oppstart av app
-    val apiService = ApiServiceImpl()
+class MainRepository(private val apiService: ApiServiceImpl) {
+    private val tag = "MainRepository"
 
     // API-Dokumentasjon: https://in2000-apiproxy.ifi.uio.no/weatherapi/metalerts/1.1/documentation
     // Finn ut i hvilken klasse URL-ene bør plasseres.
-    val endpoint = "https://in2000-apiproxy.ifi.uio.no/weatherapi/metalerts/1.1/"
-    val options = listOf("event=forestFire", "period=2019-05")  // legg til evt. flere options i denne listen
+    private val endpoint = "https://in2000-apiproxy.ifi.uio.no/weatherapi/metalerts/1.1/"
+    private val options = listOf("event=forestFire", "period=2019-05")  // legg til evt. flere options i denne listen
 
     /* Henter XML-data (RSS-feed) fra proxyen og parser denne.
      * @return liste med RssItem eller null
