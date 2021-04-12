@@ -28,8 +28,7 @@ class MainRepository {
         var rssItems : List<RssItem>? = null
         try {
             val httpResponse : String = apiService.fetchData(endpoint, options) ?: throw IOException()
-            // Konverter streng til inputStream
-            val bytestream = httpResponse.byteInputStream()
+            val bytestream = httpResponse.byteInputStream()   // Konverter streng til inputStream
             rssItems = MetAlertsRssParser().parse(bytestream)
         } catch (ex : XmlPullParserException) {
             Log.w(tag, "Feil under parsing av RSS-feed:\n$ex")
