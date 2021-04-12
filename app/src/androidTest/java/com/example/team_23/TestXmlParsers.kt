@@ -1,5 +1,6 @@
 package com.example.team_23
 
+import android.content.Context
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.team_23.api.CapParser
@@ -22,10 +23,10 @@ import java.io.InputStream
  * Med filendingen .xml tolket Android Studio testfilene som feilformatert XML og klagde på dette.
  */
 @RunWith(AndroidJUnit4::class)
-class testXmlParsers {
-    val tag = "testXmlParsers"
+class TestXmlParsers {
+    //val tag = "testXmlParsers"
     // appContext: Konteksten som appen testes under. Trengs for å aksessere assets-mappen
-    val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+    private val appContext: Context = InstrumentationRegistry.getInstrumentation().targetContext
 
     /* =============================
      * ===== RSS-parser-tester =====
