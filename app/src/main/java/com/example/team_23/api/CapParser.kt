@@ -144,7 +144,6 @@ class CapParser {
             result = parser.text
             parser.nextTag()
         }
-        //return result // TODO convert HTML Entities to UTF-8 codepoints here? I.e "&#xE5;" to "ø"?
         return result
     }
 
