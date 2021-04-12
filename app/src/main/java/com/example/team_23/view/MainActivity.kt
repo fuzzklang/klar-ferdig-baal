@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
             var str = ""
             varselListe.forEach {
                 textView.text = it.infoItemsNo[0].instruction
-                str +=  "${it.identifier}\n"
+                str +=  "${it.identifier}\n" +
                         "${it.msgType}\n" +
                         "${it.infoItemsNo[0].event}\n" +
                         "${it.infoItemsNo[0].instruction}\n\n"

@@ -37,7 +37,7 @@ class MainRepository {
             Log.w(tag, "IO-feil under parsing av RSS-feed:\n$ex")
             // + Print toast?
         }
-        return rssItems  // Returner liste med RssItem
+        return rssItems  // Returner liste med RssItems
     }
 
     /* Henter XML-data (CAP Alert) fra proxyen og parser denne.
