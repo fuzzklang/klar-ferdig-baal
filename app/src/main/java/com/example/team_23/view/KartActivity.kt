@@ -1,14 +1,10 @@
 package com.example.team_23.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.TextView
-import androidx.lifecycle.Observer
+import androidx.appcompat.app.AppCompatActivity
 import com.example.team_23.R
 import com.example.team_23.model.MainRepository
 import com.example.team_23.model.api.ApiServiceImpl
-import com.example.team_23.model.api.dataclasses.Alert
 import com.example.team_23.viewmodel.KartViewModel
 
 class KartActivity : AppCompatActivity() {

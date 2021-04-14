@@ -13,7 +13,7 @@ import kotlinx.coroutines.withContext
 
 class KartViewModel(private val repo: MainRepository): ViewModel() {
     val varsler = MutableLiveData<MutableList<Alert>>()
-    val varselListeMutex = Mutex()
+    private val varselListeMutex = Mutex()
 
     fun hentAlleVarsler() {
         val varselListe = mutableListOf<Alert>()
