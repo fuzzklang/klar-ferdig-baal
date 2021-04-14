@@ -25,6 +25,7 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
         val mutex = Mutex()
 
         CoroutineScope(Dispatchers.Default).launch {
+            // TODO: forenkle coroutinescope
             // [Terje] veldig usikker på hvordan gjøre/bruke Coroutines og asynkrone kall,
             // men tror dette skal fungere på et vis.
             val rssItems = repo.getRssFeed()

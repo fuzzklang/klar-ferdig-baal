@@ -11,7 +11,8 @@ import com.example.team_23.model.api.ApiServiceImpl
 import com.example.team_23.model.api.dataclasses.Alert
 import com.example.team_23.viewmodel.KartViewModel
 
-class MainActivity : AppCompatActivity() {
+class KartActivity : AppCompatActivity() {
+    // TODO: endre navn på Activity
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -20,6 +21,7 @@ class MainActivity : AppCompatActivity() {
         val repo = MainRepository(apiService)  // Flytt instansiering til Factory eller tilsvarende?
         val viewModel = KartViewModel(repo)
 
+        // TODO: Fjerne dette
         val textView = findViewById<TextView>(R.id.myTextView)
 
         viewModel.varsler.observe(this, Observer<List<Alert>> { varselListe ->
