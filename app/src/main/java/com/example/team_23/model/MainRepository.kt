@@ -25,6 +25,7 @@ class MainRepository(private val apiService: ApiServiceImpl) {
         // midlertidig løsning for å sikre at httpResponse er initialisert.
         var rssItems : List<RssItem>? = null
         try {
+            // Android Studio gir beskjed om: «Inappropriate blocking method call», usikker på hvorfor.
             val httpResponse : String = apiService.fetchData(endpoint, options) ?: throw IOException()
             val bytestream = httpResponse.byteInputStream()   // Konverter streng til inputStream
             rssItems = MetAlertsRssParser().parse(bytestream)
@@ -44,8 +45,9 @@ class MainRepository(private val apiService: ApiServiceImpl) {
     suspend fun getCapAlert(url : String) : Alert? {
         var alert : Alert? = null
         try {
+            // Android Studio gir beskjed om: «Inappropriate blocking method call», usikker på hvorfor.
             val httpResponse : String = apiService.fetchData(url) ?: throw IOException()
-            val bytestream = httpResponse.byteInputStream()
+            val bytestream = httpResponse.byteInputStream()  // Konverter streng til inputStream
             alert = CapParser().parse(bytestream)
         } catch (ex : XmlPullParserException) {
             Log.w(tag, "Feil under parsing av CAP Alert:\n$ex")
