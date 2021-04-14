@@ -1,4 +1,4 @@
-package com.example.team_23.api.dataclasses
+package com.example.team_23.model.api.dataclasses
 
 // Area which alert is valid for
 data class Area (

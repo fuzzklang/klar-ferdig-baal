@@ -3,12 +3,12 @@ package com.example.team_23
 import android.content.Context
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.example.team_23.api.CapParser
-import com.example.team_23.api.MetAlertsRssParser
-import com.example.team_23.api.dataclasses.Alert
-import com.example.team_23.api.dataclasses.Area
-import com.example.team_23.api.dataclasses.Info
-import com.example.team_23.api.dataclasses.RssItem
+import com.example.team_23.model.api.CapParser
+import com.example.team_23.model.api.MetAlertsRssParser
+import com.example.team_23.model.api.dataclasses.Alert
+import com.example.team_23.model.api.dataclasses.Area
+import com.example.team_23.model.api.dataclasses.Info
+import com.example.team_23.model.api.dataclasses.RssItem
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.Assert.*
@@ -20,7 +20,7 @@ import java.io.InputStream
  * XML-testfilene er basert på RSS-feeden og CAP-varslene fra MetAlerts, og noen er gjort ugyldige/feilformatert.
  *
  * Testfilene har endingen .test kun for å unngå at Android Studio ga masse feilmeldinger under kompilering.
- * Med filendingen .xml tolket Android Studio testfilene som feilformatert XML og klagde på dette.
+ * Med filendingen .xml tolket Android Studio testfilene som feilformatert XML og klager på dette.
  */
 @RunWith(AndroidJUnit4::class)
 class TestXmlParsers {
