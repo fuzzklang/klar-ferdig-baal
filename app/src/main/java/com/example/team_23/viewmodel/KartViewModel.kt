@@ -13,10 +13,10 @@ import kotlinx.coroutines.withContext
 
 class KartViewModel(private val repo: MainRepository): ViewModel() {
     val varsler = MutableLiveData<MutableList<Alert>>()
-    private val varselListeMutex = Mutex()
 
     fun hentAlleVarsler() {
         val varselListe = mutableListOf<Alert>()
+        val varselListeMutex = Mutex()  // Lås til varselListe
 
         CoroutineScope(Dispatchers.Default).launch {
             // [Terje] veldig usikker på hvordan gjøre/bruke Coroutines for asynkrone kall,
@@ -28,9 +28,9 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
             // API-kall vente i tur og orden på at det forrige skal bli ferdig, noe som er tidkrevende.
             // Bruker Mutex for å sikre at ingen av trådene skriver til varselListe samtidig (unngå mulig Race Condition).
             // [Terje: har ikke veldig god oversikt over dette, så godt mulig det inneholder feil!]
-            rssItems?.forEach {
-                withContext(Dispatchers.Default) {
-                    val alert = repo.getCapAlert(it.link!!)
+            rssItems?.forEach {  // For hvert rssItem (løkke)
+                withContext(Dispatchers.Default) {          // dispatch med ny coroutine for hvert rssItem
+                    val alert = repo.getCapAlert(it.link!!) // Hent CAP-alert via repository. 'it': rssItem
                     if (alert != null) {
                         varselListeMutex.withLock { // Trådsikkert: ingen tråder modifiserer listen samtidig
                             varselListe.add(alert)
