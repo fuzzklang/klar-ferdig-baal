@@ -13,30 +13,26 @@ import kotlinx.coroutines.withContext
 
 class KartViewModel(private val repo: MainRepository): ViewModel() {
     val varsler = MutableLiveData<MutableList<Alert>>()
-
-   // fun visBaalplasser()
+    val varselListeMutex = Mutex()
 
     fun hentAlleVarsler() {
-        //Log.d("kartViewModel", "Henter varsler!")
-        // val varselListe = mutableListOf<Alert>()  // Ikke trådsikker løsning
-
-        // Forsøk på trådsikker løsning
         val varselListe = mutableListOf<Alert>()
-        val mutex = Mutex()
 
         CoroutineScope(Dispatchers.Default).launch {
-            // TODO: forenkle coroutinescope
-            // [Terje] veldig usikker på hvordan gjøre/bruke Coroutines og asynkrone kall,
+            // [Terje] veldig usikker på hvordan gjøre/bruke Coroutines for asynkrone kall,
             // men tror dette skal fungere på et vis.
             val rssItems = repo.getRssFeed()
 
-            // For hvert RssItem kalles den tilhørende linken i en egen withContext.
-            // Altså kalles hver link asynkront om jeg har forstått det rett [Terje]
+            // For hvert RssItem gjøres et API-kall til den angitte lenken hvor varselet kan hentes fra.
+            // Hvert kall gjøres med en egen Coroutine slik at varslene hentes samtidig. Ellers må hvert
+            // API-kall vente i tur og orden på at det forrige skal bli ferdig, noe som er tidkrevende.
+            // Bruker Mutex for å sikre at ingen av trådene skriver til varselListe samtidig (unngå mulig Race Condition).
+            // [Terje: har ikke veldig god oversikt over dette, så godt mulig det inneholder feil!]
             rssItems?.forEach {
                 withContext(Dispatchers.Default) {
                     val alert = repo.getCapAlert(it.link!!)
                     if (alert != null) {
-                        mutex.withLock { // Trådsikkert: ingen tråder modifiserer listen samtidig
+                        varselListeMutex.withLock { // Trådsikkert: ingen tråder modifiserer listen samtidig
                             varselListe.add(alert)
                         }
                     }
@@ -59,6 +55,10 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
     }
 
     fun hentVarselForAngittRute() {
+
+    }
+
+    fun visBaalplasser() {
 
     }
 }
