@@ -12,34 +12,13 @@ import com.example.team_23.model.api.dataclasses.Alert
 import com.example.team_23.viewmodel.KartViewModel
 
 class KartActivity : AppCompatActivity() {
-    // TODO: endre navn på Activity
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Flytte instansiering av disse til Factory eller tilsvarende?
         val apiService = ApiServiceImpl()
-        val repo = MainRepository(apiService)  // Flytt instansiering til Factory eller tilsvarende?
-        val viewModel = KartViewModel(repo)
-
-        // TODO: Fjerne dette
-        val textView = findViewById<TextView>(R.id.myTextView)
-
-        viewModel.varsler.observe(this, Observer<List<Alert>> { varselListe ->
-            var str = ""
-            varselListe.forEach {
-                textView.text = it.infoItemsNo[0].instruction
-                str +=  "${it.identifier}\n\n"
-                        /*"${it.msgType}\n" +
-                        "${it.infoItemsNo[0].event}\n" +
-                        "${it.infoItemsNo[0].instruction}\n\n"*/
-            }
-            textView.text = str
-        })
-
-        val btn = findViewById<Button>(R.id.btn)
-        btn.setOnClickListener {
-            textView.text = "Henter varsler"
-            viewModel.hentAlleVarsler()
-        }
+        val repo = MainRepository(apiService)
+        val kartViewModel = KartViewModel(repo)
     }
 }
