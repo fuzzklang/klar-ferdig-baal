@@ -4,9 +4,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
+import androidx.lifecycle.Observer
 import com.example.team_23.R
 import com.example.team_23.model.MainRepository
 import com.example.team_23.model.api.ApiServiceImpl
+import com.example.team_23.model.api.dataclasses.Alert
 import com.example.team_23.viewmodel.KartViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -20,7 +22,7 @@ class MainActivity : AppCompatActivity() {
 
         val textView = findViewById<TextView>(R.id.myTextView)
 
-        viewModel.varsler.observe(this, { varselListe ->
+        viewModel.varsler.observe(this, Observer<List<Alert>> { varselListe ->
             var str = ""
             varselListe.forEach {
                 textView.text = it.infoItemsNo[0].instruction
