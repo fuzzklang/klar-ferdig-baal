@@ -4,8 +4,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.example.googlemaps.Base
-import com.example.googlemaps.Routes
 import com.example.team_23.R
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.coroutines.awaitString
