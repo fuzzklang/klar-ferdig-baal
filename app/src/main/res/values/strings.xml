@@ -28,8 +28,12 @@
     <string name="title">Regler</string>
     <string name="imgClose">Avslutt</string>
     <string name="imgFire">flammeikon</string>
-
-
+    <string name="info">Info</string>
+    <string name="regler">Regler</string>
+    <string name="infoContent">Trykk på kartet for å sjekke skogbrannfaren for et området</string>
+    <string name="overlay">Overlay</string>
+    <string name="infoButtonText">Info</string>
+    <string name="app_title">Klar Ferdig Bål</string>
 
 
 </resources>
