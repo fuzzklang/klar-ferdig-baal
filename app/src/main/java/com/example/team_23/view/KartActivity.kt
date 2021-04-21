@@ -30,7 +30,7 @@ class KartActivity : AppCompatActivity() {
             startActivity(intent)
 
         }
-        val infoButton = findViewById<Button>(R.id.info_button)
+        val infoButton = findViewById<ImageButton>(R.id.info_button)
         val infoCloseButton = findViewById<ImageButton>(R.id.info_close_button)
         val info = findViewById<View>(R.id.infoBox)
         var color = true
