@@ -3,7 +3,7 @@ package com.example.team_23.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.team_23.model.MainRepository
-import com.example.team_23.model.api.dataclasses.Alert
+import com.example.team_23.model.api.metalerts_dataclasses.Alert
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -27,7 +27,6 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
             // Hvert kall gjøres med en egen Coroutine slik at varslene hentes samtidig. Ellers må hvert
             // API-kall vente i tur og orden på at det forrige skal bli ferdig, noe som er tidkrevende.
             // Bruker Mutex for å sikre at ingen av trådene skriver til varselListe samtidig (unngå mulig Race Condition).
-            // [Terje: har ikke veldig god oversikt over dette, så godt mulig det inneholder feil!]
             rssItems?.forEach {  // For hvert rssItem (løkke)
                 withContext(Dispatchers.Default) {          // dispatch med ny coroutine for hvert rssItem
                     val alert = repo.getCapAlert(it.link!!) // Hent CAP-alert via repository. 'it': rssItem

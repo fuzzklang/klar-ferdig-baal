@@ -4,8 +4,8 @@ import android.util.Log
 import com.example.team_23.model.api.ApiServiceImpl
 import com.example.team_23.model.api.CapParser
 import com.example.team_23.model.api.MetAlertsRssParser
-import com.example.team_23.model.api.dataclasses.Alert
-import com.example.team_23.model.api.dataclasses.RssItem
+import com.example.team_23.model.api.metalerts_dataclasses.Alert
+import com.example.team_23.model.api.metalerts_dataclasses.RssItem
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
 
