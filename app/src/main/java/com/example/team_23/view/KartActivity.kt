@@ -33,8 +33,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private val url = "https://maps.googleapis.com/maps/api/directions/json?origin=59.911491,10.757933&destination=59.26754,10.40762&key=AIzaSyAyK0NkgPMxOOTnWR5EFKdy2DzfDXGh-HI"
     private val gson = Gson()
+    //liste som inneholder polyline-punktene
     private val path: MutableList<List<LatLng>> = ArrayList()
-    private var currentMarker: Marker? = null
+    //liste med responsen fra api-kallet
     private var base:List<Routes>? = null
 
 
