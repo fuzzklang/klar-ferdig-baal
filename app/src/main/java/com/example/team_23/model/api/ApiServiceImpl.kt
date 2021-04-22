@@ -15,6 +15,7 @@ class ApiServiceImpl: ApiService {
      * @param endpoint : String, options : liste av strenger som blir inkludert i request-url
      * @return String
      */
+    @Suppress("BlockingMethodInNonBlockingContext")
     override suspend fun fetchData(endpoint: String, options: List<String>): String? {
         // Sårbart å lage URL selv, vurder å bruke OkHttp sin URL-Builder eller tilsvarende
         val url = endpoint + "?" + options.joinToString("&")
@@ -25,6 +26,7 @@ class ApiServiceImpl: ApiService {
     /* Metode lager en request-URL ved hjelp av OkHttp-klient og gjør nettverkskall.
      * Returnerer streng eller null.
      */
+    @Suppress("BlockingMethodInNonBlockingContext")
     override suspend fun fetchData(url: String): String? {
         return withContext(Dispatchers.IO) {
             val request = Request.Builder() // Bygg Request med OkHttp

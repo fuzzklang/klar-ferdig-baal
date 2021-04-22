@@ -41,6 +41,7 @@ class MainRepository(private val apiService: ApiServiceImpl) {
     /* Henter XML-data (RSS-feed) fra proxyen og parser denne.
      * @return liste med RssItem eller null
      */
+    @Suppress("BlockingMethodInNonBlockingContext")
     suspend fun getRssFeed() : List<RssItem>? {
         // Kast IO Exception dersom API-kall feiler. Usikker på om dette er ideellt, men en iaf
         // midlertidig løsning for å sikre at httpResponse er initialisert.
@@ -63,6 +64,7 @@ class MainRepository(private val apiService: ApiServiceImpl) {
     /* Henter XML-data (CAP Alert) fra proxyen og parser denne.
      * @return instans av Alert eller null.
      */
+    @Suppress("BlockingMethodInNonBlockingContext")
     suspend fun getCapAlert(url : String) : Alert? {
         var alert : Alert? = null
         try {
