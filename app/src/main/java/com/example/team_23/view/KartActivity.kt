@@ -2,26 +2,18 @@ package com.example.team_23.view
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.team_23.R
-import com.example.team_23.model.api.map_dataclasses.Base
-import com.example.team_23.model.api.map_dataclasses.Routes
-import com.github.kittinunf.fuel.Fuel
-import com.github.kittinunf.fuel.coroutines.awaitString
+import com.example.team_23.model.MainRepository
+import com.example.team_23.model.api.ApiServiceImpl
+import com.example.team_23.viewmodel.KartViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
-import com.google.gson.Gson
-import com.google.maps.android.PolyUtil
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 // import android.os.Bundle
 // import androidx.appcompat.app.AppCompatActivity
@@ -31,15 +23,10 @@ import kotlinx.coroutines.launch
 // import com.example.team_23.viewmodel.KartViewModel
 //
 class KartActivity : AppCompatActivity(), OnMapReadyCallback {
-
     private lateinit var mMap: GoogleMap
-    private val url = "https://maps.googleapis.com/maps/api/directions/json?origin=59.911491,10.757933&destination=59.26754,10.40762&key=AIzaSyAyK0NkgPMxOOTnWR5EFKdy2DzfDXGh-HI"
-    private val gson = Gson()
-    //liste som inneholder polyline-punktene
-    private val path: MutableList<List<LatLng>> = ArrayList()
-    //liste med responsen fra api-kallet
-    private var base:List<Routes>? = null
-
+    val apiService = ApiServiceImpl()
+    val repo = MainRepository(apiService)
+    val kartViewModel = KartViewModel(repo)  // Bør instansieres et annet sted
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,8 +36,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-        fetchBaseInformation()
-
+        kartViewModel.findRoute()
     }
 
     /**
@@ -62,7 +48,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
-
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         //lager to markere:en i Oslo og en i Tønsberg
@@ -72,70 +57,19 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         this.mMap.addMarker(MarkerOptions().position(tonsberg).title("Tønsberg"))
         this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(oslo, 6f))
 
-        //lager en liste som skal bestå av markers
-        val markerList = arrayListOf<Marker>()
-
-
         //når bruker trykker på kartet lages det en ny marker
         mMap.setOnMapClickListener {
             val marker = mMap.addMarker(MarkerOptions().position(it).title("Marker on click"))
             //lagrer markeren i en liste slik at man kan endre/slette den senere
-            markerList.add(marker)
+            //markerList.add(marker)
 
-            getPolylinePoints()
+            //getPolylinePoints()
 
+            val path = kartViewModel.path
             //går gjennom punktene i polyline for å skrive det ut til kartet.
             for (i in 0 until path.size) {
                 this.mMap.addPolyline(PolylineOptions().addAll(path[i]).color(Color.RED))
             }
-
-        }
-
-
-    }
-
-    //metode som henter Json fra Direction API og parser til Gson.
-    private fun fetchBaseInformation() {
-        val TAG = "Json Base Fetch"
-
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val httpResponse = Fuel.get(url).awaitString()
-                val response = gson.fromJson(httpResponse, Base::class.java)
-                Log.d(TAG, response.toString())
-                base = response.routes
-            } catch (exception: Exception) {
-                Log.w(TAG, "A network request exception was thrown: ${exception.message}")
-            }
-        }
-    }
-
-    //Må gå gjennom dataklasse for dataklasse (base, legs, steps og polyline)
-    // for å få tak i informasjonen jeg trenger (points i polyline) for å lage rute på kartet
-    private fun getPolylinePoints(){
-        val TAG = "Polyline Points"
-        if (base != null) {
-            for (element in base!!) {
-                val legs = element.legs
-                Log.d(TAG, legs.toString())
-
-                if (legs != null) {
-                    for (element in legs) {
-                        val steps = element.steps
-                        Log.d(TAG, steps.toString())
-
-                        if (steps != null) {
-                            for (element in steps) {
-                                val points = element.polyline?.points
-                                Log.d(TAG, points.toString())
-                                path.add(PolyUtil.decode(points))
-                            }
-                        }
-                    }
-                }
-
-            }
-
         }
     }
 }
