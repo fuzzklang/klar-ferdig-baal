@@ -1,14 +1,11 @@
 package com.example.team_23.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.team_23.model.MainRepository
-import com.example.team_23.model.api.map_dataclasses.Base
 import com.example.team_23.model.api.map_dataclasses.Routes
 import com.example.team_23.model.api.metalerts_dataclasses.Alert
 import com.google.android.gms.maps.model.LatLng
-import com.google.gson.Gson
 import com.google.maps.android.PolyUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -23,10 +20,8 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
     //liste med responsen fra api-kallet
     //private var routes:List<Routes>? = null  // TODO: delete?
     val routes = MutableLiveData<List<Routes>>()
-
     //liste som inneholder polyline-punktene
-    val path: MutableList<List<LatLng>> = ArrayList()
-
+    val path = MutableLiveData<MutableList<List<LatLng>>>()
 
     fun hentAlleVarsler() {
         val varselListe = mutableListOf<Alert>()
@@ -58,10 +53,12 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
     }
 
     fun findRoute() {
+        // Kaller på Directions API fra Google (via Repository) oppdaterer routes-LiveData
         CoroutineScope(Dispatchers.Default).launch {
             val routesFromApi = repo.getRoutes()
             if (routesFromApi != null) {
                 routes.postValue(routesFromApi)
+                path.postValue(getPolylinePoints(routes.value)) // Oppdater path med ny rute
             }
         }
 
@@ -79,30 +76,32 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
 
     }
 
-    //Må gå gjennom dataklasse for dataklasse (base, legs, steps og polyline)
+    // Hjelpemetode for findRoute()
+    // Må gå gjennom dataklasse for dataklasse (base, legs, steps og polyline)
     // for å få tak i informasjonen jeg trenger (points i polyline) for å lage rute på kartet
-    private fun getPolylinePoints() {
+    private fun getPolylinePoints(routes: List<Routes>?): MutableList<List<LatLng>> {
+        // tmpPathList: Brukt for å konstruere hele polyline-listen, før LiveDataen oppdateres med den komplette listen.
+        val tmpPathList = mutableListOf<List<LatLng>>()
         val TAG = "Polyline Points"
-        if (routes.value != null) {
-            for (element in routes.value!!) {
+        if (routes != null) {
+            for (element in routes) {  // Sårbart for bugs, mutable data kan ha blitt endret.
                 val legs = element.legs
-                Log.d(TAG, legs.toString())
-
+                //Log.d(TAG, legs.toString())
                 if (legs != null) {
                     for (element in legs) {
                         val steps = element.steps
-                        Log.d(TAG, steps.toString())
-
+                        //Log.d(TAG, steps.toString())
                         if (steps != null) {
                             for (element in steps) {
                                 val points = element.polyline?.points
-                                Log.d(TAG, points.toString())
-                                path.add(PolyUtil.decode(points))
+                                //Log.d(TAG, points.toString())
+                                tmpPathList.add(PolyUtil.decode(points))
                             }
                         }
                     }
                 }
             }
         }
+        return tmpPathList
     }
 }

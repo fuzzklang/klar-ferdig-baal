@@ -8,12 +8,7 @@ import com.example.team_23.model.api.map_dataclasses.Base
 import com.example.team_23.model.api.map_dataclasses.Routes
 import com.example.team_23.model.api.metalerts_dataclasses.Alert
 import com.example.team_23.model.api.metalerts_dataclasses.RssItem
-import com.github.kittinunf.fuel.Fuel
-import com.github.kittinunf.fuel.coroutines.awaitString
 import com.google.gson.Gson
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
 
@@ -31,6 +26,7 @@ class MainRepository(private val apiService: ApiServiceImpl) {
     //metode som henter Json fra Direction API og parser til Gson.
     suspend fun getRoutes(): List<Routes>? {
         var routes: List<Routes>? = null
+        Log.d(tag, "Henter ruter fra Google!")
         try {
             val httpResponse = apiService.fetchData(mapsUrl)
             val response = gson.fromJson(httpResponse, Base::class.java)

@@ -3,6 +3,7 @@ package com.example.team_23.view
 import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import com.example.team_23.R
 import com.example.team_23.model.MainRepository
 import com.example.team_23.model.api.ApiServiceImpl
@@ -12,6 +13,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
 
@@ -28,6 +30,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     val repo = MainRepository(apiService)
     val kartViewModel = KartViewModel(repo)  // Bør instansieres et annet sted
 
+    val markerList = mutableListOf<Marker>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -36,6 +40,16 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
+        // Observer path-livedata (i KartViewModel), tegn polyline ved oppdatering.
+        kartViewModel.path.observe(this, Observer<MutableList<List<LatLng>>> { paths ->
+            //går gjennom punktene i polyline for å skrive det ut til kartet.
+            for (i in 0 until paths.size) {
+                this.mMap.addPolyline(PolylineOptions().addAll(paths[i]).color(Color.RED))
+            }
+        })
+
+
+        // For testing, kaller på findRoute-metoden til kartViewModel
         kartViewModel.findRoute()
     }
 
@@ -61,15 +75,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.setOnMapClickListener {
             val marker = mMap.addMarker(MarkerOptions().position(it).title("Marker on click"))
             //lagrer markeren i en liste slik at man kan endre/slette den senere
-            //markerList.add(marker)
-
-            //getPolylinePoints()
-
-            val path = kartViewModel.path
-            //går gjennom punktene i polyline for å skrive det ut til kartet.
-            for (i in 0 until path.size) {
-                this.mMap.addPolyline(PolylineOptions().addAll(path[i]).color(Color.RED))
-            }
+            markerList.add(marker)
         }
     }
 }
