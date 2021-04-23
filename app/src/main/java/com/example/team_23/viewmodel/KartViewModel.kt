@@ -60,6 +60,7 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
             if (routesFromApi != null) {
                 routes.postValue(routesFromApi)
                 path.postValue(getPolylinePoints(routes.value)) // Oppdater path med ny rute
+                Log.d("KartViewModel.findRoute", "Path oppdatert")
             }
         }
 
@@ -84,18 +85,18 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
         // tmpPathList: Brukt for å konstruere hele polyline-listen, før LiveDataen oppdateres med den komplette listen.
         val tmpPathList = mutableListOf<List<LatLng>>()
         val TAG = "Polyline Points"
+        Log.d(TAG, "Antall routes: ${routes?.size}")
         if (routes != null) {
-            for (element in routes) {  // Sårbart for bugs, mutable data kan ha blitt endret.
-                val legs = element.legs
-                //Log.d(TAG, legs.toString())
+            for (route in routes) {  // Sårbart for bugs, mutable data kan ha blitt endret. TODO: finne bedre løsning
+                val legs = route.legs
+                Log.d(TAG, "Antall legs (i route.legs): ${legs?.size}")
                 if (legs != null) {
-                    for (element in legs) {
-                        val steps = element.steps
-                        //Log.d(TAG, steps.toString())
+                    for (leg in legs) {
+                        val steps = leg.steps
+                        Log.d(TAG, "Antall steps (i leg.steps): ${steps?.size}")
                         if (steps != null) {
-                            for (element in steps) {
-                                val points = element.polyline?.points
-                                Log.d(TAG, points.toString())
+                            for (step in steps) {
+                                val points = step.polyline?.points
                                 tmpPathList.add(PolyUtil.decode(points))
                             }
                         }

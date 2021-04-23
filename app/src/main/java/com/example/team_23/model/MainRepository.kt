@@ -30,7 +30,7 @@ class MainRepository(private val apiService: ApiServiceImpl) {
         try {
             val httpResponse = apiService.fetchData(mapsUrl)
             val response = gson.fromJson(httpResponse, Base::class.java)
-            Log.d(tag, response.toString())
+            //Log.d(tag, response.toString())
             routes = response.routes
         } catch (exception: Exception) {
             Log.w(tag, "Feil under henting av rute: ${exception.message}")
