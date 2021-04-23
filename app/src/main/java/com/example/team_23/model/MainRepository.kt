@@ -16,21 +16,21 @@ class MainRepository(private val apiService: ApiServiceImpl) {
     private val tag = "MainRepository"
 
     // API-Dokumentasjon: https://in2000-apiproxy.ifi.uio.no/weatherapi/metalerts/1.1/documentation
-    // Finn ut i hvilken klasse URL-ene bør plasseres.
+    // TODO: Finn ut i hvilken klasse URL-ene bør plasseres.
     private val endpoint = "https://in2000-apiproxy.ifi.uio.no/weatherapi/metalerts/1.1/"
     private val options = listOf("event=forestFire", "period=2019-05")  // legg til evt. flere options i denne listen
 
     private val mapsUrl = "https://maps.googleapis.com/maps/api/directions/json?origin=59.911491,10.757933&destination=59.26754,10.40762&key=AIzaSyAyK0NkgPMxOOTnWR5EFKdy2DzfDXGh-HI"  // Hardkodet for testing.
     private val gson = Gson()
 
-    //metode som henter Json fra Direction API og parser til Gson.
+    // Henter Json fra Direction API (Google) og parser ved hjelp av Gson til dataklasser.
     suspend fun getRoutes(): List<Routes>? {
         var routes: List<Routes>? = null
         Log.d(tag, "Henter ruter fra Google!")
         try {
             val httpResponse = apiService.fetchData(mapsUrl)
+            if (httpResponse != null)  Log.d(tag, "Fikk respons fra Directions API")
             val response = gson.fromJson(httpResponse, Base::class.java)
-            //Log.d(tag, response.toString())
             routes = response.routes
         } catch (exception: Exception) {
             Log.w(tag, "Feil under henting av rute: ${exception.message}")
@@ -38,7 +38,7 @@ class MainRepository(private val apiService: ApiServiceImpl) {
         return routes
     }
 
-    /* Henter XML-data (RSS-feed) fra proxyen og parser denne.
+    /* Henter XML-data (RSS-feed) fra MetAlerts-proxyen (IN2000) og parser responsen.
      * @return liste med RssItem eller null
      */
     @Suppress("BlockingMethodInNonBlockingContext")
@@ -47,28 +47,24 @@ class MainRepository(private val apiService: ApiServiceImpl) {
         // midlertidig løsning for å sikre at httpResponse er initialisert.
         var rssItems : List<RssItem>? = null
         try {
-            // Android Studio gir beskjed om: «Inappropriate blocking method call», usikker på hvorfor.
             val httpResponse : String = apiService.fetchData(endpoint, options) ?: throw IOException()
             val bytestream = httpResponse.byteInputStream()   // Konverter streng til inputStream
             rssItems = MetAlertsRssParser().parse(bytestream)
         } catch (ex : XmlPullParserException) {
             Log.w(tag, "Feil under parsing av RSS-feed:\n$ex")
-            // + Print toast?
         } catch (ex: IOException) {
             Log.w(tag, "IO-feil under parsing av RSS-feed:\n$ex")
-            // + Print toast?
         }
         return rssItems  // Returner liste med RssItems
     }
 
-    /* Henter XML-data (CAP Alert) fra proxyen og parser denne.
+    /* Henter XML-data (CAP Alert) fra MetAlerts-proxyen (IN2000) og parser responsen.
      * @return instans av Alert eller null.
      */
     @Suppress("BlockingMethodInNonBlockingContext")
     suspend fun getCapAlert(url : String) : Alert? {
         var alert : Alert? = null
         try {
-            // Android Studio gir beskjed om: «Inappropriate blocking method call», usikker på hvorfor.
             val httpResponse : String = apiService.fetchData(url) ?: throw IOException()
             val bytestream = httpResponse.byteInputStream()  // Konverter streng til inputStream
             alert = CapParser().parse(bytestream)

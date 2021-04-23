@@ -18,10 +18,9 @@ import kotlinx.coroutines.withContext
 class KartViewModel(private val repo: MainRepository): ViewModel() {
     val varsler = MutableLiveData<MutableList<Alert>>()
 
-    //liste med responsen fra api-kallet
-    //private var routes:List<Routes>? = null  // TODO: delete?
+    // Liste med responsen fra api-kall til Directions API
     val routes = MutableLiveData<List<Routes>>()
-    //liste som inneholder polyline-punktene
+    // Liste som inneholder polyline-punktene fra routes (sørg for at hele tiden samsvarer med 'routes')
     val path = MutableLiveData<MutableList<List<LatLng>>>()
 
     fun hentAlleVarsler() {
@@ -58,8 +57,8 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
         CoroutineScope(Dispatchers.Default).launch {
             val routesFromApi = repo.getRoutes()
             if (routesFromApi != null) {
-                routes.postValue(routesFromApi)
-                path.postValue(getPolylinePoints(routes.value)) // Oppdater path med ny rute
+                routes.postValue(routesFromApi)                 // Oppdater routes (hentet fra API)
+                path.postValue(getPolylinePoints(routes.value)) // Oppdater path (lat/lng-punkter) basert på ny rute
                 Log.d("KartViewModel.findRoute", "Path oppdatert")
             }
         }
@@ -80,7 +79,7 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
 
     // Hjelpemetode for findRoute()
     // Må gå gjennom dataklasse for dataklasse (base, legs, steps og polyline)
-    // for å få tak i informasjonen jeg trenger (points i polyline) for å lage rute på kartet
+    // for å få tak i informasjonen programmet trenger (points i polyline) for å lage rute på kartet
     private fun getPolylinePoints(routes: List<Routes>?): MutableList<List<LatLng>> {
         // tmpPathList: Brukt for å konstruere hele polyline-listen, før LiveDataen oppdateres med den komplette listen.
         val tmpPathList = mutableListOf<List<LatLng>>()

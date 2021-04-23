@@ -47,9 +47,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 this.mMap.addPolyline(PolylineOptions().addAll(paths[i]).color(Color.RED))
             }
         })
-
-
-        // For testing, kaller på findRoute-metoden til kartViewModel
     }
 
     /**
