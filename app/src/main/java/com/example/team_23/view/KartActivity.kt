@@ -50,7 +50,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
         // For testing, kaller på findRoute-metoden til kartViewModel
-        kartViewModel.findRoute()
     }
 
     /**
@@ -76,6 +75,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             val marker = mMap.addMarker(MarkerOptions().position(it).title("Marker on click"))
             //lagrer markeren i en liste slik at man kan endre/slette den senere
             markerList.add(marker)
+            kartViewModel.findRoute()
         }
     }
 }

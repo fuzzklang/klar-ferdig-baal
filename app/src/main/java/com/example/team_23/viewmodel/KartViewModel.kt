@@ -1,5 +1,6 @@
 package com.example.team_23.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.team_23.model.MainRepository
@@ -94,7 +95,7 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
                         if (steps != null) {
                             for (element in steps) {
                                 val points = element.polyline?.points
-                                //Log.d(TAG, points.toString())
+                                Log.d(TAG, points.toString())
                                 tmpPathList.add(PolyUtil.decode(points))
                             }
                         }
