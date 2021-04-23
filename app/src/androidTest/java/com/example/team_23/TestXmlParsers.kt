@@ -5,10 +5,10 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.team_23.model.api.CapParser
 import com.example.team_23.model.api.MetAlertsRssParser
-import com.example.team_23.model.api.dataclasses.Alert
-import com.example.team_23.model.api.dataclasses.Area
-import com.example.team_23.model.api.dataclasses.Info
-import com.example.team_23.model.api.dataclasses.RssItem
+import com.example.team_23.model.api.metalerts_dataclasses.Alert
+import com.example.team_23.model.api.metalerts_dataclasses.Area
+import com.example.team_23.model.api.metalerts_dataclasses.Info
+import com.example.team_23.model.api.metalerts_dataclasses.RssItem
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.Assert.*
