@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Team23">
-        <activity android:name=".MainActivity">
+        <activity android:name=".view.RegelView"></activity>
+        <activity android:name=".view.KartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
