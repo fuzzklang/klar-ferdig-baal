@@ -17,19 +17,14 @@ import kotlinx.coroutines.withContext
 
 class KartViewModel(private val repo: MainRepository): ViewModel() {
     val varsler = MutableLiveData<MutableList<Alert>>()
-
-    // Liste med responsen fra api-kall til Directions API
-    val routes = MutableLiveData<List<Routes>>()
-    // Liste som inneholder polyline-punktene fra routes (sørg for at hele tiden samsvarer med 'routes')
-    val path = MutableLiveData<MutableList<List<LatLng>>>()
+    val routes = MutableLiveData<List<Routes>>()             // Liste med responsen fra api-kall til Directions API
+    val path = MutableLiveData<MutableList<List<LatLng>>>()  // Liste som inneholder polyline-punktene fra routes (sørg for at hele tiden samsvarer med 'routes')
 
     fun hentAlleVarsler() {
         val varselListe = mutableListOf<Alert>()
         val varselListeMutex = Mutex()  // Lås til varselListe
-
         CoroutineScope(Dispatchers.Default).launch {
             val rssItems = repo.getRssFeed()
-
             // For hvert RssItem gjøres et API-kall til den angitte lenken hvor varselet kan hentes fra.
             // Hvert kall gjøres med en egen Coroutine slik at varslene hentes samtidig. Ellers må hvert
             // API-kall vente i tur og orden på at det forrige skal bli ferdig, noe som er tidkrevende.
@@ -62,7 +57,6 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
                 Log.d("KartViewModel.findRoute", "Path oppdatert")
             }
         }
-
     }
 
     fun hentPos() {
