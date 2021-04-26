@@ -1,5 +1,6 @@
 package com.example.team_23.model
 
+import android.location.Location
 import android.util.Log
 import com.example.team_23.model.api.ApiServiceImpl
 import com.example.team_23.model.api.CapParser
@@ -76,5 +77,10 @@ class MainRepository(private val apiService: ApiServiceImpl) {
             // Print toast?
         }
         return alert
+    }
+
+    suspend fun getLocation(): Location {
+        // TODO: implement getlocation
+        return Location("abc")
     }
 }

@@ -1,5 +1,6 @@
 package com.example.team_23.viewmodel
 
+import android.location.Location
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,11 +15,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import okhttp3.Dispatcher
 
 class KartViewModel(private val repo: MainRepository): ViewModel() {
     val varsler = MutableLiveData<MutableList<Alert>>()
     val routes = MutableLiveData<List<Routes>>()             // Liste med responsen fra api-kall til Directions API
     val path = MutableLiveData<MutableList<List<LatLng>>>()  // Liste som inneholder polyline-punktene fra routes (sørg for at hele tiden samsvarer med 'routes')
+    val location = MutableLiveData<Location>()               // Enhetens lokasjon (GPS)
 
     fun hentAlleVarsler() {
         val varselListe = mutableListOf<Alert>()
@@ -59,8 +62,10 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
         }
     }
 
-    fun hentPos() {
-
+    fun getLocation() {
+        CoroutineScope(Dispatchers.Default).launch {
+            location.postValue(repo.getLocation())  // Oppdater location (LiveData) med lokasjon
+        }
     }
 
     fun hentVarselForAngittRute() {
