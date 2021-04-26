@@ -2,6 +2,7 @@ package com.example.team_23.viewmodel
 
 import android.location.Location
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.team_23.model.MainRepository
@@ -20,7 +21,7 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
     val alerts = MutableLiveData<MutableList<Alert>>()
     val routes = MutableLiveData<List<Routes>>()             // Liste med responsen fra api-kall til Directions API
     val path = MutableLiveData<MutableList<List<LatLng>>>()  // Liste som inneholder polyline-punktene fra routes (sørg for at hele tiden samsvarer med 'routes')
-    val location = MutableLiveData<Location>()               // Enhetens lokasjon (GPS)
+    var location = MutableLiveData<Location>()               // Enhetens lokasjon (GPS)
 
     fun hentAlleVarsler() {
         val varselListe = mutableListOf<Alert>()
@@ -45,6 +46,16 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
         }
     }
 
+    private fun updateLocation() {
+        location = repo.getLocation() as MutableLiveData<Location>
+    }
+
+    fun getLocation(): LiveData<Location> {
+        updateLocation()
+        Log.d("KartViewModel", "getLocation: ${location.value?.latitude}, ${location.value?.longitude}")
+        return location
+    }
+
     fun getAlertsAtLocation(lat: String, lon: String) {
 
     }
@@ -58,12 +69,6 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
                 path.postValue(getPolylinePoints(routes.value)) // Oppdater path (lat/lng-punkter) basert på ny rute
                 Log.d("KartViewModel.findRoute", "Path oppdatert")
             }
-        }
-    }
-
-    fun getLocation() {
-        CoroutineScope(Dispatchers.Default).launch {
-            location.postValue(repo.getLocation())  // Oppdater location (LiveData) med lokasjon
         }
     }
 

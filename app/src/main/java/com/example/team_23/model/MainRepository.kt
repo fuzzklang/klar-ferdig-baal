@@ -1,7 +1,12 @@
 package com.example.team_23.model
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.location.Location
 import android.util.Log
+import androidx.core.app.ActivityCompat
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.team_23.model.api.ApiServiceImpl
 import com.example.team_23.model.api.CapParser
 import com.example.team_23.model.api.MetAlertsRssParser
@@ -9,11 +14,14 @@ import com.example.team_23.model.api.map_dataclasses.Base
 import com.example.team_23.model.api.map_dataclasses.Routes
 import com.example.team_23.model.api.metalerts_dataclasses.Alert
 import com.example.team_23.model.api.metalerts_dataclasses.RssItem
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.gson.Gson
+import kotlinx.coroutines.processNextEventInCurrentThread
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
 
-class MainRepository(private val apiService: ApiServiceImpl) {
+class MainRepository(private val apiService: ApiServiceImpl, private val fusedLocationProviderClient: FusedLocationProviderClient) {
     private val tag = "MainRepository"
 
     // API-Dokumentasjon: https://in2000-apiproxy.ifi.uio.no/weatherapi/metalerts/1.1/documentation
@@ -21,6 +29,7 @@ class MainRepository(private val apiService: ApiServiceImpl) {
     private val endpoint = "https://in2000-apiproxy.ifi.uio.no/weatherapi/metalerts/1.1/"
     private val options = listOf("event=forestFire", "period=2019-05")  // legg til evt. flere options i denne listen
 
+    // Directions API
     private val mapsUrl = "https://maps.googleapis.com/maps/api/directions/json?origin=59.911491,10.757933&destination=59.26754,10.40762&key=AIzaSyAyK0NkgPMxOOTnWR5EFKdy2DzfDXGh-HI"  // Hardkodet for testing.
     private val gson = Gson()
 
@@ -79,8 +88,25 @@ class MainRepository(private val apiService: ApiServiceImpl) {
         return alert
     }
 
-    suspend fun getLocation(): Location {
-        // TODO: implement getlocation
-        return Location("abc")
+    /* Henter GPS-lokasjon ved hjelp av FusedLocationProviderClient
+    * NB: Metoden antar at Viewet sjekker tilgangsrettigheter ("permissions") og at disse er innvilget!
+    * Den kaster bare en SecurityException dersom f.eks. bruker har avslått lokasjonstilgang ("permission")
+    * @returns LiveData<Location>
+    */
+    fun getLocation(): LiveData<Location> {
+        Log.d(tag, "getLocation ble kalt")
+        val liveDataLocation = MutableLiveData<Location>()
+        try {
+            val locationTask = fusedLocationProviderClient.lastLocation
+            locationTask.addOnSuccessListener {
+                Log.d(tag,"getLocation: onSuccessListener ${it.latitude}, ${it.longitude}")
+                liveDataLocation.postValue(it)
+            }.addOnCompleteListener {
+                Log.d(tag,"getLocation: task completed! Result: ${it.result}")
+            }
+        } catch (ex: SecurityException) {
+            Log.w("MainRepo.getLocation", "Error when getting location")
+        }
+        return liveDataLocation
     }
 }
