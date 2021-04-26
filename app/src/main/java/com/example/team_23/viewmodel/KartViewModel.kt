@@ -15,10 +15,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import okhttp3.Dispatcher
 
 class KartViewModel(private val repo: MainRepository): ViewModel() {
-    val varsler = MutableLiveData<MutableList<Alert>>()
+    val alerts = MutableLiveData<MutableList<Alert>>()
     val routes = MutableLiveData<List<Routes>>()             // Liste med responsen fra api-kall til Directions API
     val path = MutableLiveData<MutableList<List<LatLng>>>()  // Liste som inneholder polyline-punktene fra routes (sørg for at hele tiden samsvarer med 'routes')
     val location = MutableLiveData<Location>()               // Enhetens lokasjon (GPS)
@@ -42,11 +41,11 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
                     }
                 }
             }
-            varsler.postValue(varselListe)
+            alerts.postValue(varselListe)
         }
     }
 
-    fun hentVarslerForSted(lat: String, lon: String) {
+    fun getAlertsAtLocation(lat: String, lon: String) {
 
     }
 
@@ -68,11 +67,11 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
         }
     }
 
-    fun hentVarselForAngittRute() {
+    fun getAlertsForRoute() {
 
     }
 
-    fun visBaalplasser() {
+    fun showBonfireSpots() {
 
     }
 
