@@ -23,11 +23,28 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
     val path = MutableLiveData<MutableList<List<LatLng>>>()  // Liste som inneholder polyline-punktene fra routes (sørg for at hele tiden samsvarer med 'routes')
     var location = MutableLiveData<Location>()               // Enhetens lokasjon (GPS)
 
-    fun hentAlleVarsler() {
+    fun getAllAlerts() {
+        getAlertsAtLocation(null, null)
+    }
+
+    private fun updateLocation() {
+        location = repo.getLocation() as MutableLiveData<Location>
+    }
+
+    fun getLocation(): LiveData<Location> {
+        updateLocation()
+        Log.d("KartViewModel", "getLocation: ${location.value?.latitude}, ${location.value?.longitude}")
+        return location
+    }
+
+    /*
+    * parametre: hvis null hentes alle varsler
+    * */
+    private fun getAlertsAtLocation(lat: Double?, lon: Double?) {
         val varselListe = mutableListOf<Alert>()
         val varselListeMutex = Mutex()  // Lås til varselListe
         CoroutineScope(Dispatchers.Default).launch {
-            val rssItems = repo.getRssFeed()
+            val rssItems = repo.getRssFeed(lat, lon)
             // For hvert RssItem gjøres et API-kall til den angitte lenken hvor varselet kan hentes fra.
             // Hvert kall gjøres med en egen Coroutine slik at varslene hentes samtidig. Ellers må hvert
             // API-kall vente i tur og orden på at det forrige skal bli ferdig, noe som er tidkrevende.
@@ -46,18 +63,11 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
         }
     }
 
-    private fun updateLocation() {
-        location = repo.getLocation() as MutableLiveData<Location>
-    }
-
-    fun getLocation(): LiveData<Location> {
-        updateLocation()
-        Log.d("KartViewModel", "getLocation: ${location.value?.latitude}, ${location.value?.longitude}")
-        return location
-    }
-
-    fun getAlertsAtLocation(lat: String, lon: String) {
-
+    fun getAlertsAtLocation() {
+        val lat = location.value?.latitude
+        val lon = location.value?.longitude
+        // Feilsjekking i tilfelle ikke lokasjon tilgjengelig?
+        getAlertsAtLocation(lat, lon)
     }
 
     fun findRoute() {

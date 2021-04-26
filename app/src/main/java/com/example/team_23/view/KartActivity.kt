@@ -27,9 +27,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var repo: MainRepository
     private lateinit var kartViewModel: KartViewModel
 
-    val LOCATION_PERMISSION_REQUEST = 1
+    private val LOCATION_PERMISSION_REQUEST = 1
 
-    val markerList = mutableListOf<Marker>()
+    private val markerList = mutableListOf<Marker>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +52,13 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             //går gjennom punktene i polyline for å skrive det ut til kartet.
             for (i in 0 until paths.size) {
                 this.mMap.addPolyline(PolylineOptions().addAll(paths[i]).color(Color.RED))
+            }
+        })
+
+        kartViewModel.alerts.observe(this, {
+            Log.d("KartActivity", "Endring skjedd i alerts-liste!")
+            kartViewModel.alerts.value?.forEach {
+                Log.d("KartActivity", "Alert: $it")
             }
         })
     }
@@ -104,17 +111,19 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                     Toast.makeText(this, "Ingen lokasjon tilgjengelig", Toast.LENGTH_SHORT).show()
                 }
             })
+            Log.d("KartActivity", "Henter varsler for lokasjon!")
+            kartViewModel.getAlertsAtLocation()
             true
         }
     }
 
     private fun getLocationAccess() {
         Log.d("KartActivity", "getLocation: mMap.isMyLocationEnabled: ${mMap.isMyLocationEnabled}")
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mMap.isMyLocationEnabled = true
         } else
             Log.d("KartActivity", "getLocation: ber om lokasjonsrettigheter")
-            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST)
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -128,6 +137,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                                 this,
                                 Manifest.permission.ACCESS_COARSE_LOCATION
                         ) != PackageManager.PERMISSION_GRANTED) {
+                    // Usikker på når programmet evt. kommer hit
                 } else {
                     Log.d("KartActivity", "Lokasjonstilgang innvilget!")
                     mMap.isMyLocationEnabled = true
