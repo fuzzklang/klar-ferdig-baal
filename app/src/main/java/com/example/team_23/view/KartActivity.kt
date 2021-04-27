@@ -1,16 +1,16 @@
 package com.example.team_23.view
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import android.content.Intent
-import android.view.View
-import android.widget.ImageButton
 import com.example.team_23.R
 import com.example.team_23.model.MainRepository
 import com.example.team_23.model.api.ApiServiceImpl
@@ -65,9 +65,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         })
         //knapp som sender bruker til reglene
-        val rulesActicityBtn = findViewById<ImageButton>(R.id.send_rules)
+        val rulesActivityBtn = findViewById<ImageButton>(R.id.send_rules)
 
-        rulesActicityBtn.setOnClickListener{
+        rulesActivityBtn.setOnClickListener{
             val intent = Intent(this,RegelView::class.java)
             startActivity(intent)
 
@@ -81,9 +81,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         //Funksjon som endrer synligheten til info view
         fun closeInfo(){
             if (infoSynlig == true) {
-                info.setVisibility(View.INVISIBLE)
+                info.visibility = View.INVISIBLE
             } else{
-                info.setVisibility(View.VISIBLE)
+                info.visibility = View.VISIBLE
             }
             infoSynlig = !infoSynlig
         }
