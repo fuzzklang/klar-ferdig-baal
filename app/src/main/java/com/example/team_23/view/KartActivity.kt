@@ -104,6 +104,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
      */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+        mMap.setPadding(0, 2000, 0, 0)
         //lager to markere:en i Oslo og en i Tønsberg
         val oslo = LatLng(59.911491, 10.757933) // Oslo
         val tonsberg = LatLng(59.26754, 10.40762) // Tønsberg
