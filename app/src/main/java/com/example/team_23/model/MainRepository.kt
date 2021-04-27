@@ -69,11 +69,6 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
         return rssItems  // Returner liste med RssItems
     }
 
-    @Suppress("BlockingMethodInNonBlockingContext")
-    suspend fun getRssFeed() : List<RssItem>? {
-        return getRssFeed(null, null)
-    }
-
     /* Henter XML-data (CAP Alert) fra MetAlerts-proxyen (IN2000) og parser responsen.
      * @return instans av Alert eller null.
      */

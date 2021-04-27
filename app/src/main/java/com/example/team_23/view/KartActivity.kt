@@ -9,7 +9,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
 import com.example.team_23.R
 import com.example.team_23.model.MainRepository
 import com.example.team_23.model.api.ApiServiceImpl
@@ -49,7 +48,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
 
         // Observer path-livedata (i fra KartViewModel), tegn polyline ved oppdatering.
-        kartViewModel.path.observe(this, Observer<MutableList<List<LatLng>>> { paths ->
+        kartViewModel.path.observe(this, { paths ->
             //går gjennom punktene i polyline for å skrive det ut til kartet.
             for (i in 0 until paths.size) {
                 this.mMap.addPolyline(PolylineOptions().addAll(paths[i]).color(Color.RED))
@@ -113,8 +112,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                     Toast.makeText(this, "Ingen lokasjon tilgjengelig", Toast.LENGTH_SHORT).show()
                 }
             })
-            Log.d("KartActivity", "Henter varsler for lokasjon!")
-            kartViewModel.getAlertsCurrentLocation()
             true
         }
     }
