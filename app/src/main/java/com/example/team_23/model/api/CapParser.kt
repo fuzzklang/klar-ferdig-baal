@@ -2,9 +2,9 @@ package com.example.team_23.model.api
 
 import android.util.Log
 import android.util.Xml
-import com.example.team_23.model.api.dataclasses.Alert
-import com.example.team_23.model.api.dataclasses.Area
-import com.example.team_23.model.api.dataclasses.Info
+import com.example.team_23.model.api.metalerts_dataclasses.Alert
+import com.example.team_23.model.api.metalerts_dataclasses.Area
+import com.example.team_23.model.api.metalerts_dataclasses.Info
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
