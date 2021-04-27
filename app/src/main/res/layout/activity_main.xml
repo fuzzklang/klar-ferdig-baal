@@ -170,7 +170,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/popup"
-            android:visibility="invisible"
+            android:visibility="visible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="80dp"
@@ -255,16 +255,17 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
             <ImageButton
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:id="@+id/popupCloseButton"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_marginBottom="219dp"
                 android:background="@drawable/close"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/imageView"
-                app:layout_constraintHorizontal_bias="0.921"
+                app:layout_constraintHorizontal_bias="0.934"
                 app:layout_constraintStart_toStartOf="@+id/imageView"
                 app:layout_constraintTop_toTopOf="@+id/imageView"
-                app:layout_constraintVertical_bias="0.072" />
+                app:layout_constraintVertical_bias="0.116" />
 
             <TextView
                 android:id="@+id/textView10"

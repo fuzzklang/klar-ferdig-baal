@@ -79,6 +79,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         val popupButton = findViewById<Button>(R.id.popupButton)
         val info = findViewById<View>(R.id.infoBox)
         val popup = findViewById<View>(R.id.popup)
+        val popupCloseButton = findViewById<ImageButton>(R.id.popupCloseButton)
 
         var infoSynlig = true //Variabel som holder styr paa synligheten til info view
         //Funksjon som endrer synligheten til info view
@@ -107,6 +108,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         popupButton.setOnClickListener{togglePopup()}
+        popupCloseButton.setOnClickListener{togglePopup()}
 
     }
 
