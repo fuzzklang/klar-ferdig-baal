@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -75,12 +76,14 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val infoButton = findViewById<ImageButton>(R.id.info_button)
         val infoCloseButton = findViewById<ImageButton>(R.id.info_close_button)
+        val popupButton = findViewById<Button>(R.id.popupButton)
         val info = findViewById<View>(R.id.infoBox)
+        val popup = findViewById<View>(R.id.popup)
 
         var infoSynlig = true //Variabel som holder styr paa synligheten til info view
         //Funksjon som endrer synligheten til info view
-        fun closeInfo(){
-            if (infoSynlig == true) {
+        fun toggleInfo() {
+            if (infoSynlig) {
                 info.visibility = View.INVISIBLE
             } else{
                 info.visibility = View.VISIBLE
@@ -88,9 +91,23 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             infoSynlig = !infoSynlig
         }
         //Info knapp som endrer info sin synlighet
-        infoButton.setOnClickListener {closeInfo()}
+        infoButton.setOnClickListener {toggleInfo()}
         //Info knapp som gjør info view usynelig
-        infoCloseButton.setOnClickListener{closeInfo()}
+        infoCloseButton.setOnClickListener{toggleInfo()}
+
+        var popupSynlig = false
+
+        fun togglePopup(){
+            if (popupSynlig) {
+                popup.visibility = View.INVISIBLE
+            } else{
+                popup.visibility = View.VISIBLE
+            }
+            popupSynlig = !popupSynlig
+        }
+
+        popupButton.setOnClickListener{togglePopup()}
+
     }
 
     /**
