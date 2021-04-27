@@ -30,21 +30,24 @@ class KartActivity : AppCompatActivity() {
             startActivity(intent)
 
         }
+
         val infoButton = findViewById<ImageButton>(R.id.info_button)
         val infoCloseButton = findViewById<ImageButton>(R.id.info_close_button)
         val info = findViewById<View>(R.id.infoBox)
-        var color = true
 
+        var infoSynlig = true //Variabel som holder styr paa synligheten til info view
+        //Funksjon som endrer synligheten til info view
         fun closeInfo(){
-            if (color == true) {
+            if (infoSynlig == true) {
                 info.setVisibility(View.INVISIBLE)
             } else{
                 info.setVisibility(View.VISIBLE)
             }
-            color = !color
+            infoSynlig = !infoSynlig
         }
-
+        //Info knapp som endrer info sin synlighet
         infoButton.setOnClickListener {closeInfo()}
+        //Info knapp som gjør info view usynelig
         infoCloseButton.setOnClickListener{closeInfo()}
 
     }
