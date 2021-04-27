@@ -20,12 +20,13 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
     private val tag = "MainRepository"
 
     // API-Dokumentasjon: https://in2000-apiproxy.ifi.uio.no/weatherapi/metalerts/1.1/documentation
-    // TODO: Finn ut i hvilken klasse URL-ene bør plasseres.
     private val endpoint = "https://in2000-apiproxy.ifi.uio.no/weatherapi/metalerts/1.1/"
-    private val permanentOptions = listOf("event=forestFire")  // legg til evt. flere options i denne listen
+    // Opsjonene i permanentOptions-listen blir med i alle API-kall til MetAlerts.
+    // Legg til evt. flere options i denne listen
+    private val permanentOptions = listOf("event=forestFire")
 
     // Directions API
-    private val mapsUrl = "https://maps.googleapis.com/maps/api/directions/json?origin=59.911491,10.757933&destination=59.26754,10.40762&key=AIzaSyAyK0NkgPMxOOTnWR5EFKdy2DzfDXGh-HI"  // Hardkodet for testing.
+    private val mapsUrl = "https://maps.googleapis.com/maps/api/directions/json?origin=59.911491,10.757933&destination=59.26754,10.40762&key=AIzaSyAyK0NkgPMxOOTnWR5EFKdy2DzfDXGh-HI"  // Hardkodet for testing. TODO: noe som skal oppdateres?
     private val gson = Gson()
 
     // Henter Json fra Direction API (Google) og parser ved hjelp av Gson til dataklasser.

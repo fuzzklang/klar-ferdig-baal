@@ -23,24 +23,67 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
     val path = MutableLiveData<MutableList<List<LatLng>>>()  // Liste som inneholder polyline-punktene fra routes (sørg for at hele tiden samsvarer med 'routes')
     var location = MutableLiveData<Location>()               // Enhetens lokasjon (GPS)
 
+    /* Grensesnitt til View.
+    * Henter alle tilgjengelige varsler.
+     */
     fun getAllAlerts() {
-        getAlertsAtLocation(null, null)
+        getAlerts(null, null)
     }
 
-    private fun updateLocation() {
-        location = repo.getLocation() as MutableLiveData<Location>
+    /* Grensesnitt til View.
+    * Henter varsler for nåværende sted.
+    * Er avhengig av at lokasjon (livedata 'location') er tilgjengelig og oppdatert.
+    */
+    fun getAlertsCurrentLocation() {
+        val lat = location.value?.latitude
+        val lon = location.value?.longitude
+        // Feilsjekking i tilfelle ikke lokasjon tilgjengelig?
+        if (lat == null || lon == null) {
+            Log.w("KartViewModel", "Advarsel: getAlertsCurrentLocation() ble kalt men lokasjon er ikke tilgjengelig.")
+        }
+        getAlerts(lat, lon)
     }
 
+    /* Grensesnitt til View
+     * Returnerer en instans av livedata-instans med lokasjon.
+     */
     fun getLocation(): LiveData<Location> {
         updateLocation()
         Log.d("KartViewModel", "getLocation: ${location.value?.latitude}, ${location.value?.longitude}")
         return location
     }
 
-    /*
-    * parametre: hvis null hentes alle varsler
-    * */
-    private fun getAlertsAtLocation(lat: Double?, lon: Double?) {
+    fun getAlertsForRoute() {
+
+    }
+
+    fun findRoute() {
+        // Kaller på Directions API fra Google (via Repository) og oppdaterer routes-LiveData
+        CoroutineScope(Dispatchers.Default).launch {
+            val routesFromApi = repo.getRoutes()
+            if (routesFromApi != null) {
+                routes.postValue(routesFromApi)                 // Oppdater routes (hentet fra API)
+                path.postValue(getPolylinePoints(routes.value)) // Oppdater path (lat/lng-punkter) basert på ny rute
+                Log.d("KartViewModel.findRoute", "Path oppdatert")
+            }
+        }
+    }
+
+    fun showBonfireSpots() {
+
+    }
+
+    // Oppdaterer nåværende posisjon ved kall til repository
+    private fun updateLocation() {
+        location = repo.getLocation() as MutableLiveData<Location>
+    }
+
+    /* Privat metode, implementerer funksjonaliteten brukt i getAllAlerts() og getAlertsCurrentLocation().
+     * Dersom ingen lokasjon oppgis (parametre er null) hentes alle tilgjengelige varsler.
+     * Ellers hentes varsler for angitt posisjon.
+     * Metoden oppdaterer alerts-variabelen (LiveData).
+    */
+    private fun getAlerts(lat: Double?, lon: Double?) {
         val varselListe = mutableListOf<Alert>()
         val varselListeMutex = Mutex()  // Lås til varselListe
         CoroutineScope(Dispatchers.Default).launch {
@@ -63,36 +106,10 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
         }
     }
 
-    fun getAlertsAtLocation() {
-        val lat = location.value?.latitude
-        val lon = location.value?.longitude
-        // Feilsjekking i tilfelle ikke lokasjon tilgjengelig?
-        getAlertsAtLocation(lat, lon)
-    }
-
-    fun findRoute() {
-        // Kaller på Directions API fra Google (via Repository) oppdaterer routes-LiveData
-        CoroutineScope(Dispatchers.Default).launch {
-            val routesFromApi = repo.getRoutes()
-            if (routesFromApi != null) {
-                routes.postValue(routesFromApi)                 // Oppdater routes (hentet fra API)
-                path.postValue(getPolylinePoints(routes.value)) // Oppdater path (lat/lng-punkter) basert på ny rute
-                Log.d("KartViewModel.findRoute", "Path oppdatert")
-            }
-        }
-    }
-
-    fun getAlertsForRoute() {
-
-    }
-
-    fun showBonfireSpots() {
-
-    }
-
-    // Hjelpemetode for findRoute()
-    // Må gå gjennom dataklasse for dataklasse (base, legs, steps og polyline)
-    // for å få tak i informasjonen programmet trenger (points i polyline) for å lage rute på kartet
+    /* Hjelpemetode for findRoute()
+     * Må gå gjennom dataklasse for dataklasse (base, legs, steps og polyline)
+     * for å få tak i informasjonen programmet trenger (points i polyline) for å lage rute på kartet
+     */
     private fun getPolylinePoints(routes: List<Routes>?): MutableList<List<LatLng>> {
         // tmpPathList: Brukt for å konstruere hele polyline-listen, før LiveDataen oppdateres med den komplette listen.
         val tmpPathList = mutableListOf<List<LatLng>>()

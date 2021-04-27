@@ -27,7 +27,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var repo: MainRepository
     private lateinit var kartViewModel: KartViewModel
 
-    private val LOCATION_PERMISSION_REQUEST = 1
+    private val LOCATION_PERMISSION_REQUEST = 1  // Til lokasjonsrettigheter
 
     private val markerList = mutableListOf<Marker>()
 
@@ -36,7 +36,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         setContentView(R.layout.activity_main)
 
         /*BEGIN COMMENT
-        * Alle disse bør instansieres annetsteds! */
+        * Alle disse bør instansieres annetsteds!
+        * For eksempel i et Factory eller tilsvarende */
         apiService = ApiServiceImpl()
         repo = MainRepository(apiService, LocationServices.getFusedLocationProviderClient(applicationContext))
         kartViewModel = KartViewModel(repo)
@@ -47,7 +48,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-        // Observer path-livedata (i KartViewModel), tegn polyline ved oppdatering.
+        // Observer path-livedata (i fra KartViewModel), tegn polyline ved oppdatering.
         kartViewModel.path.observe(this, Observer<MutableList<List<LatLng>>> { paths ->
             //går gjennom punktene i polyline for å skrive det ut til kartet.
             for (i in 0 until paths.size) {
@@ -55,6 +56,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         })
 
+        /* Observer varsel-liste fra KartViewModel */
         kartViewModel.alerts.observe(this, {
             Log.d("KartActivity", "Endring skjedd i alerts-liste!")
             kartViewModel.alerts.value?.forEach {
@@ -83,7 +85,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
         getLocationAccess()
 
-        //når bruker trykker på kartet lages det en ny marker
+        // Når bruker trykker på kartet lages det en ny marker
         mMap.setOnMapClickListener {
             val marker = mMap.addMarker(MarkerOptions().position(it).title("Marker on click"))
             //lagrer markeren i en liste slik at man kan endre/slette den senere
@@ -91,7 +93,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             kartViewModel.findRoute()
         }
 
-        // Ved klikk på "Min lokasjon"-knappen:
+        // Ved klikk på "Vis Min Lokasjon"-knappen (oppe i høyre hjørne):
         // Hent en LiveData-instans med lokasjon (fra ViewModel) som deretter blir observert
         // [Denne løsningen kan potensielt føre til en viss delay fra knappen blir klikket til kameraet flytter seg]
         mMap.setOnMyLocationButtonClickListener {
@@ -112,11 +114,12 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
             })
             Log.d("KartActivity", "Henter varsler for lokasjon!")
-            kartViewModel.getAlertsAtLocation()
+            kartViewModel.getAlertsCurrentLocation()
             true
         }
     }
 
+    /* Hjelpemetode for å få tilgangsrettigheter for lokasjon */
     private fun getLocationAccess() {
         Log.d("KartActivity", "getLocation: mMap.isMyLocationEnabled: ${mMap.isMyLocationEnabled}")
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -126,6 +129,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST)
     }
 
+    /* Metode kalles når svar ang. lokasjonstilgang kommer tilbake. Sjekker om tillatelse er innvilget */
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         Log.d("KartActivity", "onRequestPermissionsResult er kalt")
         if (requestCode == LOCATION_PERMISSION_REQUEST) {
