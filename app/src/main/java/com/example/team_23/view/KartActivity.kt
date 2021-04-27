@@ -1,20 +1,16 @@
 package com.example.team_23.view
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import android.content.Intent
-import android.os.Bundle
-import android.view.View
-import android.widget.Button
-import android.widget.ImageButton
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.res.ResourcesCompat
 import com.example.team_23.R
 import com.example.team_23.model.MainRepository
 import com.example.team_23.model.api.ApiServiceImpl
@@ -68,6 +64,33 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 Log.d("KartActivity", "Alert: $it")
             }
         })
+        //knapp som sender bruker til reglene
+        val rulesActivityBtn = findViewById<ImageButton>(R.id.send_rules)
+
+        rulesActivityBtn.setOnClickListener{
+            val intent = Intent(this,RegelView::class.java)
+            startActivity(intent)
+
+        }
+
+        val infoButton = findViewById<ImageButton>(R.id.info_button)
+        val infoCloseButton = findViewById<ImageButton>(R.id.info_close_button)
+        val info = findViewById<View>(R.id.infoBox)
+
+        var infoSynlig = true //Variabel som holder styr paa synligheten til info view
+        //Funksjon som endrer synligheten til info view
+        fun closeInfo(){
+            if (infoSynlig == true) {
+                info.visibility = View.INVISIBLE
+            } else{
+                info.visibility = View.VISIBLE
+            }
+            infoSynlig = !infoSynlig
+        }
+        //Info knapp som endrer info sin synlighet
+        infoButton.setOnClickListener {closeInfo()}
+        //Info knapp som gjør info view usynelig
+        infoCloseButton.setOnClickListener{closeInfo()}
     }
 
     /**
@@ -81,6 +104,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
      */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+        mMap.setPadding(0, 2000, 0, 0)
         //lager to markere:en i Oslo og en i Tønsberg
         val oslo = LatLng(59.911491, 10.757933) // Oslo
         val tonsberg = LatLng(59.26754, 10.40762) // Tønsberg
@@ -155,32 +179,4 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
     }
-  
-        //knapp som sender bruker til reglene
-        val rulesActicityBtn = findViewById<ImageButton>(R.id.send_rules)
-
-        rulesActicityBtn.setOnClickListener{
-            val intent = Intent(this,RegelView::class.java)
-            startActivity(intent)
-
-        }
-
-        val infoButton = findViewById<ImageButton>(R.id.info_button)
-        val infoCloseButton = findViewById<ImageButton>(R.id.info_close_button)
-        val info = findViewById<View>(R.id.infoBox)
-
-        var infoSynlig = true //Variabel som holder styr paa synligheten til info view
-        //Funksjon som endrer synligheten til info view
-        fun closeInfo(){
-            if (infoSynlig == true) {
-                info.setVisibility(View.INVISIBLE)
-            } else{
-                info.setVisibility(View.VISIBLE)
-            }
-            infoSynlig = !infoSynlig
-        }
-        //Info knapp som endrer info sin synlighet
-        infoButton.setOnClickListener {closeInfo()}
-        //Info knapp som gjør info view usynelig
-        infoCloseButton.setOnClickListener{closeInfo()}
 }
