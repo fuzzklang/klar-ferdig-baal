@@ -1,3 +1,39 @@
 <resources>
-    <string name="app_name">Team-23</string>
+    <string name="app_name">KlarFerdigBål</string>
+    <string name="rules">
+        • Respekter det nasjonale bålforbudet 15. april til 15. &#160;&#160;september
+         Ikke tenn bål i skog og utmark i denne &#160;&#160;&#160;perioden.\n\n<br/><br/>
+        •Følg med på skogbrannvarselet og følg rådene fra &#160;&#160;&#160;ditt lokale brannvesen\n\n<br/><br/>
+        •Bruk godkjente bålplasser hvis du skal tenne bål\n\n<br/><br/>
+        •Ta hensyn til skogbrannfare og vindforhold.\n\n<br/><br/>
+        • Det er alltid den som brenner bål som har ansvaret
+        &#160;&#160;&#160;for brannsikkerheten.\n\n<br/><br/>
+        • Det bør være en voksen, edru person som er
+         &#160;&#160;&#160;ansvarlig for bålet.\n\n<br/><br/>
+        • Bålet må være i god avstand fra bebyggelse og
+         &#160;&#160;&#160;vegetasjon.\n\n<br/><br/>
+        • Det er ikke lov å brenne bål på svaberg.\n\n<br/><br/>
+        • Bålet må ikke være større enn at du har kontroll på
+         &#160;&#160;&#160;det og kan slokke ved behov.\n\n<br/><br/>
+        • Ha egnede slokkemidler lett tilgjengelig.\n\n<br/><br/>
+        • Det er forbudt å brenne plast, bygningsmaterialer
+         &#160;&#160;&#160;og annen søppel.\n\n<br/><br/>
+        • Når du forlater bålplassen skal bålet være helt
+         &#160;&#160;&#160;slokket.\n\n<br/><br/>
+
+
+    </string>
+
+
+    <string name="title">Regler</string>
+    <string name="imgClose">Avslutt</string>
+    <string name="imgFire">flammeikon</string>
+    <string name="info">Info</string>
+    <string name="regler">Regler</string>
+    <string name="infoContent">Trykk på kartet for å sjekke skogbrannfaren for et området</string>
+    <string name="overlay">Overlay</string>
+    <string name="infoButtonText">Info</string>
+    <string name="app_title">Klar Ferdig Bål</string>
+
+
 </resources>
