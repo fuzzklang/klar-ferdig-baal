@@ -65,6 +65,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 Log.d("KartActivity", "Alert: $it")
             }
         })
+
         //knapp som sender bruker til reglene
         val rulesActivityBtn = findViewById<ImageButton>(R.id.send_rules)
 
@@ -109,6 +110,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
         popupButton.setOnClickListener{togglePopup()}
         popupCloseButton.setOnClickListener{togglePopup()}
+
+        kartViewModel.getAllAlerts()
 
     }
 
