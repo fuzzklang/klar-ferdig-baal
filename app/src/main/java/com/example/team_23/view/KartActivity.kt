@@ -91,6 +91,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         infoButton.setOnClickListener {closeInfo()}
         //Info knapp som gjør info view usynelig
         infoCloseButton.setOnClickListener{closeInfo()}
+
+
+        kartViewModel.getAllAlerts()
     }
 
     /**
