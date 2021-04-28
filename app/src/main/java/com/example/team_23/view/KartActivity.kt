@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -58,11 +59,27 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         })
 
+        val warningArea = findViewById<TextView>(R.id.warningArea)
+        val warningInfo = findViewById<TextView>(R.id.warningInfo)
+        val warningLevel = findViewById<TextView>(R.id.warningLevel)
+
         /* Observer varsel-liste fra KartViewModel */
         kartViewModel.alerts.observe(this, {
             Log.d("KartActivity", "Endring skjedd i alerts-liste!")
             kartViewModel.alerts.value?.forEach {
                 Log.d("KartActivity", "Alert: $it")
+                it.infoItemsNo.forEach{
+                    warningArea.text = it.area.areaDesc
+                    warningInfo.text = it.instruction
+                    if (it.severity.toString() == "Moderate") {
+                        warningLevel.text = "Moderat skogbrannfare"
+                    }else if(it.severity.toString() == "Severe"){
+                        warningLevel.text = "Betydelig skogbrannfare"
+                    }else{
+                        warningLevel.text = "?"
+                        Log.d("testing6666", "test: ${it.severity}")
+                    }
+                }
             }
         })
 
@@ -87,8 +104,10 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         fun toggleInfo() {
             if (infoSynlig) {
                 info.visibility = View.INVISIBLE
+                mMap.uiSettings.isScrollGesturesEnabled = true
             } else{
                 info.visibility = View.VISIBLE
+                mMap.uiSettings.isScrollGesturesEnabled = false
             }
             infoSynlig = !infoSynlig
         }
@@ -102,8 +121,10 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         fun togglePopup(){
             if (popupSynlig) {
                 popup.visibility = View.INVISIBLE
+                mMap.uiSettings.isScrollGesturesEnabled = true
             } else{
                 popup.visibility = View.VISIBLE
+                mMap.uiSettings.isScrollGesturesEnabled = false
             }
             popupSynlig = !popupSynlig
         }

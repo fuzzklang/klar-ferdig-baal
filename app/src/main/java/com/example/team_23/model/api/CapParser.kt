@@ -77,10 +77,10 @@ class CapParser {
         var lang: String? = null
         var event: String? = null
         var responseType: String? = null
+        var severity: String? = null
         // Disse kan inkluderes dersom vi trenger disse XML-elementene fra varselet.
         // Må defineres i dataklassen Info også.
         /*var urgency: String? = null
-        var severity: String? = null
         var certainty: String? = null
         var effective: String? = null
         var onset: String? = null
@@ -99,11 +99,12 @@ class CapParser {
                 "event" -> event = readText(parser)
                 "responseType" -> responseType = readText(parser)
                 "instruction" -> instruction = readText(parser)
+                "severity" -> severity = readText(parser)
                 "area" -> area = readArea(parser)
                 else -> skip(parser)
             }
         }
-        return Info(lang, event, responseType, instruction, area)
+        return Info(lang, event, responseType, severity, instruction, area)
     }
 
     @Throws(XmlPullParserException::class, IOException::class)
