@@ -101,7 +101,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
         var infoSynlig = true //Variabel som holder styr paa synligheten til info view
         //Funksjon som endrer synligheten til info view
-        mMap.uiSettings.isScrollGesturesEnabled = false
         fun toggleInfo() {
             if (infoSynlig) {
                 info.visibility = View.INVISIBLE
@@ -188,6 +187,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             })
             true
         }
+        mMap.uiSettings.isScrollGesturesEnabled = false
     }
 
     /* Hjelpemetode for å få tilgangsrettigheter for lokasjon */
