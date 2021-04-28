@@ -101,6 +101,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
         var infoSynlig = true //Variabel som holder styr paa synligheten til info view
         //Funksjon som endrer synligheten til info view
+        mMap.uiSettings.isScrollGesturesEnabled = false
         fun toggleInfo() {
             if (infoSynlig) {
                 info.visibility = View.INVISIBLE
