@@ -97,6 +97,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         val popupButton = findViewById<Button>(R.id.popupButton)
         val info = findViewById<View>(R.id.infoBox)
         val popup = findViewById<View>(R.id.popup)
+        val popup2 = findViewById<View>(R.id.popup2)
         val popupCloseButton = findViewById<ImageButton>(R.id.popupCloseButton)
 
         var infoSynlig = true //Variabel som holder styr paa synligheten til info view
@@ -120,10 +121,12 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
         fun togglePopup(){
             if (popupSynlig) {
-                popup.visibility = View.INVISIBLE
+                popup2.visibility = View.INVISIBLE
+                popup.visibility = View.VISIBLE
                 mMap.uiSettings.isScrollGesturesEnabled = true
             } else{
-                popup.visibility = View.VISIBLE
+                popup2.visibility = View.VISIBLE
+                popup.visibility = View.INVISIBLE
                 mMap.uiSettings.isScrollGesturesEnabled = false
             }
             popupSynlig = !popupSynlig

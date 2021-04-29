@@ -103,7 +103,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/infoBox"
-            android:visibility="visible"
+            android:visibility="invisible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -443,6 +443,125 @@
                 app:layout_constraintVertical_bias="0.729"
                 app:srcCompat="@drawable/yellowwarning" />
 
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/popup2"
+            android:visibility="visible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="80dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/send_rules"
+            >
+
+            <ImageView
+                android:id="@+id/waningLevel_mainImageView"
+                android:layout_width="279dp"
+                android:layout_height="391dp"
+                android:background="@drawable/shape"
+                android:contentDescription="TODO"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.416" />
+
+            <ImageView
+                android:id="@+id/levels"
+                android:layout_height="320dp"
+                android:layout_width="215dp"
+                android:layout_marginBottom="0dp"
+                android:background="@drawable/shape"
+                android:backgroundTint="@color/grey"
+                app:layout_constraintBottom_toBottomOf="@id/waningLevel_mainImageView"
+                app:layout_constraintEnd_toEndOf="@+id/waningLevel_mainImageView"
+                app:layout_constraintHorizontal_bias="0.522"
+                app:layout_constraintStart_toStartOf="@+id/waningLevel_mainImageView"
+                app:layout_constraintTop_toTopOf="@+id/waningLevel_mainImageView"
+                app:layout_constraintVertical_bias="0.817" />
+
+            <TextView
+                android:id="@+id/warningLevels"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/levels"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:layout_marginTop="18dp"
+                app:layout_constraintBottom_toTopOf="@id/levels"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.491"
+                app:layout_constraintStart_toStartOf="@id/waningLevel_mainImageView"
+                app:layout_constraintTop_toTopOf="@id/waningLevel_mainImageView"
+                app:layout_constraintVertical_bias="0.142" />
+
+            <TextView
+                android:id="@+id/moderate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Moderat skogbrannfare"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:layout_marginBottom="290dp"
+                app:layout_constraintBottom_toBottomOf="@id/levels"
+                app:layout_constraintEnd_toEndOf="@id/levels"
+                app:layout_constraintStart_toStartOf="@id/levels"
+                app:layout_constraintTop_toTopOf="@id/levels" />
+
+            <ImageView
+                android:id="@+id/moderateSign"
+                android:layout_width="50dp"
+                android:layout_height="45dp"
+                app:layout_constraintBottom_toBottomOf="@id/levels"
+                app:layout_constraintEnd_toEndOf="@id/levels"
+                app:layout_constraintStart_toStartOf="@id/levels"
+                app:layout_constraintTop_toBottomOf="@id/moderate"
+                app:srcCompat="@drawable/yellowwarning"
+                android:layout_marginBottom="240dp"/>
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="210dp"
+                android:gravity="center"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@id/levels"
+                app:layout_constraintEnd_toEndOf="@id/levels"
+                app:layout_constraintStart_toStartOf="@id/levels"
+                app:layout_constraintTop_toBottomOf="@+id/moderateSign"
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                android:text="@string/moderat_description"
+                android:layout_marginBottom="150dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@id/levels"
+                app:layout_constraintEnd_toEndOf="@id/levels"
+                app:layout_constraintStart_toStartOf="@id/levels"
+                app:layout_constraintTop_toTopOf="@id/levels"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:gravity="center"
+                android:text="Betydelig skogbrannfare"
+                android:layout_marginTop="50dp"/>
+
+            <ImageButton
+                android:id="@+id/popup2CloseButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/close"
+                android:layout_marginStart="210dp"
+                android:layout_marginTop="15dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
