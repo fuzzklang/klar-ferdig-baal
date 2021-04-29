@@ -98,14 +98,16 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         val popupButton = findViewById<Button>(R.id.popupButton)
         val info = findViewById<View>(R.id.infoBox)
         val popup = findViewById<View>(R.id.popup)
-        val popup2 = findViewById<View>(R.id.popup2)
         val popupCloseButton = findViewById<ImageButton>(R.id.popupCloseButton)
+        val levelsButton = findViewById<Button>(R.id.levelsButton)
+        val levelsPopup = findViewById<View>(R.id.levelsPopup)
+        val levelsPopupCloseBtn = findViewById<ImageButton>(R.id.levelsCloseButton)
 
         var infoSynlig = true //Variabel som holder styr paa synligheten til info view
         //Funksjon som endrer synligheten til info view
         fun toggleInfo() {
             if (infoSynlig) {
-                info.visibility = View.INVISIBLE
+                info.visibility = View.VISIBLE
                 mMap.uiSettings.isScrollGesturesEnabled = true
             } else{
                 info.visibility = View.VISIBLE
@@ -118,15 +120,13 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         //Info knapp som gjør info view usynelig
         infoCloseButton.setOnClickListener{toggleInfo()}
 
-        var popupSynlig = false
+        var popupSynlig = true
 
         fun togglePopup(){
             if (popupSynlig) {
-                popup2.visibility = View.INVISIBLE
                 popup.visibility = View.VISIBLE
                 mMap.uiSettings.isScrollGesturesEnabled = true
             } else{
-                popup2.visibility = View.VISIBLE
                 popup.visibility = View.INVISIBLE
                 mMap.uiSettings.isScrollGesturesEnabled = false
             }
@@ -135,6 +135,24 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
         popupButton.setOnClickListener{togglePopup()}
         popupCloseButton.setOnClickListener{togglePopup()}
+
+        var levelsPopupSynlig = true
+
+        fun toggleLevelsPopup(){
+            if (levelsPopupSynlig){
+                levelsPopup.visibility = View.VISIBLE
+                popup.visibility = View.INVISIBLE
+                mMap.uiSettings.isScrollGesturesEnabled = true
+            } else{
+                levelsPopup.visibility = View.INVISIBLE
+                popup.visibility = View.VISIBLE
+                mMap.uiSettings.isScrollGesturesEnabled = false
+            }
+            levelsPopupSynlig = !levelsPopupSynlig
+        }
+
+        levelsButton.setOnClickListener { toggleLevelsPopup() }
+        levelsPopupCloseBtn.setOnClickListener { toggleLevelsPopup() }
 
         kartViewModel.getAllAlerts()
 
