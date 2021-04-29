@@ -87,7 +87,14 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
         //knapp som sender bruker til reglene
         val rulesActivityBtn = findViewById<ImageButton>(R.id.send_rules)
-        val infoButton = findViewById<Button>(R.id.info_button)
+
+        rulesActivityBtn.setOnClickListener{
+            val intent = Intent(this,RegelView::class.java)
+            startActivity(intent)
+
+        }
+
+        val infoButton = findViewById<ImageButton>(R.id.info_button)
         val infoCloseButton = findViewById<ImageButton>(R.id.info_close_button)
         val popupButton = findViewById<Button>(R.id.popupButton)
         val info = findViewById<View>(R.id.infoBox)
@@ -95,6 +102,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         val popupCloseButton = findViewById<ImageButton>(R.id.popupCloseButton)
         val menu = findViewById<View>(R.id.menu)
         val menuButton = findViewById<ImageButton>(R.id.menuButton)
+        val levelsButton = findViewById<Button>(R.id.levelsButton)
+        val levelsPopup = findViewById<View>(R.id.levelsPopup)
+        val levelsPopupCloseBtn = findViewById<ImageButton>(R.id.levelsCloseButton)
 
         var menuSynlig = false
         var infoSynlig = true //Variabel som holder styr paa synligheten til info view
@@ -169,6 +179,24 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         menuButton.setOnClickListener{toggleMenu()}
+
+        var levelsPopupSynlig = true
+
+        fun toggleLevelsPopup(){
+            if (levelsPopupSynlig){
+                levelsPopup.visibility = View.VISIBLE
+                popup.visibility = View.INVISIBLE
+                mMap.uiSettings.isScrollGesturesEnabled = true
+            } else{
+                levelsPopup.visibility = View.INVISIBLE
+                popup.visibility = View.VISIBLE
+                mMap.uiSettings.isScrollGesturesEnabled = false
+            }
+            levelsPopupSynlig = !levelsPopupSynlig
+        }
+
+        levelsButton.setOnClickListener { toggleLevelsPopup() }
+        levelsPopupCloseBtn.setOnClickListener { toggleLevelsPopup() }
 
         kartViewModel.getAllAlerts()
 
