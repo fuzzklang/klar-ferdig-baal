@@ -34,12 +34,25 @@
     <string name="overlay">Overlay</string>
     <string name="infoButtonText">Info</string>
     <string name="app_title">Klar Ferdig Bål</string>
-    <string name="loading">Loading...</string>
+
+
     <string name="levels">Farenivå</string>
     <string name="moderat_description">Moderat farenivå vises når det finnes en
     risiko for farlige situasjoner, som kan forårsake lokale skader.
     I en slik situasjon kan man stort sett oppføre seg som normalt, men
     det er viktig å være varsom.</string>
+
+    <string name="loading">Loading…</string>
+    <string name="close_infobox_button">Close infobox button</string>
+    <string name="overlay_button">Overlay Button</string>
+    <string name="info_button">Info Button</string>
+    <string name="sok">Søk…</string>
+    <string name="farevarselniva">Farevarselnivå</string>
+    <string name="nivaer">Nivåer</string>
+    <string name="informasjon">Informasjon</string>
+    <string name="dra_hit">Dra hit</string>
+    <string name="balplasser">Bålplasser</string>
+    <string name="popup">popup</string>
 
 
 </resources>

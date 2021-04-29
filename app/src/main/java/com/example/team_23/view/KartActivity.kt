@@ -1,15 +1,13 @@
 package com.example.team_23.view
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -34,6 +32,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private val markerList = mutableListOf<Marker>()
 
+    @SuppressLint("UseCompatLoadingForDrawables", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -62,6 +61,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         val warningArea = findViewById<TextView>(R.id.warningArea)
         val warningInfo = findViewById<TextView>(R.id.warningInfo)
         val warningLevel = findViewById<TextView>(R.id.warningLevel)
+        val warningLevelImg = findViewById<ImageView>(R.id.warningLevelImg)
 
         /* Observer varsel-liste fra KartViewModel */
         kartViewModel.alerts.observe(this, {
@@ -73,11 +73,12 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                     warningInfo.text = it.instruction
                     if (it.severity.toString() == "Moderate") {
                         warningLevel.text = "Moderat skogbrannfare"
+                        warningLevelImg.background = resources.getDrawable(R.drawable.yellowwarning,theme)
                     }else if(it.severity.toString() == "Severe"){
                         warningLevel.text = "Betydelig skogbrannfare"
+                        warningLevelImg.background = resources.getDrawable(R.drawable.orangewarning,theme)
                     }else{
                         warningLevel.text = "?"
-                        Log.d("testing6666", "test: ${it.severity}")
                     }
                 }
             }
