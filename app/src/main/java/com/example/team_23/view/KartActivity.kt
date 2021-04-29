@@ -63,6 +63,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         val warningInfo = findViewById<TextView>(R.id.warningInfo)
         val warningLevel = findViewById<TextView>(R.id.warningLevel)
         val warningLevelImg = findViewById<ImageView>(R.id.warningLevelImg)
+        val warningLevelColor = findViewById<View>(R.id.warningLevelColor)
 
         /* Observer varsel-liste fra KartViewModel */
         kartViewModel.alerts.observe(this, {
@@ -75,9 +76,11 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                     if (it.severity.toString() == "Moderate") {
                         warningLevel.text = "Moderat skogbrannfare"
                         warningLevelImg.background = resources.getDrawable(R.drawable.yellowwarning,theme)
+                        warningLevelColor.background = resources.getDrawable(R.color.yellow,theme)
                     }else if(it.severity.toString() == "Severe"){
                         warningLevel.text = "Betydelig skogbrannfare"
                         warningLevelImg.background = resources.getDrawable(R.drawable.orangewarning,theme)
+                        warningLevelColor.background = resources.getDrawable(R.color.orange,theme)
                     }else{
                         warningLevel.text = "?"
                     }
