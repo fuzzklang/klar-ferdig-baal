@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.team_23.R
@@ -86,29 +87,41 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
         //knapp som sender bruker til reglene
         val rulesActivityBtn = findViewById<ImageButton>(R.id.send_rules)
-
-        rulesActivityBtn.setOnClickListener{
-            val intent = Intent(this,RegelView::class.java)
-            startActivity(intent)
-
-        }
-
-        val infoButton = findViewById<ImageButton>(R.id.info_button)
+        val infoButton = findViewById<Button>(R.id.info_button)
         val infoCloseButton = findViewById<ImageButton>(R.id.info_close_button)
         val popupButton = findViewById<Button>(R.id.popupButton)
         val info = findViewById<View>(R.id.infoBox)
         val popup = findViewById<View>(R.id.popup)
         val popupCloseButton = findViewById<ImageButton>(R.id.popupCloseButton)
+        val menu = findViewById<View>(R.id.menu)
+        val menuButton = findViewById<ImageButton>(R.id.menuButton)
 
+        var menuSynlig = false
         var infoSynlig = true //Variabel som holder styr paa synligheten til info view
+        var popupSynlig = false
+
+
+        rulesActivityBtn.setOnClickListener{
+            val intent = Intent(this,RegelView::class.java)
+            startActivity(intent)
+            if(menuSynlig){
+                menu.visibility = View.GONE
+                menuButton.background = resources.getDrawable(R.drawable.menubutton,theme)
+            }
+        }
+
         //Funksjon som endrer synligheten til info view
         fun toggleInfo() {
             if (infoSynlig) {
-                info.visibility = View.INVISIBLE
+                info.visibility = View.GONE
                 mMap.uiSettings.isScrollGesturesEnabled = true
             } else{
                 info.visibility = View.VISIBLE
                 mMap.uiSettings.isScrollGesturesEnabled = false
+                if(menuSynlig){
+                    menu.visibility = View.GONE
+                    menuButton.background = resources.getDrawable(R.drawable.menubutton,theme)
+                }
             }
             infoSynlig = !infoSynlig
         }
@@ -117,21 +130,45 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         //Info knapp som gjør info view usynelig
         infoCloseButton.setOnClickListener{toggleInfo()}
 
-        var popupSynlig = false
 
         fun togglePopup(){
             if (popupSynlig) {
-                popup.visibility = View.INVISIBLE
+                popup.visibility = View.GONE
                 mMap.uiSettings.isScrollGesturesEnabled = true
             } else{
                 popup.visibility = View.VISIBLE
                 mMap.uiSettings.isScrollGesturesEnabled = false
+                if(menuSynlig){
+                    menu.visibility = View.GONE
+                    menuButton.background = resources.getDrawable(R.drawable.menubutton,theme)
+                }
             }
             popupSynlig = !popupSynlig
         }
 
         popupButton.setOnClickListener{togglePopup()}
         popupCloseButton.setOnClickListener{togglePopup()}
+
+        fun toggleMenu(){
+            if(menuSynlig){
+                menu.visibility = View.GONE
+                mMap.uiSettings.isScrollGesturesEnabled = true
+                menuButton.background = resources.getDrawable(R.drawable.menubutton,theme)
+            }else{
+                menu.visibility = View.VISIBLE
+                mMap.uiSettings.isScrollGesturesEnabled = false
+                menuButton.background = resources.getDrawable(R.drawable.closemenubutton,theme)
+                if(infoSynlig){
+                    toggleInfo()
+                }
+                if(popupSynlig){
+                    togglePopup()
+                }
+            }
+            menuSynlig = !menuSynlig
+        }
+
+        menuButton.setOnClickListener{toggleMenu()}
 
         kartViewModel.getAllAlerts()
 

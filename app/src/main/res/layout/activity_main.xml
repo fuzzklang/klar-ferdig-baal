@@ -20,12 +20,35 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:context=".MapsActivity" />
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true">
 
+
+        <Button
+            android:id="@+id/popupButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/popup"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.501"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.926" />
+
+        <Button
+            android:layout_width="140dp"
+            android:layout_height="50dp"
+            android:text="Varsler her"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.501"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/popupButton" />
 
         <EditText
             android:id="@+id/plain_text_input"
@@ -55,30 +78,93 @@
             app:layout_constraintTop_toTopOf="parent" />
 
 
-        <ImageButton
-            android:id="@+id/info_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="100dp"
-            android:background="@drawable/infobutton"
-            android:contentDescription="@string/info_button"
-            android:textColor="@color/black"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/menu"
+            android:elevation="2dp"
+            android:layout_width="250dp"
+            android:layout_height="732dp"
+            android:layout_marginStart="160dp"
+            android:layout_marginTop="120dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="1.0">
+
+            <View
+                android:id="@+id/view2"
+                android:layout_width="275dp"
+                android:layout_height="657dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <ImageButton
+                android:id="@+id/send_rules"
+                android:layout_width="120dp"
+                android:layout_height="40dp"
+                android:background="@drawable/rulesbutton"
+                android:contentDescription="@string/rules"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.613"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.325" />
+
+            <Button
+                android:id="@+id/info_button"
+                android:layout_width="140dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="100dp"
+                android:contentDescription="@string/info_button"
+                android:scaleType="fitCenter"
+                android:text="Info"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.569"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.305" />
+
+            <Button
+                android:id="@+id/overlay_button"
+                android:layout_width="140dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="100dp"
+                android:layout_marginEnd="20dp"
+                android:contentDescription="@string/overlay_button"
+                android:scaleType="fitCenter"
+                android:text="Overlay"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.808"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.395" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <ImageButton
-            android:id="@+id/overlay_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/menuButton"
+            android:elevation="2dp"
+            android:scaleType="fitCenter"
+            android:layout_width="65dp"
+            android:layout_height="70dp"
             android:layout_marginTop="100dp"
             android:layout_marginEnd="20dp"
-            android:background="@drawable/overlaybutton"
-            android:contentDescription="@string/overlay_button"
+            android:background="@drawable/menubutton"
+            android:contentDescription="@string/menu_button"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -156,11 +242,10 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/popup"
-            android:visibility="invisible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="80dp"
-            app:layout_constraintBottom_toBottomOf="@+id/send_rules"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/popupButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -169,6 +254,7 @@
                 android:id="@+id/imageView"
                 android:layout_width="280dp"
                 android:layout_height="403dp"
+                android:layout_marginTop="120dp"
                 android:background="@drawable/shape"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -305,12 +391,12 @@
 
             <TextView
                 android:id="@+id/warningInfo"
-                android:gravity="center"
                 android:layout_width="173dp"
                 android:layout_height="76dp"
+                android:gravity="center"
                 android:text="@string/loading"
-                android:textSize="12sp"
                 android:textColor="@color/black"
+                android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView2"
                 app:layout_constraintEnd_toEndOf="@+id/imageView2"
                 app:layout_constraintStart_toStartOf="@+id/imageView2"
@@ -343,16 +429,6 @@
                 app:layout_constraintVertical_bias="0.37"
                 tools:ignore="ContentDescription" />
 
-            <ImageButton
-                android:id="@+id/imageView4"
-                android:layout_width="10dp"
-                android:layout_height="10dp"
-                app:background="@drawable/walking"
-                app:layout_constraintBottom_toBottomOf="@+id/imageButton3"
-                app:layout_constraintEnd_toEndOf="@+id/imageButton3"
-                app:layout_constraintStart_toStartOf="@+id/imageButton3"
-                app:layout_constraintTop_toTopOf="@+id/imageButton3"
-                tools:ignore="ContentDescription" />
 
             <ImageButton
                 android:id="@+id/imageView6"
@@ -443,34 +519,5 @@
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <ImageButton
-            android:id="@+id/send_rules"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="166dp"
-            android:layout_marginEnd="152dp"
-            android:background="@drawable/rulesbutton"
-            android:contentDescription="@string/rules"
-            android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
-
-        <Button
-            android:id="@+id/popupButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/popup"
-            app:layout_constraintBottom_toTopOf="@+id/send_rules"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-</RelativeLayout>
+   </RelativeLayout>
