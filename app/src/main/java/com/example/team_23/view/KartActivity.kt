@@ -86,7 +86,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         })
 
         //knapp som sender bruker til reglene
-        val rulesActivityBtn = findViewById<ImageButton>(R.id.send_rules)
+        val rulesActivityBtn = findViewById<Button>(R.id.send_rules)
 
         rulesActivityBtn.setOnClickListener{
             val intent = Intent(this,RegelView::class.java)
@@ -94,7 +94,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
         }
 
-        val infoButton = findViewById<ImageButton>(R.id.info_button)
+        val infoButton = findViewById<Button>(R.id.info_button)
         val infoCloseButton = findViewById<ImageButton>(R.id.info_close_button)
         val popupButton = findViewById<Button>(R.id.popupButton)
         val info = findViewById<View>(R.id.infoBox)
@@ -117,6 +117,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             if(menuSynlig){
                 menu.visibility = View.GONE
                 menuButton.background = resources.getDrawable(R.drawable.menubutton,theme)
+                menuSynlig = !menuSynlig
             }
         }
 
@@ -131,6 +132,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 if(menuSynlig){
                     menu.visibility = View.GONE
                     menuButton.background = resources.getDrawable(R.drawable.menubutton,theme)
+                    menuSynlig = !menuSynlig
                 }
             }
             infoSynlig = !infoSynlig
@@ -151,6 +153,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 if(menuSynlig){
                     menu.visibility = View.GONE
                     menuButton.background = resources.getDrawable(R.drawable.menubutton,theme)
+                    menuSynlig = !menuSynlig
                 }
             }
             popupSynlig = !popupSynlig
@@ -185,10 +188,10 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         fun toggleLevelsPopup(){
             if (levelsPopupSynlig){
                 levelsPopup.visibility = View.VISIBLE
-                popup.visibility = View.INVISIBLE
+                popup.visibility = View.GONE
                 mMap.uiSettings.isScrollGesturesEnabled = true
             } else{
-                levelsPopup.visibility = View.INVISIBLE
+                levelsPopup.visibility = View.GONE
                 popup.visibility = View.VISIBLE
                 mMap.uiSettings.isScrollGesturesEnabled = false
             }
