@@ -31,7 +31,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private val LOCATION_PERMISSION_REQUEST = 1  // Til lokasjonsrettigheter
 
-    private val markerList = mutableListOf<Marker>()
+    private var marker: Marker? = null
 
     @SuppressLint("UseCompatLoadingForDrawables", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -213,12 +213,15 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val varsler_her = findViewById<Button>(R.id.varsler_her)
 
-        //TODO kalle på currentLocation metoden i stedet
+        //TODO dette skal ikke kommenteres ut, men funker ikke pga getLocationAccess
+
+        /*getLocationAccess()
+        kartViewModel.getLocation()
 
         varsler_her.setOnClickListener{
-            kartViewModel.getAlert(59.91, 10.75)
-        }
-        
+            kartViewModel.getAlertCurrentLocation()
+        }*/
+
     }
 
     /**
@@ -242,12 +245,13 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
         getLocationAccess()
 
-        // Når bruker trykker på kartet lages det en ny marker
+        // Når bruker trykker på kartet lages det en marker
         mMap.setOnMapClickListener {
-            val marker = mMap.addMarker(MarkerOptions().position(it).title("Marker on click"))
-            //lagrer markeren i en liste slik at man kan endre/slette den senere
-            markerList.add(marker)
-            kartViewModel.findRoute()
+            marker?.remove()
+
+            marker = mMap.addMarker(MarkerOptions().position(it).title("Marker on click"))
+
+            kartViewModel.getAlert(it.latitude, it.longitude)
         }
 
         // Ved klikk på "Vis Min Lokasjon"-knappen (oppe i høyre hjørne):
@@ -277,13 +281,16 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
     /* Hjelpemetode for å få tilgangsrettigheter for lokasjon */
     private fun getLocationAccess() {
-        Log.d("KartActivity", "getLocation: mMap.isMyLocationEnabled: ${mMap.isMyLocationEnabled}")
+        //Log.d("KartActivity", "getLocation: mMap.isMyLocationEnabled: ${mMap.isMyLocationEnabled}")
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            mMap.isMyLocationEnabled = true
-        } else
+            mMap?.isMyLocationEnabled = true
+
+        } else {
             Log.d("KartActivity", "getLocation: ber om lokasjonsrettigheter")
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST)
+        }
     }
+
 
     /* Metode kalles når svar ang. lokasjonstilgang kommer tilbake. Sjekker om tillatelse er innvilget */
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {

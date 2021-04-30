@@ -33,16 +33,18 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
     * Henter varsler for nåværende sted.
     * Er avhengig av at lokasjon (livedata 'location') er tilgjengelig og oppdatert.
     */
-    fun getAlertsCurrentLocation() {
-
-
-        /*val lat = location.value?.latitude
+    fun getAlertCurrentLocation() {
+        val lat = location.value?.latitude
         val lon = location.value?.longitude
+
         // Feilsjekking i tilfelle ikke lokasjon tilgjengelig?
         if (lat == null || lon == null) {
             Log.w("KartViewModel", "Advarsel: getAlertsCurrentLocation() ble kalt men lokasjon er ikke tilgjengelig.")
         }
-        getAlerts(lat, lon)*/
+        else{
+            getAlert(lat, lon)
+        }
+
     }
 
     fun getAlert(lat: Double, lon: Double){
