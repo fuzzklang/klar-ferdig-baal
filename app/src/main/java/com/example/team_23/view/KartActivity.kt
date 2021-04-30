@@ -244,11 +244,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.setPadding(0, 2000, 0, 0)
         //lager to markere:en i Oslo og en i Tønsberg
         val oslo = LatLng(59.911491, 10.757933) // Oslo
-        val tonsberg = LatLng(59.26754, 10.40762) // Tønsberg
-        this.mMap.addMarker(MarkerOptions().position(oslo).title("Oslo"))
-        this.mMap.addMarker(MarkerOptions().position(tonsberg).title("Tønsberg"))
         this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(oslo, 6f))
 
+        // Sjekk at tilgang til lokasjon
         getLocationAccess()
         Log.d("KartActivity.onMapReady", "mMap.isMyLocationEnabled: ${mMap.isMyLocationEnabled}")
         //kartViewModel.updateLocation()  // Må hente lokasjon på et tidspunkt. HVOR?
@@ -287,13 +285,14 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
     /* Hjelpemetode for å få tilgangsrettigheter for lokasjon */
     private fun getLocationAccess() {
-        //Log.d("KartActivity", "getLocation: mMap.isMyLocationEnabled: ${mMap.isMyLocationEnabled}")
+        Log.d("KartActivity", "getLocation: mMap.isMyLocationEnabled: ${mMap.isMyLocationEnabled}")
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             hasLocationAccess = true
             mMap.isMyLocationEnabled = true
             kartViewModel.updateLocation()
         } else {
             Log.d("KartActivity", "getLocation: ber om lokasjonsrettigheter")
+            hasLocationAccess = false
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST)
         }
     }
