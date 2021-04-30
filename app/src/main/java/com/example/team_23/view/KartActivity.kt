@@ -9,7 +9,6 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.team_23.R
@@ -66,9 +65,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         val warningLevelColor = findViewById<View>(R.id.warningLevelColor)
 
         /* Observer varsel-liste fra KartViewModel */
-        kartViewModel.alerts.observe(this, {
+        kartViewModel.allAlerts.observe(this, {
             Log.d("KartActivity", "Endring skjedd i alerts-liste!")
-            kartViewModel.alerts.value?.forEach {
+            kartViewModel.allAlerts.value?.forEach {
                 Log.d("KartActivity", "Alert: $it")
                 it.infoItemsNo.forEach{
                     warningArea.text = it.area.areaDesc
@@ -283,14 +282,13 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun getLocationAccess() {
         //Log.d("KartActivity", "getLocation: mMap.isMyLocationEnabled: ${mMap.isMyLocationEnabled}")
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            mMap?.isMyLocationEnabled = true
+            mMap.isMyLocationEnabled = true
 
         } else {
             Log.d("KartActivity", "getLocation: ber om lokasjonsrettigheter")
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST)
         }
     }
-
 
     /* Metode kalles når svar ang. lokasjonstilgang kommer tilbake. Sjekker om tillatelse er innvilget */
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
