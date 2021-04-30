@@ -18,11 +18,11 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
 class KartViewModel(private val repo: MainRepository): ViewModel() {
-    val allAlerts = MutableLiveData<MutableList<Alert>>()
+    val allAlerts = MutableLiveData<MutableList<Alert>>()    // Liste med alle skogbrannfarevarsler utstedt av MetAlerts
     val routes = MutableLiveData<List<Routes>>()             // Liste med responsen fra api-kall til Directions API
     val path = MutableLiveData<MutableList<List<LatLng>>>()  // Liste som inneholder polyline-punktene fra routes (sørg for at hele tiden samsvarer med 'routes')
     var location = MutableLiveData<Location>()               // Enhetens lokasjon (GPS)
-    var alertAtPosition = MutableLiveData<Alert>()
+    var alertAtPosition = MutableLiveData<Alert>()           // Varsel for angitt sted.
 
     /* Grensesnitt til View.
      * Henter varsler for nåværende sted.
@@ -47,11 +47,11 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
             var alert: Alert? = null
             val rssItem = repo.getRssFeed(lat, lon)
             if (rssItem != null) {
-                Log.d("Alert", rssItem.size.toString())
+                Log.d("KartViewModel.getAlert", "Antall RSS-items returnert fra API: {rssItem.size}")
                 alert = repo.getCapAlert(rssItem[0].link!!)
             }
-            if (alert != null){
-                alertAtPosition.postValue(alert)
+            if (alert != null) {
+                alertAtPosition.postValue(alert)  // Oppdater varsel-livedata med ny verdi
             }
         }
     }
@@ -77,7 +77,8 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
         }
     }
 
-    // Oppdaterer nåværende posisjon ved kall til repository
+    // Oppdaterer nåværende posisjon ved kall til repository.
+    // Antar at appen har tilgang til lokasjon.
     private fun updateLocation() {
         location = repo.getLocation() as MutableLiveData<Location>
     }
