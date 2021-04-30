@@ -3,7 +3,9 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -220,13 +222,99 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         mMap.setPadding(0, 2000, 0, 0)
-        //lager to markere:en i Oslo og en i Tønsberg
-        val oslo = LatLng(59.911491, 10.757933) // Oslo
-        val tonsberg = LatLng(59.26754, 10.40762) // Tønsberg
-        this.mMap.addMarker(MarkerOptions().position(oslo).title("Oslo"))
-        this.mMap.addMarker(MarkerOptions().position(tonsberg).title("Tønsberg"))
-        this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(oslo, 6f))
 
+
+        val baalplassKnapp = findViewById<Button>(R.id.baalplass_button)
+        //endrer stoerrelse paa campfire ikonet
+        val height = 50
+        val width = 50
+        val baalikon = ContextCompat.getDrawable(this, R.drawable.campfire) as BitmapDrawable
+        val b = baalikon.bitmap
+        val smallMarker = Bitmap.createScaledBitmap(b, width, height, false)
+        val oslo = LatLng(59.911491, 10.757933) // Oslo
+        // hashmap av alle baalplasser i oslo med navn og koordinater
+        //TODO legg inn i egen fil eller strukturer et annet sted
+        var baalmap = HashMap<String, Array<Double>>()
+        baalmap["rundvann"] = arrayOf(59.851, 10.875)
+        baalmap["askevann"] = arrayOf(59.833, 10.901)
+        baalmap["setertjern"] = arrayOf(59.828, 10.894)
+        baalmap["skjelbreia"] = arrayOf(59.825, 10.950)
+        baalmap["vangen"] = arrayOf(59.818, 11.004)
+        baalmap["braaten_ved_noklevann"] = arrayOf(59.876, 10.862)
+        baalmap["katissa"] = arrayOf(59.873, 10.874)
+        baalmap["bremsrud"] = arrayOf(59.876, 10.881)
+        baalmap["nord-elvaaga"] = arrayOf(59.901, 10.911)
+        baalmap["ulsrudvann"] = arrayOf(59.889, 10.868)
+        baalmap["lutvann"] = arrayOf(59.918, 10.881)
+        baalmap["bogstadvannet_nordoest"] = arrayOf(59.976, 10.622)
+        baalmap["jegersborgdammen"] = arrayOf(59.975, 10.631)
+        baalmap["sognsvann_soer"] = arrayOf(59.971, 10.724)
+        baalmap["sognsvann_oest"] = arrayOf(59.974, 10.732)
+        baalmap["nedre_blanksjoe"] = arrayOf(59.981, 10.739)
+        baalmap["sognsvann_nord"] = arrayOf(59.980, 10.726)
+        baalmap["oevreseterjern"] = arrayOf(59.982, 10.670)
+        baalmap["lille_aaklungen"] = arrayOf(59.988, 10.714)
+        baalmap["trollvann"] = arrayOf(59.962, 10.808)
+        baalmap["vesletjern"] = arrayOf(59.960, 10.862)
+        baalmap["steinbruvann_sor"] = arrayOf(59.975, 10.881)
+        baalmap["steinbruvann_nord"] = arrayOf(59.980, 10.882)
+        baalmap["finnerud"] = arrayOf(60.030, 10.638)
+        baalmap["store_aaklungen"] = arrayOf(60.001, 10.724)
+        baalmap["lille_tryvannet"] = arrayOf(60.000, 10.677)
+        baalmap["skjennungen"] = arrayOf(60.005, 10.683)
+        baalmap["oeyungen"] = arrayOf(60.041, 10.752)
+        baalmap["oeyungen_damstokksletta"] = arrayOf(60.042, 10.755)
+        baalmap["kapteinsputten"] = arrayOf(59.969, 10.815)
+        baalmap["hvernvenbukta1"] = arrayOf(59.831, 10.772)
+        baalmap["hvernvenbukta2"] = arrayOf(59.834, 10.773)
+        baalmap["asperuddumpa"] = arrayOf(59.836, 10.799)
+        baalmap["stensrudtjern"] = arrayOf(59.823, 10.869)
+        baalmap["nordseterparken"] = arrayOf(59.873, 10.795)
+        baalmap["manglerud_friomraade"] = arrayOf(59.894, 10.817)
+        baalmap["trolldalen"] = arrayOf(59.911, 10.855)
+        baalmap["tveitaparken"] = arrayOf(59.918, 10.844)
+        baalmap["haugerud_friomraade1"] = arrayOf(59.919, 10.864)
+        baalmap["haugerud_friomraade2"] = arrayOf(59.920, 10.863)
+        baalmap["ammerudgrenda_turvei_d9"] = arrayOf(59.962, 10.878)
+        baalmap["teglverksdammen_nedre"] = arrayOf(59.923, 10.796)
+        baalmap["teglverksdammen_oevre"] = arrayOf(59.923, 10.797)
+        baalmap["kampen_trykkbassenget"] = arrayOf(59.915, 10.781)
+        baalmap["sofienbergparken"] = arrayOf(59.923, 10.765)
+        baalmap["st.hanshaugen_park"] = arrayOf(59.926, 10.741)
+        baalmap["frognerparken"] = arrayOf(59.924, 10.707)
+        baalmap["hukodden"] = arrayOf(59.895, 10.675)
+        baalmap["aarvolldammen"] = arrayOf(59.948, 10.819)
+        baalmap["svarttjern"] = arrayOf(59.968, 10.898)
+        baalmap["smedstuaparken"] = arrayOf(59.954, 10.915)
+        baalmap["furuset kulturpark"] = arrayOf(59.943, 10.889)
+        baalmap["verdensparken1"] = arrayOf(59.943, 10.895)
+        baalmap["verdensparken2"] = arrayOf(59.944, 10.896)
+        baalmap["verdensparken3"] = arrayOf(59.945, 10.896)
+        baalmap["veitvettparken"] = arrayOf(59.942, 10.848)
+        baalmap["Tokerudbekken"] = arrayOf(59.972, 10.922)
+        baalmap["jesperudjordet"] = arrayOf(59.962, 10.930)
+        baalmap["alnaparken"] = arrayOf(59.942, 10.876)
+        var baalMarkers = mutableListOf<Marker>()
+        for ((k, v) in baalmap) {
+            baalMarkers.add(this.mMap.addMarker(MarkerOptions().position(LatLng(v[0],v[1])).title(k).icon(BitmapDescriptorFactory.fromBitmap(smallMarker))))
+        }
+        //her skjules/vises baalplassene
+        var status = true
+        baalplassKnapp.setOnClickListener(){
+            status = !status
+            if(!status) {
+                for (i in baalMarkers) {
+                    i.setVisible(false)
+                }
+            }else{
+                for(i in baalMarkers) {
+                    i.setVisible(true)
+                }
+            }
+        }
+
+
+       this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(oslo, 6f))
         getLocationAccess()
 
         // Når bruker trykker på kartet lages det en ny marker
@@ -252,7 +340,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                         .target(LatLng(location.latitude, location.longitude))
                         .zoom(6f)
                         .build()
-                    mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+                   // mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
                 } else {
                     Toast.makeText(this, "Ingen lokasjon tilgjengelig", Toast.LENGTH_SHORT).show()
                 }
