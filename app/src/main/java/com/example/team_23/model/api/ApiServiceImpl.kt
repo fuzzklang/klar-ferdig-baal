@@ -29,6 +29,7 @@ class ApiServiceImpl: ApiService {
     @Suppress("BlockingMethodInNonBlockingContext")
     override suspend fun fetchData(url: String): String? {
         return withContext(Dispatchers.IO) {
+            Log.d("URL", url)
             val request = Request.Builder() // Bygg Request med OkHttp
                     .url(url)
                     .build()

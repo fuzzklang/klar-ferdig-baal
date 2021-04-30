@@ -206,7 +206,19 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
         kartViewModel.getAllAlerts()
 
-        kartViewModel.getAlert(59.91, 10.75)
+
+        kartViewModel.alertAtPosition.observe(this, {
+            togglePopup()
+        })
+
+        val varsler_her = findViewById<Button>(R.id.varsler_her)
+
+        //TODO kalle på currentLocation metoden i stedet
+
+        varsler_her.setOnClickListener{
+            kartViewModel.getAlert(59.91, 10.75)
+        }
+        
     }
 
     /**

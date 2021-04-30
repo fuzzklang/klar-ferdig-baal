@@ -51,7 +51,7 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
             val RSSitem = repo.getRssFeed(lat, lon)
             if (RSSitem != null) {
                 Log.d("Alert", RSSitem.size.toString())
-                alert = repo.getCapAlert(RSSitem[0].toString())
+                alert = repo.getCapAlert(RSSitem[0].link!!)
             }
             if (alert != null){
                 alertAtPosition.postValue(alert)
