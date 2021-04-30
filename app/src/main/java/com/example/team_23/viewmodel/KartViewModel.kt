@@ -60,7 +60,6 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
      * Returnerer en instans av livedata med lokasjon.
      */
     fun getLocation(): LiveData<Location> {
-        updateLocation()
         Log.d("KartViewModel", "getLocation: ${location.value?.latitude}, ${location.value?.longitude}")
         return location
     }
