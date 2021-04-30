@@ -84,7 +84,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/menu"
             android:layout_width="250dp"
-            android:layout_height="732dp"
+            android:layout_height="match_parent"
             android:layout_marginStart="162dp"
             android:layout_marginTop="120dp"
             android:elevation="2dp"
@@ -99,7 +99,7 @@
             <View
                 android:id="@+id/view2"
                 android:layout_width="249dp"
-                android:layout_height="730dp"
+                android:layout_height="match_parent"
                 android:background="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -107,51 +107,89 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="1.0" />
 
-            <Button
-                android:id="@+id/send_rules"
-                android:layout_width="140dp"
-                android:layout_height="40dp"
-                android:contentDescription="@string/rules"
-                android:text="Regler"
-                android:textColor="@color/white"
-                app:layout_constraintBottom_toBottomOf="parent"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Informasjon"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toTopOf="@+id/info_button"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.325" />
+                app:layout_constraintTop_toTopOf="@+id/view2"
+                app:layout_constraintVertical_bias="0.911" />
 
             <Button
                 android:id="@+id/info_button"
                 android:layout_width="141dp"
                 android:layout_height="40dp"
                 android:layout_marginTop="100dp"
+                android:backgroundTint="@color/grey"
                 android:contentDescription="@string/info_button"
                 android:scaleType="fitCenter"
                 android:text="Info"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_bias="0.504"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.305" />
+                app:layout_constraintVertical_bias="0.101" />
 
             <Button
-                android:id="@+id/overlay_button"
+                android:id="@+id/send_rules"
                 android:layout_width="140dp"
                 android:layout_height="40dp"
-                android:layout_marginTop="100dp"
-                android:contentDescription="@string/overlay_button"
-                android:scaleType="fitCenter"
-                android:text="Overlay"
-                android:textColor="@color/white"
+                android:backgroundTint="@color/grey"
+                android:contentDescription="@string/rules"
+                android:text="Regler"
+                android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.395" />
+                app:layout_constraintVertical_bias="0.327" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kartfunksjoner"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toTopOf="@+id/overlay_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/send_rules"
+                app:layout_constraintVertical_bias="0.724" />
+
+            <ToggleButton
+                android:id="@+id/overlay_button"
+                android:layout_width="160dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="100dp"
+                android:backgroundTint="@color/grey"
+                android:contentDescription="@string/overlay_button"
+                android:scaleType="fitCenter"
+                android:textColor="@color/black"
+                android:textOff="Overlay (AV)"
+                android:textOn="Overlay (PÅ)"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.382" />
+
+            <ToggleButton
+                android:layout_width="160dp"
+                android:textOff="Bålplasser (AV)"
+                android:textOn="Bålplasser (PÅ)"
+                android:backgroundTint="@color/grey"
+                android:layout_height="40dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.56" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
