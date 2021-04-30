@@ -35,28 +35,48 @@
             android:text="@string/popup"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.501"
+            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.926" />
+            app:layout_constraintVertical_bias="0.945" />
 
         <Button
-            android:layout_width="140dp"
-            android:layout_height="50dp"
+            android:id="@+id/button"
+            android:layout_width="120dp"
+            android:layout_height="40dp"
+            android:background="@android:color/transparent"
             android:text="Varsler her"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.501"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/popupButton" />
+            app:layout_constraintTop_toBottomOf="@+id/infoBox"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <ImageView
+            android:id="@+id/imageView8"
+            android:layout_width="120dp"
+            android:layout_height="40dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/infoBox"
+            app:layout_constraintVertical_bias="1.0"
+            app:srcCompat="@drawable/shape"
+            tools:ignore="ContentDescription" />
+
 
         <EditText
             android:id="@+id/plain_text_input"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:elevation="3dp"
+            android:autofillHints="Search"
             android:background="@null"
+            android:elevation="3dp"
+            android:gravity="center"
             android:hint="@string/sok"
             android:inputType="text"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -64,14 +84,13 @@
             app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.088"
-            android:autofillHints="Search" />
+            app:layout_constraintVertical_bias="0.088" />
 
         <TextView
-            android:elevation="3dp"
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:elevation="3dp"
             android:text="@string/app_title"
             android:textColor="@color/black"
             android:textSize="25sp"
@@ -181,10 +200,10 @@
 
             <ToggleButton
                 android:layout_width="160dp"
+                android:layout_height="40dp"
+                android:backgroundTint="@color/grey"
                 android:textOff="Bålplasser (AV)"
                 android:textOn="Bålplasser (PÅ)"
-                android:backgroundTint="@color/grey"
-                android:layout_height="40dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -196,14 +215,14 @@
 
         <ImageButton
             android:id="@+id/menuButton"
-            android:elevation="2dp"
-            android:scaleType="fitCenter"
             android:layout_width="65dp"
             android:layout_height="70dp"
             android:layout_marginTop="100dp"
             android:layout_marginEnd="20dp"
             android:background="@drawable/menubutton"
             android:contentDescription="@string/menu_button"
+            android:elevation="2dp"
+            android:scaleType="fitCenter"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -214,9 +233,9 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/infoBox"
-            android:visibility="visible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.497"
@@ -430,9 +449,9 @@
 
             <TextView
                 android:id="@+id/warningInfo"
-                android:gravity="center"
                 android:layout_width="173dp"
                 android:layout_height="76dp"
+                android:gravity="center"
                 android:text="@string/loading"
                 android:textColor="@color/black"
                 android:textSize="12sp"
