@@ -44,14 +44,14 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
      */
     fun getAlert(lat: Double, lon: Double){
         CoroutineScope(Dispatchers.Default).launch {
-            var alert: Alert? = null
-            val rssItem = repo.getRssFeed(lat, lon)
-            if (rssItem != null) {
-                Log.d("KartViewModel.getAlert", "Antall RSS-items returnert fra API: {rssItem.size}")
-                alert = repo.getCapAlert(rssItem[0].link!!)
-            }
-            if (alert != null) {
+            val alert: Alert?
+            val rssItemList = repo.getRssFeed(lat, lon)
+            if (rssItemList != null && rssItemList.isNotEmpty()) {
+                Log.d("KartViewModel.getAlert", "Antall RSS-items returnert fra API: ${rssItemList.size}")
+                alert = repo.getCapAlert(rssItemList[0].link!!)
                 alertAtPosition.postValue(alert)  // Oppdater varsel-livedata med ny verdi
+            } else {
+                Log.d("KartActivity.getAlert", "Ingen varsel ble funnet")
             }
         }
     }
@@ -78,7 +78,7 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
 
     // Oppdaterer nåværende posisjon ved kall til repository.
     // Antar at appen har tilgang til lokasjon.
-    private fun updateLocation() {
+    fun updateLocation() {
         location = repo.getLocation() as MutableLiveData<Location>
     }
 
@@ -118,7 +118,7 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
         val TAG = "Polyline Points"
         Log.d(TAG, "Antall routes: ${routes?.size}")
         if (routes != null) {
-            for (route in routes) {  // Sårbart for bugs, mutable data kan ha blitt endret. TODO: finne bedre løsning
+            for (route in routes) {  // Sårbart for bugs, mutable data kan ha blitt endret.
                 val legs = route.legs
                 Log.d(TAG, "Antall legs (i route.legs): ${legs?.size}")
                 if (legs != null) {

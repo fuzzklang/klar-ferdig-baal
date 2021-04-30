@@ -29,6 +29,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var kartViewModel: KartViewModel
 
     private val LOCATION_PERMISSION_REQUEST = 1  // Til lokasjonsrettigheter
+    private var hasLocationAccess = false
 
     private var marker: Marker? = null
 
@@ -64,7 +65,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         val warningLevelImg = findViewById<ImageView>(R.id.warningLevelImg)
         val warningLevelColor = findViewById<View>(R.id.warningLevelColor)
 
-        /* Observer varsel-liste fra KartViewModel */
+        // Observer varsel-liste fra KartViewModel
+        // NB: Denne skal brukes kun til varsel-overlay, og ikke til popup-boks
         kartViewModel.allAlerts.observe(this, {
             Log.d("KartActivity", "Endring skjedd i alerts-liste!")
             kartViewModel.allAlerts.value?.forEach {
@@ -87,7 +89,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         })
 
-        //knapp som sender bruker til reglene
+        // Knapp som sender bruker til reglene
         val rulesActivityBtn = findViewById<Button>(R.id.send_rules)
 
         rulesActivityBtn.setOnClickListener{
@@ -109,7 +111,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         val levelsPopupCloseBtn = findViewById<ImageButton>(R.id.levelsCloseButton)
 
         var menuSynlig = false
-        var infoSynlig = true //Variabel som holder styr paa synligheten til info view
+        var infoSynlig = true   // Variabel som holder styr paa synligheten til info view
         var popupSynlig = false
 
 
@@ -123,7 +125,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
 
-        //Funksjon som endrer synligheten til info view
+        // Funksjon som endrer synligheten til info view
         fun toggleInfo() {
             if (infoSynlig) {
                 info.visibility = View.GONE
@@ -149,10 +151,10 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             if (popupSynlig) {
                 popup.visibility = View.GONE
                 mMap.uiSettings.isScrollGesturesEnabled = true
-            } else{
+            } else {
                 popup.visibility = View.VISIBLE
                 mMap.uiSettings.isScrollGesturesEnabled = false
-                if(menuSynlig){
+                if(menuSynlig) {
                     menu.visibility = View.GONE
                     menuButton.background = resources.getDrawable(R.drawable.menubutton,theme)
                     menuSynlig = !menuSynlig
@@ -164,19 +166,19 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         popupButton.setOnClickListener{togglePopup()}
         popupCloseButton.setOnClickListener{togglePopup()}
 
-        fun toggleMenu(){
-            if(menuSynlig){
+        fun toggleMenu() {
+            if(menuSynlig) {
                 menu.visibility = View.GONE
                 mMap.uiSettings.isScrollGesturesEnabled = true
                 menuButton.background = resources.getDrawable(R.drawable.menubutton,theme)
-            }else{
+            } else {
                 menu.visibility = View.VISIBLE
                 mMap.uiSettings.isScrollGesturesEnabled = false
                 menuButton.background = resources.getDrawable(R.drawable.closemenubutton,theme)
-                if(infoSynlig){
+                if (infoSynlig) {
                     toggleInfo()
                 }
-                if(popupSynlig){
+                if(popupSynlig) {
                     togglePopup()
                 }
             }
@@ -207,20 +209,25 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
         kartViewModel.alertAtPosition.observe(this, {
+            // Observerer endringer i alertAtPosition (type LiveData<Alert>)
+            Log.d("KartActivity", "Endring observert i alertAtPosition (LiveData<Alert>)")
             togglePopup()
         })
 
-        val varsler_her = findViewById<Button>(R.id.varsler_her)
-
-        //TODO dette skal ikke kommenteres ut, men funker ikke pga getLocationAccess
-
-        /*getLocationAccess()
-        kartViewModel.getLocation()
-
-        varsler_her.setOnClickListener{
-            kartViewModel.getAlertCurrentLocation()
-        }*/
-
+        val varslerHer = findViewById<Button>(R.id.varsler_her)
+        varslerHer.setOnClickListener{
+            getLocationAccess()  // Sjekk at vi har tilgang til lokasjon fra system.
+            // 'location'-variabelen i KartViewModel får en ny instans av LiveData *hver gang*
+            // lokasjon oppdateres. Må derfor lage en observer for den *siste og nyeste instansen* av location.
+            // Da hentes varselet først når LiveDataen har blitt fylt med informasjon om lokasjon.
+            // Ellers vil den ikke ha tilgang på lokasjons-informasjonen.
+            // NB: Ikke ideellt hvis flere 'observere' trenger å observere samme instans av 'location'.
+            val latestKnownLocation = kartViewModel.getLocation()  // type: LiveData<Location>
+            latestKnownLocation.observe(this, {
+                kartViewModel.getAlertCurrentLocation()  // Hent varsler når vi har lokasjon
+                //kartViewModel.getAlert(it.latitude, it.longitude) // Alternativt. Disse er ekvivalente. Sikrere?
+            })
+        }
     }
 
     /**
@@ -243,13 +250,13 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(oslo, 6f))
 
         getLocationAccess()
+        Log.d("KartActivity.onMapReady", "mMap.isMyLocationEnabled: ${mMap.isMyLocationEnabled}")
+        //kartViewModel.updateLocation()  // Må hente lokasjon på et tidspunkt. HVOR?
 
         // Når bruker trykker på kartet lages det en marker
         mMap.setOnMapClickListener {
             marker?.remove()
-
             marker = mMap.addMarker(MarkerOptions().position(it).title("Marker on click"))
-
             kartViewModel.getAlert(it.latitude, it.longitude)
         }
 
@@ -282,8 +289,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun getLocationAccess() {
         //Log.d("KartActivity", "getLocation: mMap.isMyLocationEnabled: ${mMap.isMyLocationEnabled}")
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            hasLocationAccess = true
             mMap.isMyLocationEnabled = true
-
+            kartViewModel.updateLocation()
         } else {
             Log.d("KartActivity", "getLocation: ber om lokasjonsrettigheter")
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST)
@@ -298,18 +306,16 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 if (ActivityCompat.checkSelfPermission(
                                 this,
                                 Manifest.permission.ACCESS_FINE_LOCATION
-                        ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                                this,
-                                Manifest.permission.ACCESS_COARSE_LOCATION
                         ) != PackageManager.PERMISSION_GRANTED) {
-                    // Usikker på når programmet evt. kommer hit
+                    Log.i("KartActivity","onRequestPermissionsResult: checkSelfPermission gir negativt svar. Har ikke tilgang.")
                 } else {
                     Log.d("KartActivity", "Lokasjonstilgang innvilget!")
+                    hasLocationAccess = true
                     mMap.isMyLocationEnabled = true
                 }
             } else {
                 Log.i("KartActivity", "Lokasjonsrettigheter ble ikke gitt. Appen trenger tilgang til lokasjon for enkelte funksjonaliteter")
-                Toast.makeText(this, "Tilgang til lokasjon er ikke gitt", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Ikke tilgang til lokasjon.", Toast.LENGTH_SHORT).show()
             }
         }
     }
