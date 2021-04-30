@@ -340,7 +340,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                         .target(LatLng(location.latitude, location.longitude))
                         .zoom(6f)
                         .build()
-                   // mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+                   mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
                 } else {
                     Toast.makeText(this, "Ingen lokasjon tilgjengelig", Toast.LENGTH_SHORT).show()
                 }
