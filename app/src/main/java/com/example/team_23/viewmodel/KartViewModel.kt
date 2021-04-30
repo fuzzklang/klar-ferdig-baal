@@ -108,14 +108,6 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
         }
     }
 
-    fun getAlertsForRoute() {
-
-    }
-
-    fun showBonfireSpots() {
-
-    }
-
     /* Hjelpemetode for findRoute()
      * Må gå gjennom dataklasse for dataklasse (base, legs, steps og polyline)
      * for å få tak i informasjonen programmet trenger (points i polyline) for å lage rute på kartet
