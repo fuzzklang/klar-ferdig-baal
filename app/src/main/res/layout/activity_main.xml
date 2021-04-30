@@ -43,6 +43,7 @@
         <Button
             android:layout_width="140dp"
             android:layout_height="50dp"
+            android:id="@+id/varsler_her"
             android:text="Varsler her"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

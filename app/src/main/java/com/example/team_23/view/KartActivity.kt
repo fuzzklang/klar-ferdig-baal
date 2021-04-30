@@ -205,6 +205,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         levelsPopupCloseBtn.setOnClickListener { toggleLevelsPopup() }
 
         kartViewModel.getAllAlerts()
+
+        kartViewModel.getAlert(59.91, 10.75)
     }
 
     /**

@@ -22,26 +22,45 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
     val routes = MutableLiveData<List<Routes>>()             // Liste med responsen fra api-kall til Directions API
     val path = MutableLiveData<MutableList<List<LatLng>>>()  // Liste som inneholder polyline-punktene fra routes (sørg for at hele tiden samsvarer med 'routes')
     var location = MutableLiveData<Location>()               // Enhetens lokasjon (GPS)
+    var alertAtPosition = MutableLiveData<Alert>()
 
     /* Grensesnitt til View.
     * Henter alle tilgjengelige varsler.
      */
-    fun getAllAlerts() {
-        getAlerts(null, null)
-    }
+
 
     /* Grensesnitt til View.
     * Henter varsler for nåværende sted.
     * Er avhengig av at lokasjon (livedata 'location') er tilgjengelig og oppdatert.
     */
     fun getAlertsCurrentLocation() {
-        val lat = location.value?.latitude
+
+
+        /*val lat = location.value?.latitude
         val lon = location.value?.longitude
         // Feilsjekking i tilfelle ikke lokasjon tilgjengelig?
         if (lat == null || lon == null) {
             Log.w("KartViewModel", "Advarsel: getAlertsCurrentLocation() ble kalt men lokasjon er ikke tilgjengelig.")
         }
-        getAlerts(lat, lon)
+        getAlerts(lat, lon)*/
+    }
+
+    fun getAlert(lat: Double, lon: Double){
+        CoroutineScope(Dispatchers.Default).launch {
+            var alert: Alert? = null
+            val RSSitem = repo.getRssFeed(lat, lon)
+            if (RSSitem != null) {
+                Log.d("Alert", RSSitem.size.toString())
+                alert = repo.getCapAlert(RSSitem[0].toString())
+            }
+            if (alert != null){
+                alertAtPosition.postValue(alert)
+            }
+
+
+
+        }
+
     }
 
     /* Grensesnitt til View
@@ -83,11 +102,12 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
      * Ellers hentes varsler for angitt posisjon.
      * Metoden oppdaterer alerts-variabelen (LiveData).
     */
-    private fun getAlerts(lat: Double?, lon: Double?) {
+    fun getAllAlerts() {
+
         val varselListe = mutableListOf<Alert>()
         val varselListeMutex = Mutex()  // Lås til varselListe
         CoroutineScope(Dispatchers.Default).launch {
-            val rssItems = repo.getRssFeed(lat, lon)
+            val rssItems = repo.getRssFeed(null, null)
             // For hvert RssItem gjøres et API-kall til den angitte lenken hvor varselet kan hentes fra.
             // Hvert kall gjøres med en egen Coroutine slik at varslene hentes samtidig. Ellers må hvert
             // API-kall vente i tur og orden på at det forrige skal bli ferdig, noe som er tidkrevende.
