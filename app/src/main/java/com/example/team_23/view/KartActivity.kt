@@ -1,14 +1,15 @@
 package com.example.team_23.view
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.ImageButton
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.team_23.R
@@ -32,6 +33,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private val markerList = mutableListOf<Marker>()
 
+    @SuppressLint("UseCompatLoadingForDrawables", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -57,15 +59,37 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         })
 
+        val warningArea = findViewById<TextView>(R.id.warningArea)
+        val warningInfo = findViewById<TextView>(R.id.warningInfo)
+        val warningLevel = findViewById<TextView>(R.id.warningLevel)
+        val warningLevelImg = findViewById<ImageView>(R.id.warningLevelImg)
+        val warningLevelColor = findViewById<View>(R.id.warningLevelColor)
+
         /* Observer varsel-liste fra KartViewModel */
         kartViewModel.alerts.observe(this, {
             Log.d("KartActivity", "Endring skjedd i alerts-liste!")
             kartViewModel.alerts.value?.forEach {
                 Log.d("KartActivity", "Alert: $it")
+                it.infoItemsNo.forEach{
+                    warningArea.text = it.area.areaDesc
+                    warningInfo.text = it.instruction
+                    if (it.severity.toString() == "Moderate") {
+                        warningLevel.text = "Moderat skogbrannfare"
+                        warningLevelImg.background = resources.getDrawable(R.drawable.yellowwarning,theme)
+                        warningLevelColor.background = resources.getDrawable(R.color.yellow,theme)
+                    }else if(it.severity.toString() == "Severe"){
+                        warningLevel.text = "Betydelig skogbrannfare"
+                        warningLevelImg.background = resources.getDrawable(R.drawable.orangewarning,theme)
+                        warningLevelColor.background = resources.getDrawable(R.color.orange,theme)
+                    }else{
+                        warningLevel.text = "?"
+                    }
+                }
             }
         })
+
         //knapp som sender bruker til reglene
-        val rulesActivityBtn = findViewById<ImageButton>(R.id.send_rules)
+        val rulesActivityBtn = findViewById<Button>(R.id.send_rules)
 
         rulesActivityBtn.setOnClickListener{
             val intent = Intent(this,RegelView::class.java)
@@ -73,25 +97,112 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
         }
 
-        val infoButton = findViewById<ImageButton>(R.id.info_button)
+        val infoButton = findViewById<Button>(R.id.info_button)
         val infoCloseButton = findViewById<ImageButton>(R.id.info_close_button)
+        val popupButton = findViewById<Button>(R.id.popupButton)
         val info = findViewById<View>(R.id.infoBox)
+        val popup = findViewById<View>(R.id.popup)
+        val popupCloseButton = findViewById<ImageButton>(R.id.popupCloseButton)
+        val menu = findViewById<View>(R.id.menu)
+        val menuButton = findViewById<ImageButton>(R.id.menuButton)
+        val levelsButton = findViewById<Button>(R.id.levelsButton)
+        val levelsPopup = findViewById<View>(R.id.levelsPopup)
+        val levelsPopupCloseBtn = findViewById<ImageButton>(R.id.levelsCloseButton)
 
+        var menuSynlig = false
         var infoSynlig = true //Variabel som holder styr paa synligheten til info view
+        var popupSynlig = false
+
+
+        rulesActivityBtn.setOnClickListener{
+            val intent = Intent(this,RegelView::class.java)
+            startActivity(intent)
+            if(menuSynlig){
+                menu.visibility = View.GONE
+                menuButton.background = resources.getDrawable(R.drawable.menubutton,theme)
+                menuSynlig = !menuSynlig
+            }
+        }
+
         //Funksjon som endrer synligheten til info view
-        fun closeInfo(){
-            if (infoSynlig == true) {
-                info.visibility = View.INVISIBLE
+        fun toggleInfo() {
+            if (infoSynlig) {
+                info.visibility = View.GONE
+                mMap.uiSettings.isScrollGesturesEnabled = true
             } else{
                 info.visibility = View.VISIBLE
+                mMap.uiSettings.isScrollGesturesEnabled = false
+                if(menuSynlig){
+                    menu.visibility = View.GONE
+                    menuButton.background = resources.getDrawable(R.drawable.menubutton,theme)
+                    menuSynlig = !menuSynlig
+                }
             }
             infoSynlig = !infoSynlig
         }
         //Info knapp som endrer info sin synlighet
-        infoButton.setOnClickListener {closeInfo()}
+        infoButton.setOnClickListener {toggleInfo()}
         //Info knapp som gjør info view usynelig
-        infoCloseButton.setOnClickListener{closeInfo()}
+        infoCloseButton.setOnClickListener{toggleInfo()}
 
+
+        fun togglePopup(){
+            if (popupSynlig) {
+                popup.visibility = View.GONE
+                mMap.uiSettings.isScrollGesturesEnabled = true
+            } else{
+                popup.visibility = View.VISIBLE
+                mMap.uiSettings.isScrollGesturesEnabled = false
+                if(menuSynlig){
+                    menu.visibility = View.GONE
+                    menuButton.background = resources.getDrawable(R.drawable.menubutton,theme)
+                    menuSynlig = !menuSynlig
+                }
+            }
+            popupSynlig = !popupSynlig
+        }
+
+        popupButton.setOnClickListener{togglePopup()}
+        popupCloseButton.setOnClickListener{togglePopup()}
+
+        fun toggleMenu(){
+            if(menuSynlig){
+                menu.visibility = View.GONE
+                mMap.uiSettings.isScrollGesturesEnabled = true
+                menuButton.background = resources.getDrawable(R.drawable.menubutton,theme)
+            }else{
+                menu.visibility = View.VISIBLE
+                mMap.uiSettings.isScrollGesturesEnabled = false
+                menuButton.background = resources.getDrawable(R.drawable.closemenubutton,theme)
+                if(infoSynlig){
+                    toggleInfo()
+                }
+                if(popupSynlig){
+                    togglePopup()
+                }
+            }
+            menuSynlig = !menuSynlig
+        }
+
+        menuButton.setOnClickListener{toggleMenu()}
+
+        var levelsPopupSynlig = true
+
+        fun toggleLevelsPopup(){
+            if (levelsPopupSynlig){
+                levelsPopup.visibility = View.VISIBLE
+                popup.visibility = View.GONE
+                mMap.uiSettings.isScrollGesturesEnabled = true
+            } else{
+                levelsPopup.visibility = View.GONE
+                popup.visibility = View.VISIBLE
+                mMap.uiSettings.isScrollGesturesEnabled = false
+            }
+            levelsPopupSynlig = !levelsPopupSynlig
+        }
+
+        levelsButton.setOnClickListener { toggleLevelsPopup() }
+        levelsPopupCloseBtn.setOnClickListener { toggleLevelsPopup() }
 
         kartViewModel.getAllAlerts()
     }
@@ -147,6 +258,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             })
             true
         }
+        mMap.uiSettings.isScrollGesturesEnabled = false
     }
 
     /* Hjelpemetode for å få tilgangsrettigheter for lokasjon */
