@@ -14,6 +14,8 @@ import androidx.core.content.ContextCompat
 import com.example.team_23.R
 import com.example.team_23.model.MainRepository
 import com.example.team_23.model.api.ApiServiceImpl
+import com.example.team_23.model.api.metalerts_dataclasses.Alert
+import com.example.team_23.model.api.metalerts_dataclasses.Info
 import com.example.team_23.viewmodel.KartViewModel
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -69,24 +71,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // NB: Denne skal brukes kun til varsel-overlay, og ikke til popup-boks
         kartViewModel.allAlerts.observe(this, {
             Log.d("KartActivity", "Endring skjedd i alerts-liste!")
-            kartViewModel.allAlerts.value?.forEach {
-                Log.d("KartActivity", "Alert: $it")
-                it.infoItemsNo.forEach{
-                    warningArea.text = it.area.areaDesc
-                    warningInfo.text = it.instruction
-                    if (it.severity.toString() == "Moderate") {
-                        warningLevel.text = "Moderat skogbrannfare"
-                        warningLevelImg.background = resources.getDrawable(R.drawable.yellowwarning,theme)
-                        warningLevelColor.background = resources.getDrawable(R.color.yellow,theme)
-                    }else if(it.severity.toString() == "Severe"){
-                        warningLevel.text = "Betydelig skogbrannfare"
-                        warningLevelImg.background = resources.getDrawable(R.drawable.orangewarning,theme)
-                        warningLevelColor.background = resources.getDrawable(R.color.orange,theme)
-                    }else{
-                        warningLevel.text = "?"
-                    }
-                }
-            }
+            // TODO: implementere overlay
         })
 
         // Knapp som sender bruker til reglene
@@ -210,7 +195,28 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
         kartViewModel.alertAtPosition.observe(this, {
             // Observerer endringer i alertAtPosition (type LiveData<Alert>)
-            Log.d("KartActivity", "Endring observert i alertAtPosition (LiveData<Alert>)")
+            val alert: Alert? = kartViewModel.alertAtPosition.value
+            Log.d("KartActivity", "Oppdatering observert i alertAtPosition. Alert: $it")
+            // Løkken viser kun siste info-item siden løkken overskriver tidligere info lagt inn.
+            alert?.infoItemsNo?.forEach { info: Info ->
+                warningArea.text = info.area.areaDesc
+                warningInfo.text = info.instruction
+                when {
+                    info.severity.toString() == "Moderate" -> {
+                        warningLevel.text = "Moderat skogbrannfare"
+                        warningLevelImg.background = resources.getDrawable(R.drawable.yellowwarning,theme)
+                        warningLevelColor.background = resources.getDrawable(R.color.yellow,theme)
+                    }
+                    info.severity.toString() == "Severe" -> {
+                        warningLevel.text = "Betydelig skogbrannfare"
+                        warningLevelImg.background = resources.getDrawable(R.drawable.orangewarning,theme)
+                        warningLevelColor.background = resources.getDrawable(R.color.orange,theme)
+                    }
+                    else -> {
+                        warningLevel.text = "?"
+                    }
+                }
+            }
             togglePopup()
         })
 
