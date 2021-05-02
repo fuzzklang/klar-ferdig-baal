@@ -85,7 +85,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val infoButton = findViewById<Button>(R.id.info_button)
         val infoCloseButton = findViewById<ImageButton>(R.id.info_close_button)
-        val popupButton = findViewById<Button>(R.id.popupButton)
         val info = findViewById<View>(R.id.infoBox)
         val popup = findViewById<View>(R.id.popup)
         val popupCloseButton = findViewById<ImageButton>(R.id.popupCloseButton)
@@ -148,7 +147,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             popupSynlig = !popupSynlig
         }
 
-        popupButton.setOnClickListener{togglePopup()}
         popupCloseButton.setOnClickListener{togglePopup()}
 
         fun toggleMenu() {

@@ -27,19 +27,6 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true">
 
-
-        <Button
-            android:id="@+id/popupButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/popup"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.501"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.926" />
-
         <Button
             android:layout_width="140dp"
             android:layout_height="50dp"
@@ -47,9 +34,10 @@
             android:text="Varsler her"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.501"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/popupButton" />
+            android:layout_marginBottom="15dp"
+            />
 
         <EditText
             android:id="@+id/plain_text_input"
@@ -246,7 +234,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/popupButton"
+            app:layout_constraintBottom_toBottomOf="@+id/varsler_her"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -537,7 +525,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="80dp"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/popupButton"
+            app:layout_constraintBottom_toTopOf="@+id/varsler_her"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
