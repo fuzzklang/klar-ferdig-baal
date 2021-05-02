@@ -102,6 +102,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/menu"
+            android:layout_marginRight="-1dp"
             android:layout_width="250dp"
             android:layout_height="match_parent"
             android:layout_marginStart="162dp"
