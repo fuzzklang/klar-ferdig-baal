@@ -100,10 +100,8 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
         try {
             val locationTask = fusedLocationProviderClient.lastLocation
             locationTask.addOnSuccessListener {
-                Log.d(tag,"getLocation: onSuccessListener ${it.latitude}, ${it.longitude}")
+                Log.d(tag,"getLocation: onSuccessListener. Resultat: ${it.latitude}, ${it.longitude}")
                 liveDataLocation.postValue(it)
-            }.addOnCompleteListener {
-                Log.d(tag,"getLocation: task completed! Result: ${it.result}")
             }
         } catch (ex: SecurityException) {
             Log.w("MainRepo.getLocation", "Error when getting location")
