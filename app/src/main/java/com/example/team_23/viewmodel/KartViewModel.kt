@@ -22,7 +22,7 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
     val routes = MutableLiveData<List<Routes>>()             // Liste med responsen fra api-kall til Directions API
     val path = MutableLiveData<MutableList<List<LatLng>>>()  // Liste som inneholder polyline-punktene fra routes (sørg for at hele tiden samsvarer med 'routes')
     var location = MutableLiveData<Location>()               // Enhetens lokasjon (GPS)
-    var alertAtPosition = MutableLiveData<Alert>()           // Varsel for angitt sted.
+    var alertAtPosition = MutableLiveData<Alert?>()          // Varsel for angitt sted.
 
     /* Grensesnitt til View.
      * Henter varsler for nåværende sted.
@@ -44,15 +44,15 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
      */
     fun getAlert(lat: Double, lon: Double){
         CoroutineScope(Dispatchers.Default).launch {
-            val alert: Alert?
+            var alert: Alert? = null
             val rssItemList = repo.getRssFeed(lat, lon)
             if (rssItemList != null && rssItemList.isNotEmpty()) {
                 Log.d("KartViewModel.getAlert", "Antall RSS-items returnert fra API: ${rssItemList.size}")
                 alert = repo.getCapAlert(rssItemList[0].link!!)
-                alertAtPosition.postValue(alert)  // Oppdater varsel-livedata med ny verdi
             } else {
                 Log.d("KartActivity.getAlert", "Ingen varsel ble funnet")
             }
+            alertAtPosition.postValue(alert)  // Oppdater varsel-livedata med ny verdi
         }
     }
 

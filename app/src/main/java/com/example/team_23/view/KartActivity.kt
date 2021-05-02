@@ -192,32 +192,36 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
         kartViewModel.getAllAlerts()
 
-
         kartViewModel.alertAtPosition.observe(this, {
             // Observerer endringer i alertAtPosition (type LiveData<Alert>)
             val alert: Alert? = kartViewModel.alertAtPosition.value
             Log.d("KartActivity", "Oppdatering observert i alertAtPosition. Alert: $it")
             // Løkken viser kun siste info-item siden løkken overskriver tidligere info lagt inn.
-            alert?.infoItemsNo?.forEach { info: Info ->
-                warningArea.text = info.area.areaDesc
-                warningInfo.text = info.instruction
-                when {
-                    info.severity.toString() == "Moderate" -> {
-                        warningLevel.text = "Moderat skogbrannfare"
-                        warningLevelImg.background = resources.getDrawable(R.drawable.yellowwarning,theme)
-                        warningLevelColor.background = resources.getDrawable(R.color.yellow,theme)
-                    }
-                    info.severity.toString() == "Severe" -> {
-                        warningLevel.text = "Betydelig skogbrannfare"
-                        warningLevelImg.background = resources.getDrawable(R.drawable.orangewarning,theme)
-                        warningLevelColor.background = resources.getDrawable(R.color.orange,theme)
-                    }
-                    else -> {
-                        warningLevel.text = "?"
+            if (alert != null) {
+                alert.infoItemsNo.forEach { info: Info ->
+                    warningArea.text = info.area.areaDesc
+                    warningInfo.text = info.instruction
+                    when {
+                        info.severity.toString() == "Moderate" -> {
+                            warningLevel.text = "Moderat skogbrannfare"
+                            warningLevelImg.background = resources.getDrawable(R.drawable.yellowwarning,theme)
+                            warningLevelColor.background = resources.getDrawable(R.color.yellow,theme)
+                        }
+                        info.severity.toString() == "Severe" -> {
+                            warningLevel.text = "Betydelig skogbrannfare"
+                            warningLevelImg.background = resources.getDrawable(R.drawable.orangewarning,theme)
+                            warningLevelColor.background = resources.getDrawable(R.color.orange,theme)
+                        }
+                        else -> {
+                            warningLevel.text = "?"
+                        }
                     }
                 }
+                togglePopup()
+            } else {
+                // Ingen varsel (alert er null)
+                Toast.makeText(this, "Ingen varsler for dette området", Toast.LENGTH_SHORT).show()  // TODO: flytt streng resources
             }
-            togglePopup()
         })
 
         val varslerHer = findViewById<Button>(R.id.varsler_her)
