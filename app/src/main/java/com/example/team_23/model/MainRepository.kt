@@ -94,13 +94,18 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
     * Den kaster bare en SecurityException dersom f.eks. bruker har avslått lokasjonstilgang ("permission")
     * @returns LiveData<Location>
     */
+    @Throws(SecurityException::class)
     fun getLocation(): LiveData<Location> {
         Log.d(tag, "getLocation ble kalt")
         val liveDataLocation = MutableLiveData<Location>()
         try {
             val locationTask = fusedLocationProviderClient.lastLocation
             locationTask.addOnSuccessListener {
-                Log.d(tag,"getLocation: onSuccessListener. Resultat: ${it.latitude}, ${it.longitude}")
+                // Resultat ("it") kan være null dersom system ikke har informasjon om nåværende lokasjon.
+                if (it == null)
+                    Log.d(tag, "getLocation: onSuccessListener. Resultat (Location) er null.")
+                else
+                    Log.d(tag,"getLocation: onSuccessListener. Resultat: ${it.latitude}, ${it.longitude}")
                 liveDataLocation.postValue(it)
             }
         } catch (ex: SecurityException) {
