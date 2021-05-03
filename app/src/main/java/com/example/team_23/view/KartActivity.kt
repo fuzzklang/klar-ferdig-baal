@@ -14,10 +14,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.team_23.R
-import com.example.team_23.model.MainRepository
-import com.example.team_23.model.api.ApiServiceImpl
 import com.example.team_23.model.api.metalerts_dataclasses.Alert
 import com.example.team_23.model.api.metalerts_dataclasses.Info
+import com.example.team_23.utils.ViewModelProvider
 import com.example.team_23.viewmodel.KartViewModel
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -28,8 +27,6 @@ import com.google.android.gms.maps.model.*
 
 class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
-    private lateinit var apiService: ApiServiceImpl
-    private lateinit var repo: MainRepository
     private lateinit var kartViewModel: KartViewModel
 
     private val LOCATION_PERMISSION_REQUEST = 1  // Til lokasjonsrettigheter
@@ -41,14 +38,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        /*BEGIN COMMENT
-        * Alle disse bør instansieres annetsteds!
-        * For eksempel i et Factory eller tilsvarende */
-        apiService = ApiServiceImpl()
-        repo = MainRepository(apiService, LocationServices.getFusedLocationProviderClient(applicationContext))
-        kartViewModel = KartViewModel(repo)
-        /* END COMMENT */
+        kartViewModel = ViewModelProvider.getKartViewModel(LocationServices.getFusedLocationProviderClient(applicationContext))
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
@@ -334,15 +324,15 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         }
         //her skjules/vises baalplassene
         var status = true
-        baalplassKnapp.setOnClickListener(){
+        baalplassKnapp.setOnClickListener {
             status = !status
             if(!status) {
                 for (i in baalMarkers) {
-                    i.setVisible(false)
+                    i.isVisible = false
                 }
             }else{
                 for(i in baalMarkers) {
-                    i.setVisible(true)
+                    i.isVisible = true
                 }
             }
         }
