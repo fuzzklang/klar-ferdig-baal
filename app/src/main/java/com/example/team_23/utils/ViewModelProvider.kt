@@ -12,7 +12,7 @@ class ViewModelProvider private constructor() {
     // Skal fungere som et Singleton.
 
     companion object Factory {
-        private val tag = "ViewModelProvider"
+        private const val tag = "ViewModelProvider"
         private var kartViewModel: KartViewModel? = null
 
         fun getKartViewModel(fusedLocationProvider: FusedLocationProviderClient): KartViewModel {

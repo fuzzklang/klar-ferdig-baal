@@ -1,16 +1,13 @@
 package com.example.team_23.view
 
-import androidx.appcompat.app.AppCompatActivity
-import com.example.team_23.R
-
 
 import android.os.Bundle
 import android.view.ViewGroup
-import android.widget.Toast
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ScrollView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.example.team_23.R
 
 
 class RegelView : AppCompatActivity() {
@@ -24,7 +21,7 @@ class RegelView : AppCompatActivity() {
                 ViewGroup.LayoutParams.MATCH_PARENT)
         scrollView.layoutParams = layoutParams
 
-        val returnButton = findViewById(R.id.returnButton) as ImageButton
+        val returnButton = findViewById<ImageButton>(R.id.returnButton)
 
         returnButton.setOnClickListener {
             onBackPressed()
