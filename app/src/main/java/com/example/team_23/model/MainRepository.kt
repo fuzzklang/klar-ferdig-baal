@@ -99,17 +99,18 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
     * @returns LiveData<Location>
     */
     @Throws(SecurityException::class)
-    fun getLocation(): LiveData<Location> {
+    fun getLocation(): LiveData<Location?> {
         Log.d(tag, "getLocation ble kalt")
         val liveDataLocation = MutableLiveData<Location>()
         try {
             val locationTask = fusedLocationProviderClient.lastLocation
             locationTask.addOnSuccessListener {
                 // Resultat ("it") kan være null dersom system ikke har informasjon om nåværende lokasjon.
-                if (it == null)
+                if (it == null) {
                     Log.d(tag, "getLocation: onSuccessListener. Resultat (Location) er null.")
-                else
+                } else {
                     Log.d(tag,"getLocation: onSuccessListener. Resultat: ${it.latitude}, ${it.longitude}")
+                }
                 liveDataLocation.postValue(it)
             }
         } catch (ex: SecurityException) {
