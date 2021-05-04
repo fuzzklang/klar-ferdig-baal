@@ -299,15 +299,15 @@
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="290dp"
-                android:layout_height="476dp"
-                android:layout_marginTop="90dp"
+                android:layout_width="279dp"
+                android:layout_height="411dp"
+                android:layout_marginTop="110dp"
                 android:background="@drawable/shape"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.416"
+                app:layout_constraintVertical_bias="0.422"
                 tools:ignore="ContentDescription" />
 
             <ImageView
@@ -318,24 +318,24 @@
                 android:backgroundTint="@color/grey"
                 app:layout_constraintBottom_toTopOf="@+id/imageView2"
                 app:layout_constraintEnd_toEndOf="@+id/imageView"
-                app:layout_constraintHorizontal_bias="0.487"
+                app:layout_constraintHorizontal_bias="0.477"
                 app:layout_constraintStart_toStartOf="@+id/imageView"
                 app:layout_constraintTop_toTopOf="@+id/imageView"
-                app:layout_constraintVertical_bias="0.796"
+                app:layout_constraintVertical_bias="0.803"
                 tools:ignore="ContentDescription" />
 
             <ImageView
                 android:id="@+id/imageView2"
-                android:layout_width="219dp"
+                android:layout_width="226dp"
                 android:layout_height="150dp"
                 android:background="@drawable/shape"
                 android:backgroundTint="@color/grey"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView"
                 app:layout_constraintEnd_toEndOf="@+id/imageView"
-                app:layout_constraintHorizontal_bias="0.436"
+                app:layout_constraintHorizontal_bias="0.471"
                 app:layout_constraintStart_toStartOf="@+id/imageView"
                 app:layout_constraintTop_toTopOf="@+id/imageView"
-                app:layout_constraintVertical_bias="0.754"
+                app:layout_constraintVertical_bias="0.75"
                 tools:ignore="ContentDescription" />
 
             <TextView
@@ -351,7 +351,7 @@
                 app:layout_constraintHorizontal_bias="0.492"
                 app:layout_constraintStart_toStartOf="@+id/imageView"
                 app:layout_constraintTop_toTopOf="@+id/imageView"
-                app:layout_constraintVertical_bias="0.137" />
+                app:layout_constraintVertical_bias="0.106" />
 
             <View
                 android:id="@+id/warningLevelColor"
@@ -363,7 +363,7 @@
                 app:layout_constraintHorizontal_bias="0.502"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/warningArea"
-                app:layout_constraintVertical_bias="0.555" />
+                app:layout_constraintVertical_bias="0.14" />
 
             <ImageButton
                 android:id="@+id/popupCloseButton"
@@ -417,12 +417,12 @@
                 android:textAllCaps="false"
                 android:textColor="@color/black"
                 android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView"
+                app:layout_constraintBottom_toTopOf="@+id/imageView2"
                 app:layout_constraintEnd_toEndOf="@+id/imageView"
                 app:layout_constraintHorizontal_bias="0.495"
                 app:layout_constraintStart_toStartOf="@+id/imageView"
-                app:layout_constraintTop_toTopOf="@+id/imageView"
-                app:layout_constraintVertical_bias="0.476" />
+                app:layout_constraintTop_toBottomOf="@+id/imageView3"
+                app:layout_constraintVertical_bias="0.583" />
 
             <TextView
                 android:id="@+id/textView5"
@@ -454,56 +454,54 @@
                 app:layout_constraintVertical_bias="0.762" />
 
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/imageButton3"
-                android:layout_width="43dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="92dp"
+                android:layout_width="149dp"
+                android:layout_height="36dp"
                 android:background="@drawable/shapeborder"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.2"
-                app:layout_constraintStart_toStartOf="@+id/imageView"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageView2"
-                app:layout_constraintVertical_bias="0.291"
+                app:layout_constraintVertical_bias="0.6"
                 tools:ignore="ContentDescription" />
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/imageView6"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_marginTop="1.4dp"
-                android:layout_marginRight="3dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="1dp"
                 android:background="@null"
                 android:scaleType="fitCenter"
                 app:layout_constraintBottom_toBottomOf="@+id/imageButton3"
                 app:layout_constraintEnd_toEndOf="@+id/imageButton3"
-                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintHorizontal_bias="0.075"
                 app:layout_constraintStart_toStartOf="@+id/imageButton3"
                 app:layout_constraintTop_toTopOf="@+id/imageButton3"
-                app:layout_constraintVertical_bias="0.0"
+                app:layout_constraintVertical_bias="0.333"
                 app:srcCompat="@drawable/walking"
                 tools:ignore="ContentDescription" />
 
             <TextView
-                android:layout_width="36dp"
-                android:layout_height="wrap_content"
+                android:layout_width="92dp"
+                android:layout_height="34dp"
                 android:gravity="center"
                 android:text="@string/dra_hit"
                 android:textColor="@color/black"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView"
-                app:layout_constraintEnd_toEndOf="@+id/imageView"
-                app:layout_constraintHorizontal_bias="0.497"
-                app:layout_constraintStart_toStartOf="@+id/imageView"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toTopOf="@+id/imageButton3"
+                app:layout_constraintEnd_toEndOf="@+id/imageButton3"
+                app:layout_constraintHorizontal_bias="0.561"
+                app:layout_constraintStart_toStartOf="@+id/imageButton3"
                 app:layout_constraintTop_toBottomOf="@+id/imageButton3"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintVertical_bias="0.514" />
 
             <ImageView
-                android:layout_marginTop="7dp"
                 android:id="@+id/imageView7"
                 android:layout_width="15dp"
                 android:layout_height="17dp"
+                android:layout_marginTop="7dp"
                 app:layout_constraintBottom_toTopOf="@+id/imageView2"
                 app:layout_constraintEnd_toEndOf="@+id/levelsButton"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -532,6 +530,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                app:layout_constraintGuide_begin="20dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 app:layout_constraintGuide_begin="20dp" />
 
 

@@ -338,7 +338,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             })
             true
         }
-        mMap.uiSettings.isScrollGesturesEnabled = false
     }
 
     // ===== HJELPEMETODER =====
