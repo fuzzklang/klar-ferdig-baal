@@ -13,6 +13,7 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import com.example.team_23.R
 import com.example.team_23.model.dataclasses.Bonfire
 import com.example.team_23.model.dataclasses.metalerts_dataclasses.Alert
@@ -331,7 +332,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             mMap.uiSettings.isScrollGesturesEnabled = false
             if(menuSynlig){
                 menu.visibility = View.GONE
-                menuButton.background = resources.getDrawable(R.drawable.menubutton,theme)
+                menuButton.background = ResourcesCompat.getDrawable(resources, R.drawable.menubutton,theme)
                 menuSynlig = !menuSynlig
             }
         }
@@ -347,7 +348,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             mMap.uiSettings.isScrollGesturesEnabled = false
             if(menuSynlig) {
                 menu.visibility = View.GONE
-                menuButton.background = resources.getDrawable(R.drawable.menubutton,theme)
+                menuButton.background = ResourcesCompat.getDrawable(resources, R.drawable.menubutton,theme)
                 menuSynlig = !menuSynlig
             }
         }
@@ -358,11 +359,11 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         if(menuSynlig) {
             menu.visibility = View.GONE
             mMap.uiSettings.isScrollGesturesEnabled = true
-            menuButton.background = resources.getDrawable(R.drawable.menubutton,theme)
+            menuButton.background = ResourcesCompat.getDrawable(resources, R.drawable.menubutton,theme)
         } else {
             menu.visibility = View.VISIBLE
             mMap.uiSettings.isScrollGesturesEnabled = false
-            menuButton.background = resources.getDrawable(R.drawable.closemenubutton,theme)
+            menuButton.background = ResourcesCompat.getDrawable(resources, R.drawable.closemenubutton,theme)
             if (infoSynlig) {
                 toggleInfo()
             }
