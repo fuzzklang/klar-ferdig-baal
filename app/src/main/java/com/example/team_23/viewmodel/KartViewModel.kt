@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.team_23.model.MainRepository
 import com.example.team_23.model.dataclasses.Bonfire
-import com.example.team_23.model.dataclasses.map_dataclasses.Routes
+import com.example.team_23.model.dataclasses.Routes
 import com.example.team_23.model.dataclasses.metalerts_dataclasses.Alert
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.PolyUtil

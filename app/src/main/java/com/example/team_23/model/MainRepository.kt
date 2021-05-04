@@ -7,9 +7,9 @@ import androidx.lifecycle.MutableLiveData
 import com.example.team_23.model.api.ApiServiceImpl
 import com.example.team_23.model.api.CapParser
 import com.example.team_23.model.api.MetAlertsRssParser
+import com.example.team_23.model.dataclasses.Base
 import com.example.team_23.model.dataclasses.Bonfire
-import com.example.team_23.model.dataclasses.map_dataclasses.Base
-import com.example.team_23.model.dataclasses.map_dataclasses.Routes
+import com.example.team_23.model.dataclasses.Routes
 import com.example.team_23.model.dataclasses.metalerts_dataclasses.Alert
 import com.example.team_23.model.dataclasses.metalerts_dataclasses.RssItem
 import com.google.android.gms.location.FusedLocationProviderClient

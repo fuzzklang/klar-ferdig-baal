@@ -28,6 +28,8 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 
 class KartActivity : AppCompatActivity(), OnMapReadyCallback {
+    private val tag = "KartActivity"
+
     private lateinit var mMap: GoogleMap
     private lateinit var kartViewModel: KartViewModel
 
@@ -161,7 +163,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // Observer varsel-liste fra KartViewModel
         // NB: Denne skal brukes kun til varsel-overlay, og ikke til popup-boks
         kartViewModel.allAlerts.observe(this, {
-            Log.d("KartActivity", "Endring skjedd i alerts-liste!")
+            Log.d(tag, "Endring skjedd i alerts-liste!")
             // TODO: implementere overlay
         })
 
@@ -169,7 +171,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         kartViewModel.alertAtPosition.observe(this, {
             // Observerer endringer i alertAtPosition (type LiveData<Alert>)
             val alert: Alert? = kartViewModel.alertAtPosition.value
-            Log.d("KartActivity", "Oppdatering observert i alertAtPosition. Alert: $it")
+            Log.d(tag, "Oppdatering observert i alertAtPosition. Alert: $it")
             // Løkken viser kun siste info-item siden løkken overskriver tidligere info lagt inn.
             if (alert != null) {
                 alert.infoItemsNo.forEach { info: Info ->
@@ -238,7 +240,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 .title("${bonfire.name} (${bonfire.type})")
                 .icon(BitmapDescriptorFactory.fromBitmap(smallBonfireMarkerBitmap)))
             if (marker == null)
-                Log.w("KartActivity", "onMapReady: en bonfireMarker er null! Ignorerer. Kan føre til uønsket oppførsel fra app.")
+                Log.w(tag, "onMapReady: en bonfireMarker er null! Ignorerer. Kan føre til uønsket oppførsel fra app.")
             else
                 bonfireMarkers.add(marker)
         }
@@ -263,7 +265,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // Hent en LiveData-instans med lokasjon (fra ViewModel) som deretter blir observert
         // [Denne løsningen kan potensielt føre til en viss delay fra knappen blir klikket til kameraet flytter seg]
         mMap.setOnMyLocationButtonClickListener {
-            Log.d("KartActivity", "Klikk registrert på MyLocationButton")
+            Log.d(tag, "Klikk registrert på MyLocationButton")
             val locationLiveData = kartViewModel.getLocation()
             // Når LiveDataen får koordinater flyttes kamera til oppdatert posisjon
             locationLiveData.observe(this, {
@@ -288,13 +290,13 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
     /* Hjelpemetode for å få tilgangsrettigheter for lokasjon */
     private fun getLocationAccess() {
-        Log.d("KartActivity", "getLocation: mMap.isMyLocationEnabled: ${mMap.isMyLocationEnabled}")
+        Log.d(tag, "getLocation: mMap.isMyLocationEnabled: ${mMap.isMyLocationEnabled}")
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             hasLocationAccess = true
             mMap.isMyLocationEnabled = true
             kartViewModel.updateLocation()
         } else {
-            Log.d("KartActivity", "getLocation: ber om lokasjonsrettigheter")
+            Log.d(tag, "getLocation: ber om lokasjonsrettigheter")
             hasLocationAccess = false
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST)
         }
@@ -302,21 +304,21 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
     /* Metode kalles når svar ang. lokasjonstilgang kommer tilbake. Sjekker om tillatelse er innvilget */
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        Log.d("KartActivity", "onRequestPermissionsResult er kalt")
+        Log.d(tag, "onRequestPermissionsResult er kalt")
         if (requestCode == LOCATION_PERMISSION_REQUEST) {
             if (grantResults.contains(PackageManager.PERMISSION_GRANTED)) {
                 if (ActivityCompat.checkSelfPermission(
                                 this,
                                 Manifest.permission.ACCESS_FINE_LOCATION
                         ) != PackageManager.PERMISSION_GRANTED) {
-                    Log.i("KartActivity","onRequestPermissionsResult: checkSelfPermission gir negativt svar. Har ikke tilgang.")
+                    Log.i(tag,"onRequestPermissionsResult: checkSelfPermission gir negativt svar. Har ikke tilgang.")
                 } else {
-                    Log.d("KartActivity", "Lokasjonstilgang innvilget!")
+                    Log.d(tag, "Lokasjonstilgang innvilget!")
                     hasLocationAccess = true
                     mMap.isMyLocationEnabled = true
                 }
             } else {
-                Log.i("KartActivity", "Lokasjonsrettigheter ble ikke gitt. Appen trenger tilgang til lokasjon for enkelte funksjonaliteter")
+                Log.i(tag, "Lokasjonsrettigheter ble ikke gitt. Appen trenger tilgang til lokasjon for enkelte funksjonaliteter")
                 Toast.makeText(this, "Ikke tilgang til lokasjon.", Toast.LENGTH_SHORT).show()
             }
         }
