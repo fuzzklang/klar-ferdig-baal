@@ -100,8 +100,10 @@
                 app:layout_constraintVertical_bias="0.0" />
 
             <TextView
+                android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:text="Informasjon"
                 android:textColor="@color/black"
                 android:textSize="18sp"
@@ -109,7 +111,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/view2"
-                app:layout_constraintVertical_bias="0.911" />
+                app:layout_constraintVertical_bias="1.0" />
 
             <Button
                 android:id="@+id/info_button"
@@ -121,12 +123,12 @@
                 android:scaleType="fitCenter"
                 android:text="Info"
                 android:textColor="@color/black"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/send_rules"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.504"
+                app:layout_constraintHorizontal_bias="0.495"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.101" />
+                app:layout_constraintVertical_bias="1.0" />
 
             <Button
                 android:id="@+id/send_rules"
@@ -136,24 +138,27 @@
                 android:backgroundTint="@color/grey"
                 android:contentDescription="@string/rules"
                 android:text="Regler"
+                android:layout_marginBottom="20dp"
                 android:textColor="@color/black"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/textView6"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.327" />
+                app:layout_constraintVertical_bias="1.0" />
 
             <TextView
+                android:id="@+id/textView6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:text="Kartfunksjoner"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toTopOf="@+id/overlay_button"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/send_rules"
-                app:layout_constraintVertical_bias="0.724" />
+                app:layout_constraintTop_toTopOf="@+id/guideline3"
+                app:layout_constraintVertical_bias="1.0" />
 
             <ToggleButton
                 android:id="@+id/overlay_button"
@@ -166,11 +171,11 @@
                 android:textColor="@color/black"
                 android:textOff="Overlay (AV)"
                 android:textOn="Overlay (PÅ)"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/baalplass_button"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.382" />
+                app:layout_constraintVertical_bias="1.0" />
 
             <ToggleButton
                 android:id="@+id/baalplass_button"
@@ -182,9 +187,17 @@
                 android:textOn="Vis Bålplasser"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.488"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.56" />
+                app:layout_constraintVertical_bias="0.553" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="20dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -276,8 +289,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/popup"
-            android:layout_width="278dp"
-            android:layout_height="544dp"
+            android:layout_width="293dp"
+            android:layout_height="572dp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/varsler_her"
             app:layout_constraintEnd_toEndOf="parent"
@@ -286,9 +299,9 @@
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="271dp"
-                android:layout_height="420dp"
-                android:layout_marginTop="100dp"
+                android:layout_width="290dp"
+                android:layout_height="476dp"
+                android:layout_marginTop="90dp"
                 android:background="@drawable/shape"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -305,23 +318,24 @@
                 android:backgroundTint="@color/grey"
                 app:layout_constraintBottom_toTopOf="@+id/imageView2"
                 app:layout_constraintEnd_toEndOf="@+id/imageView"
-                app:layout_constraintHorizontal_bias="0.522"
+                app:layout_constraintHorizontal_bias="0.487"
                 app:layout_constraintStart_toStartOf="@+id/imageView"
                 app:layout_constraintTop_toTopOf="@+id/imageView"
-                app:layout_constraintVertical_bias="0.817"
+                app:layout_constraintVertical_bias="0.796"
                 tools:ignore="ContentDescription" />
 
             <ImageView
                 android:id="@+id/imageView2"
-                android:layout_width="215dp"
-                android:layout_height="136dp"
+                android:layout_width="219dp"
+                android:layout_height="150dp"
                 android:background="@drawable/shape"
                 android:backgroundTint="@color/grey"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView"
                 app:layout_constraintEnd_toEndOf="@+id/imageView"
+                app:layout_constraintHorizontal_bias="0.436"
                 app:layout_constraintStart_toStartOf="@+id/imageView"
                 app:layout_constraintTop_toTopOf="@+id/imageView"
-                app:layout_constraintVertical_bias="0.745"
+                app:layout_constraintVertical_bias="0.754"
                 tools:ignore="ContentDescription" />
 
             <TextView
@@ -334,10 +348,10 @@
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.491"
+                app:layout_constraintHorizontal_bias="0.492"
                 app:layout_constraintStart_toStartOf="@+id/imageView"
                 app:layout_constraintTop_toTopOf="@+id/imageView"
-                app:layout_constraintVertical_bias="0.142" />
+                app:layout_constraintVertical_bias="0.137" />
 
             <View
                 android:id="@+id/warningLevelColor"
@@ -346,23 +360,23 @@
                 android:background="@color/black"
                 app:layout_constraintBottom_toTopOf="@+id/imageView3"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintHorizontal_bias="0.502"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/warningArea"
-                app:layout_constraintVertical_bias="0.729" />
+                app:layout_constraintVertical_bias="0.555" />
 
             <ImageButton
                 android:id="@+id/popupCloseButton"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_marginBottom="219dp"
                 android:background="@drawable/close"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/imageView"
-                app:layout_constraintHorizontal_bias="0.934"
+                app:layout_constraintHorizontal_bias="0.941"
                 app:layout_constraintStart_toStartOf="@+id/imageView"
                 app:layout_constraintTop_toTopOf="@+id/imageView"
-                app:layout_constraintVertical_bias="0.116"
+                app:layout_constraintVertical_bias="0.071"
                 tools:ignore="ContentDescription" />
 
             <TextView
@@ -397,17 +411,18 @@
                 android:id="@+id/levelsButton"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="70dp"
-                android:layout_height="33dp"
+                android:layout_height="25dp"
+                android:padding="0dp"
                 android:text="@string/nivaer"
                 android:textAllCaps="false"
                 android:textColor="@color/black"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView"
                 app:layout_constraintEnd_toEndOf="@+id/imageView"
-                app:layout_constraintHorizontal_bias="0.532"
+                app:layout_constraintHorizontal_bias="0.495"
                 app:layout_constraintStart_toStartOf="@+id/imageView"
                 app:layout_constraintTop_toTopOf="@+id/imageView"
-                app:layout_constraintVertical_bias="0.462" />
+                app:layout_constraintVertical_bias="0.476" />
 
             <TextView
                 android:id="@+id/textView5"
@@ -418,86 +433,52 @@
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView2"
                 app:layout_constraintEnd_toEndOf="@+id/imageView2"
-                app:layout_constraintHorizontal_bias="0.495"
+                app:layout_constraintHorizontal_bias="0.508"
                 app:layout_constraintStart_toStartOf="@+id/imageView2"
                 app:layout_constraintTop_toTopOf="@+id/imageView2"
-                app:layout_constraintVertical_bias="0.089" />
+                app:layout_constraintVertical_bias="0.094" />
 
             <TextView
                 android:id="@+id/warningInfo"
-                android:layout_width="173dp"
-                android:layout_height="76dp"
+                android:layout_width="193dp"
+                android:layout_height="103dp"
                 android:gravity="center"
                 android:text="@string/loading"
                 android:textColor="@color/black"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView2"
                 app:layout_constraintEnd_toEndOf="@+id/imageView2"
+                app:layout_constraintHorizontal_bias="0.6"
                 app:layout_constraintStart_toStartOf="@+id/imageView2"
                 app:layout_constraintTop_toTopOf="@+id/imageView2"
-                app:layout_constraintVertical_bias="0.683" />
+                app:layout_constraintVertical_bias="0.762" />
+
 
             <ImageView
                 android:id="@+id/imageButton3"
                 android:layout_width="43dp"
                 android:layout_height="40dp"
+                android:layout_marginStart="92dp"
                 android:background="@drawable/shapeborder"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView"
-                app:layout_constraintEnd_toStartOf="@+id/imageButton2"
-                app:layout_constraintHorizontal_bias="0.865"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.2"
                 app:layout_constraintStart_toStartOf="@+id/imageView"
                 app:layout_constraintTop_toBottomOf="@+id/imageView2"
-                app:layout_constraintVertical_bias="0.37"
-                tools:ignore="ContentDescription" />
-
-            <ImageView
-                android:id="@+id/imageButton2"
-                android:layout_width="43dp"
-                android:layout_height="40dp"
-                android:background="@drawable/shapeborder"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView"
-                app:layout_constraintEnd_toEndOf="@+id/imageView"
-                app:layout_constraintHorizontal_bias="0.613"
-                app:layout_constraintStart_toStartOf="@+id/imageView"
-                app:layout_constraintTop_toBottomOf="@+id/imageView2"
-                app:layout_constraintVertical_bias="0.37"
-                tools:ignore="ContentDescription" />
-
-            <ImageButton
-                android:id="@+id/imageView4"
-                android:layout_width="10dp"
-                android:layout_height="10dp"
-                app:background="@drawable/walking"
-                app:layout_constraintBottom_toBottomOf="@+id/imageButton3"
-                app:layout_constraintEnd_toEndOf="@+id/imageButton3"
-                app:layout_constraintStart_toStartOf="@+id/imageButton3"
-                app:layout_constraintTop_toTopOf="@+id/imageButton3"
-                tools:ignore="ContentDescription" />
-
-            <ImageButton
-                android:id="@+id/imageView5"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:background="@null"
-                android:scaleType="fitCenter"
-                app:layout_constraintBottom_toBottomOf="@+id/imageButton2"
-                app:layout_constraintEnd_toEndOf="@+id/imageButton2"
-                app:layout_constraintHorizontal_bias="0.428"
-                app:layout_constraintStart_toStartOf="@+id/imageButton2"
-                app:layout_constraintTop_toTopOf="@+id/imageButton2"
-                app:layout_constraintVertical_bias="0.0"
-                app:srcCompat="@drawable/campfire"
+                app:layout_constraintVertical_bias="0.291"
                 tools:ignore="ContentDescription" />
 
             <ImageButton
                 android:id="@+id/imageView6"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
+                android:layout_marginTop="1.4dp"
+                android:layout_marginRight="3dp"
                 android:background="@null"
                 android:scaleType="fitCenter"
                 app:layout_constraintBottom_toBottomOf="@+id/imageButton3"
                 app:layout_constraintEnd_toEndOf="@+id/imageButton3"
-                app:layout_constraintHorizontal_bias="0.571"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="@+id/imageButton3"
                 app:layout_constraintTop_toTopOf="@+id/imageButton3"
                 app:layout_constraintVertical_bias="0.0"
@@ -513,37 +494,22 @@
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView"
                 app:layout_constraintEnd_toEndOf="@+id/imageView"
-                app:layout_constraintHorizontal_bias="0.375"
+                app:layout_constraintHorizontal_bias="0.497"
                 app:layout_constraintStart_toStartOf="@+id/imageView"
                 app:layout_constraintTop_toBottomOf="@+id/imageButton3"
                 app:layout_constraintVertical_bias="0.0" />
 
-            <TextView
-                android:id="@+id/textView9"
-                android:layout_width="46dp"
-                android:layout_height="13dp"
-                android:gravity="center"
-                android:text="@string/balplasser"
-                android:textColor="@color/black"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView"
-                app:layout_constraintEnd_toEndOf="@+id/imageView"
-                app:layout_constraintHorizontal_bias="0.621"
-                app:layout_constraintStart_toStartOf="@+id/imageView"
-                app:layout_constraintTop_toBottomOf="@+id/imageButton2"
-                app:layout_constraintVertical_bias="0.0" />
-
             <ImageView
+                android:layout_marginTop="7dp"
                 android:id="@+id/imageView7"
                 android:layout_width="15dp"
                 android:layout_height="17dp"
-                android:layout_marginBottom="6dp"
                 app:layout_constraintBottom_toTopOf="@+id/imageView2"
                 app:layout_constraintEnd_toEndOf="@+id/levelsButton"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/levelsButton"
                 app:layout_constraintTop_toTopOf="@+id/levelsButton"
-                app:layout_constraintVertical_bias="1.0"
+                app:layout_constraintVertical_bias="0.0"
                 app:srcCompat="@drawable/nivaaer"
                 tools:ignore="ContentDescription" />
 
@@ -560,6 +526,13 @@
                 app:layout_constraintTop_toTopOf="@+id/imageView3"
                 app:layout_constraintVertical_bias="0.729"
                 tools:ignore="ContentDescription" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="20dp" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
