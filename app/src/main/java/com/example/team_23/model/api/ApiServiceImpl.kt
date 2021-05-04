@@ -3,7 +3,9 @@ package com.example.team_23.model.api
 import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import okhttp3.*
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
 import java.io.IOException
 
 // Implementasjon av ApiService-grensesnittet
@@ -29,7 +31,7 @@ class ApiServiceImpl: ApiService {
     @Suppress("BlockingMethodInNonBlockingContext")
     override suspend fun fetchData(url: String): String? {
         return withContext(Dispatchers.IO) {
-            Log.d("URL", url)
+            Log.d(tag, "URL: $url")
             val request = Request.Builder() // Bygg Request med OkHttp
                     .url(url)
                     .build()

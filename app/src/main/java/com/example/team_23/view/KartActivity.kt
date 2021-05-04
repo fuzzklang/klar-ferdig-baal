@@ -14,10 +14,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.team_23.R
-import com.example.team_23.model.MainRepository
-import com.example.team_23.model.api.ApiServiceImpl
 import com.example.team_23.model.api.metalerts_dataclasses.Alert
 import com.example.team_23.model.api.metalerts_dataclasses.Info
+import com.example.team_23.utils.ViewModelProvider
 import com.example.team_23.viewmodel.KartViewModel
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -28,8 +27,6 @@ import com.google.android.gms.maps.model.*
 
 class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
-    private lateinit var apiService: ApiServiceImpl
-    private lateinit var repo: MainRepository
     private lateinit var kartViewModel: KartViewModel
 
     private val LOCATION_PERMISSION_REQUEST = 1  // Til lokasjonsrettigheter
@@ -37,69 +34,76 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private var marker: Marker? = null
 
+    // ===== VARIABLER brukt av Activity =====
+    // ----- Info-boks -----
+    private lateinit var info: View
+    private lateinit var infoButton: Button
+    private lateinit var infoCloseButton: ImageButton
+    private var infoSynlig = true   // Variabel som holder styr paa synligheten til info view
+    // ----- Meny -----
+    private lateinit var menu: View
+    private lateinit var menuButton: ImageButton
+    private var menuSynlig = false
+    // ----- Popup-boks -----
+    private lateinit var popup: View
+    private lateinit var popupCloseButton: ImageButton
+    private var popupSynlig = false
+    // ----- Levels -----
+    private lateinit var levelsButton: Button
+    private lateinit var levelsPopup: View
+    private lateinit var levelsPopupCloseBtn: ImageButton
+    private var levelsPopupSynlig = true
+
+
     @SuppressLint("UseCompatLoadingForDrawables", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        /*BEGIN COMMENT
-        * Alle disse bør instansieres annetsteds!
-        * For eksempel i et Factory eller tilsvarende */
-        apiService = ApiServiceImpl()
-        repo = MainRepository(apiService, LocationServices.getFusedLocationProviderClient(applicationContext))
-        kartViewModel = KartViewModel(repo)
-        /* END COMMENT */
-
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        // Setter KartViewModel og Kart tidlig.
+        kartViewModel = ViewModelProvider.getKartViewModel(LocationServices.getFusedLocationProviderClient(applicationContext))
+        // Henter SupportMapFragment og får beskjed når kartet (map) er klart til bruk. Se onMapReady-metoden.
         val mapFragment = supportFragmentManager
-            .findFragmentById(R.id.map) as SupportMapFragment
+                .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-        // Observer path-livedata (i fra KartViewModel), tegn polyline ved oppdatering.
-        kartViewModel.path.observe(this, { paths ->
-            //går gjennom punktene i polyline for å skrive det ut til kartet.
-            for (i in 0 until paths.size) {
-                this.mMap.addPolyline(PolylineOptions().addAll(paths[i]).color(Color.RED))
-            }
-        })
 
+        // TODO: beskriv variablene/hvor de brukes/hva de brukes til
+        // ===== SETT VIEWS =====
+        // ----- Varsler Her-knapp -----
+        val varslerHer = findViewById<Button>(R.id.varsler_her)
+
+        // ----- Meny -----
+        menu = findViewById<View>(R.id.menu)
+        menuButton = findViewById<ImageButton>(R.id.menuButton)
+        val rulesActivityBtn = findViewById<Button>(R.id.send_rules)  // Knapp som sender bruker til reglene
+
+        // ----- Info-boks -----
+        infoButton = findViewById<Button>(R.id.info_button)
+        infoCloseButton = findViewById<ImageButton>(R.id.info_close_button)
+        info = findViewById<View>(R.id.infoBox)
+
+        // ----- Popup-boks -----
+        // (varselvisning?)
+        popup = findViewById<View>(R.id.popup)
+        popupCloseButton = findViewById<ImageButton>(R.id.popupCloseButton)
         val warningArea = findViewById<TextView>(R.id.warningArea)
         val warningInfo = findViewById<TextView>(R.id.warningInfo)
         val warningLevel = findViewById<TextView>(R.id.warningLevel)
         val warningLevelImg = findViewById<ImageView>(R.id.warningLevelImg)
         val warningLevelColor = findViewById<View>(R.id.warningLevelColor)
 
-        // Observer varsel-liste fra KartViewModel
-        // NB: Denne skal brukes kun til varsel-overlay, og ikke til popup-boks
-        kartViewModel.allAlerts.observe(this, {
-            Log.d("KartActivity", "Endring skjedd i alerts-liste!")
-            // TODO: implementere overlay
-        })
+        // ----- Levels -----
+        levelsButton = findViewById<Button>(R.id.levelsButton)
+        levelsPopup = findViewById<View>(R.id.levelsPopup)
+        levelsPopupCloseBtn = findViewById<ImageButton>(R.id.levelsCloseButton)
 
-        // Knapp som sender bruker til reglene
-        val rulesActivityBtn = findViewById<Button>(R.id.send_rules)
 
+        // ===== (ONCLICK) LISTENERS =====
         rulesActivityBtn.setOnClickListener{
             val intent = Intent(this,RegelView::class.java)
             startActivity(intent)
-
         }
-
-        val infoButton = findViewById<Button>(R.id.info_button)
-        val infoCloseButton = findViewById<ImageButton>(R.id.info_close_button)
-        val info = findViewById<View>(R.id.infoBox)
-        val popup = findViewById<View>(R.id.popup)
-        val popupCloseButton = findViewById<ImageButton>(R.id.popupCloseButton)
-        val menu = findViewById<View>(R.id.menu)
-        val menuButton = findViewById<ImageButton>(R.id.menuButton)
-        val levelsButton = findViewById<Button>(R.id.levelsButton)
-        val levelsPopup = findViewById<View>(R.id.levelsPopup)
-        val levelsPopupCloseBtn = findViewById<ImageButton>(R.id.levelsCloseButton)
-
-        var menuSynlig = false
-        var infoSynlig = true   // Variabel som holder styr paa synligheten til info view
-        var popupSynlig = false
-
 
         rulesActivityBtn.setOnClickListener{
             val intent = Intent(this,RegelView::class.java)
@@ -111,87 +115,50 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
 
-        // Funksjon som endrer synligheten til info view
-        fun toggleInfo() {
-            if (infoSynlig) {
-                info.visibility = View.GONE
-                mMap.uiSettings.isScrollGesturesEnabled = true
-            } else{
-                info.visibility = View.VISIBLE
-                mMap.uiSettings.isScrollGesturesEnabled = false
-                if(menuSynlig){
-                    menu.visibility = View.GONE
-                    menuButton.background = resources.getDrawable(R.drawable.menubutton,theme)
-                    menuSynlig = !menuSynlig
-                }
-            }
-            infoSynlig = !infoSynlig
-        }
-        //Info knapp som endrer info sin synlighet
-        infoButton.setOnClickListener {toggleInfo()}
-        //Info knapp som gjør info view usynelig
-        infoCloseButton.setOnClickListener{toggleInfo()}
+        infoButton.setOnClickListener {toggleInfo()}      //Info knapp som endrer info sin synlighet
 
-
-        fun togglePopup(){
-            if (popupSynlig) {
-                popup.visibility = View.GONE
-                mMap.uiSettings.isScrollGesturesEnabled = true
-            } else {
-                popup.visibility = View.VISIBLE
-                mMap.uiSettings.isScrollGesturesEnabled = false
-                if(menuSynlig) {
-                    menu.visibility = View.GONE
-                    menuButton.background = resources.getDrawable(R.drawable.menubutton,theme)
-                    menuSynlig = !menuSynlig
-                }
-            }
-            popupSynlig = !popupSynlig
-        }
-
-        popupCloseButton.setOnClickListener{togglePopup()}
-
-        fun toggleMenu() {
-            if(menuSynlig) {
-                menu.visibility = View.GONE
-                mMap.uiSettings.isScrollGesturesEnabled = true
-                menuButton.background = resources.getDrawable(R.drawable.menubutton,theme)
-            } else {
-                menu.visibility = View.VISIBLE
-                mMap.uiSettings.isScrollGesturesEnabled = false
-                menuButton.background = resources.getDrawable(R.drawable.closemenubutton,theme)
-                if (infoSynlig) {
-                    toggleInfo()
-                }
-                if(popupSynlig) {
-                    togglePopup()
-                }
-            }
-            menuSynlig = !menuSynlig
-        }
+        infoCloseButton.setOnClickListener{toggleInfo()}  //Info knapp som gjør info view usynelig
 
         menuButton.setOnClickListener{toggleMenu()}
 
-        var levelsPopupSynlig = true
-
-        fun toggleLevelsPopup(){
-            if (levelsPopupSynlig){
-                levelsPopup.visibility = View.VISIBLE
-                popup.visibility = View.GONE
-                mMap.uiSettings.isScrollGesturesEnabled = true
-            } else{
-                levelsPopup.visibility = View.GONE
-                popup.visibility = View.VISIBLE
-                mMap.uiSettings.isScrollGesturesEnabled = false
-            }
-            levelsPopupSynlig = !levelsPopupSynlig
-        }
-
         levelsButton.setOnClickListener { toggleLevelsPopup() }
+
         levelsPopupCloseBtn.setOnClickListener { toggleLevelsPopup() }
 
-        kartViewModel.getAllAlerts()
+        popupCloseButton.setOnClickListener{togglePopup()}
 
+        varslerHer.setOnClickListener{
+            getLocationAccess()  // Sjekk at vi har tilgang til lokasjon fra system.
+            // 'location'-variabelen i KartViewModel får en ny instans av LiveData *hver gang*
+            // lokasjon oppdateres. Må derfor lage en observer for den *siste og nyeste instansen* av location.
+            // Da hentes varselet først når LiveDataen har blitt fylt med informasjon om lokasjon.
+            // Ellers vil den ikke ha tilgang på lokasjons-informasjonen.
+            // NB: Ikke ideellt hvis flere 'observere' trenger å observere samme instans av 'location'.
+            val latestKnownLocation = kartViewModel.getLocation()  // type: LiveData<Location>
+            latestKnownLocation.observe(this, {
+                kartViewModel.getAlertCurrentLocation()  // Hent varsler når vi har lokasjon
+                //kartViewModel.getAlert(it.latitude, it.longitude) // Alternativt. Disse er ekvivalente. Sikrere?
+            })
+        }
+
+
+        // ===== OBSERVERS =====
+        // Observer path-livedata (i fra KartViewModel), tegn polyline ved oppdatering.
+        kartViewModel.path.observe(this, { paths ->
+            //går gjennom punktene i polyline for å skrive det ut til kartet.
+            for (i in 0 until paths.size) {
+                this.mMap.addPolyline(PolylineOptions().addAll(paths[i]).color(Color.RED))
+            }
+        })
+
+        // Observer varsel-liste fra KartViewModel
+        // NB: Denne skal brukes kun til varsel-overlay, og ikke til popup-boks
+        kartViewModel.allAlerts.observe(this, {
+            Log.d("KartActivity", "Endring skjedd i alerts-liste!")
+            // TODO: implementere overlay
+        })
+
+        // TODO: skriv hjelpefunksjon og flytt ut av onCreate
         kartViewModel.alertAtPosition.observe(this, {
             // Observerer endringer i alertAtPosition (type LiveData<Alert>)
             val alert: Alert? = kartViewModel.alertAtPosition.value
@@ -224,20 +191,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         })
 
-        val varslerHer = findViewById<Button>(R.id.varsler_her)
-        varslerHer.setOnClickListener{
-            getLocationAccess()  // Sjekk at vi har tilgang til lokasjon fra system.
-            // 'location'-variabelen i KartViewModel får en ny instans av LiveData *hver gang*
-            // lokasjon oppdateres. Må derfor lage en observer for den *siste og nyeste instansen* av location.
-            // Da hentes varselet først når LiveDataen har blitt fylt med informasjon om lokasjon.
-            // Ellers vil den ikke ha tilgang på lokasjons-informasjonen.
-            // NB: Ikke ideellt hvis flere 'observere' trenger å observere samme instans av 'location'.
-            val latestKnownLocation = kartViewModel.getLocation()  // type: LiveData<Location>
-            latestKnownLocation.observe(this, {
-                kartViewModel.getAlertCurrentLocation()  // Hent varsler når vi har lokasjon
-                //kartViewModel.getAlert(it.latitude, it.longitude) // Alternativt. Disse er ekvivalente. Sikrere?
-            })
-        }
+
+        kartViewModel.getAllAlerts()  // Hent alle varsler ved oppstart av app
     }
 
     /**
@@ -334,15 +289,15 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         }
         //her skjules/vises baalplassene
         var status = true
-        baalplassKnapp.setOnClickListener(){
+        baalplassKnapp.setOnClickListener {
             status = !status
             if(!status) {
                 for (i in baalMarkers) {
-                    i.setVisible(false)
+                    i.isVisible = false
                 }
             }else{
                 for(i in baalMarkers) {
-                    i.setVisible(true)
+                    i.isVisible = true
                 }
             }
         }
@@ -386,6 +341,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.uiSettings.isScrollGesturesEnabled = false
     }
 
+    // ===== HJELPEMETODER =====
+
     /* Hjelpemetode for å få tilgangsrettigheter for lokasjon */
     private fun getLocationAccess() {
         Log.d("KartActivity", "getLocation: mMap.isMyLocationEnabled: ${mMap.isMyLocationEnabled}")
@@ -420,5 +377,70 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 Toast.makeText(this, "Ikke tilgang til lokasjon.", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    // Funksjon som endrer synligheten til info view
+    private fun toggleInfo() {
+        if (infoSynlig) {
+            info.visibility = View.GONE
+            mMap.uiSettings.isScrollGesturesEnabled = true
+        } else{
+            info.visibility = View.VISIBLE
+            mMap.uiSettings.isScrollGesturesEnabled = false
+            if(menuSynlig){
+                menu.visibility = View.GONE
+                menuButton.background = resources.getDrawable(R.drawable.menubutton,theme)
+                menuSynlig = !menuSynlig
+            }
+        }
+        infoSynlig = !infoSynlig
+    }
+
+    private fun togglePopup(){
+        if (popupSynlig) {
+            popup.visibility = View.GONE
+            mMap.uiSettings.isScrollGesturesEnabled = true
+        } else {
+            popup.visibility = View.VISIBLE
+            mMap.uiSettings.isScrollGesturesEnabled = false
+            if(menuSynlig) {
+                menu.visibility = View.GONE
+                menuButton.background = resources.getDrawable(R.drawable.menubutton,theme)
+                menuSynlig = !menuSynlig
+            }
+        }
+        popupSynlig = !popupSynlig
+    }
+
+    private fun toggleMenu() {
+        if(menuSynlig) {
+            menu.visibility = View.GONE
+            mMap.uiSettings.isScrollGesturesEnabled = true
+            menuButton.background = resources.getDrawable(R.drawable.menubutton,theme)
+        } else {
+            menu.visibility = View.VISIBLE
+            mMap.uiSettings.isScrollGesturesEnabled = false
+            menuButton.background = resources.getDrawable(R.drawable.closemenubutton,theme)
+            if (infoSynlig) {
+                toggleInfo()
+            }
+            if(popupSynlig) {
+                togglePopup()
+            }
+        }
+        menuSynlig = !menuSynlig
+    }
+
+    private fun toggleLevelsPopup(){
+        if (levelsPopupSynlig){
+            levelsPopup.visibility = View.VISIBLE
+            popup.visibility = View.GONE
+            mMap.uiSettings.isScrollGesturesEnabled = true
+        } else{
+            levelsPopup.visibility = View.GONE
+            popup.visibility = View.VISIBLE
+            mMap.uiSettings.isScrollGesturesEnabled = false
+        }
+        levelsPopupSynlig = !levelsPopupSynlig
     }
 }
