@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.team_23.R
+import com.example.team_23.model.dataclasses.Bonfire
 import com.example.team_23.model.dataclasses.metalerts_dataclasses.Alert
 import com.example.team_23.model.dataclasses.metalerts_dataclasses.Info
 import com.example.team_23.utils.ViewModelProvider
@@ -53,6 +54,11 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var levelsPopup: View
     private lateinit var levelsPopupCloseBtn: ImageButton
     private var levelsPopupSynlig = true
+    // ----- Bonfire -----
+    private var showBonfireMarkers = true
+    private lateinit var showBonfiresButton: Button
+    private lateinit var bonfireSpots: List<Bonfire>
+    private lateinit var bonfireMarkers: MutableList<Marker>
 
 
     @SuppressLint("UseCompatLoadingForDrawables", "SetTextI18n")
@@ -196,6 +202,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         kartViewModel.getBonfireSpots()
     }
 
+    // ===== GOOGLE MAP READY =====
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -209,51 +216,40 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap = googleMap
         mMap.setPadding(0, 2000, 0, 0)
 
-        val baalplassKnapp = findViewById<Button>(R.id.baalplass_button)
-        //endrer stoerrelse paa campfire ikonet
-        val height = 50
-        val width = 50
-        val baalikon = ContextCompat.getDrawable(this, R.drawable.campfire) as BitmapDrawable
-        val b = baalikon.bitmap
-        val smallMarker = Bitmap.createScaledBitmap(b, width, height, false)
+        // ===== FLYTT KAMERA =====
+        // Flyttes nå til Oslo. Velge annet sted?
         val oslo = LatLng(59.911491, 10.757933) // Oslo
-
         this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(oslo, 6f))
 
-        val bonfireSpots = kartViewModel.getBonfireSpots()
-        val bonfireMarkers = mutableListOf<Marker>()
+        // ===== TEGNE BÅLPLASSER =====
+        showBonfireMarkers = true
+        bonfireSpots = kartViewModel.getBonfireSpots()
+        // TODO: burde noe av dette flyttes til layout-filene?
+        val bonfireIconHeight = 50   // endrer stoerrelse paa campfire ikonet
+        val bonfireIconWidth = 50    // -- " ---
+        val bonfireIcon = ContextCompat.getDrawable(this, R.drawable.campfire) as BitmapDrawable
+        val smallBonfireMarkerBitmap = Bitmap.createScaledBitmap(bonfireIcon.bitmap, bonfireIconWidth, bonfireIconHeight, false) // Brukes når markørene lages under
+
+        bonfireMarkers = mutableListOf<Marker>()  // Liste som holder på markørene
         for (bonfire in bonfireSpots) {
             val marker = mMap.addMarker(MarkerOptions()
                 .position(LatLng(bonfire.lat, bonfire.lon))
                 .title("${bonfire.name} (${bonfire.type})")
-                .icon(BitmapDescriptorFactory.fromBitmap(smallMarker)))
+                .icon(BitmapDescriptorFactory.fromBitmap(smallBonfireMarkerBitmap)))
             if (marker == null)
                 Log.w("KartActivity", "onMapReady: en bonfireMarker er null! Ignorerer. Kan føre til uønsket oppførsel fra app.")
             else
                 bonfireMarkers.add(marker)
         }
 
-        //her skjules/vises baalplassene
-        var status = true
-        baalplassKnapp.setOnClickListener {
-            status = !status
-            if(!status) {
-                for (i in bonfireMarkers) {
-                    i.isVisible = false
-                }
-            } else {
-                for(i in bonfireMarkers) {
-                    i.isVisible = true
-                }
-            }
-        }
-
-       this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(oslo, 6f))
-
-        // Sjekk at tilgang til lokasjon
+        // ===== LOKASJON =====
+        // Sjekk at tilgang til lokasjon (skal også sette mMap.isMyLocationEnabled og oppdaterer lokasjon dersom tilgang)
         getLocationAccess()
         Log.d("KartActivity.onMapReady", "mMap.isMyLocationEnabled: ${mMap.isMyLocationEnabled}")
-        //kartViewModel.updateLocation()  // Må hente lokasjon på et tidspunkt. HVOR?
+
+        // ===== ON CLICK LISTENERS =====
+        showBonfiresButton = findViewById<Button>(R.id.baalplass_button)
+        showBonfiresButton.setOnClickListener {toggleBonfires()}
 
         // Når bruker trykker på kartet lages det en marker
         mMap.setOnMapClickListener {
@@ -377,7 +373,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         menuSynlig = !menuSynlig
     }
 
-    private fun toggleLevelsPopup(){
+    private fun toggleLevelsPopup() {
         if (levelsPopupSynlig){
             levelsPopup.visibility = View.VISIBLE
             popup.visibility = View.GONE
@@ -388,5 +384,18 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             mMap.uiSettings.isScrollGesturesEnabled = false
         }
         levelsPopupSynlig = !levelsPopupSynlig
+    }
+
+    private fun toggleBonfires() {
+        showBonfireMarkers = !showBonfireMarkers
+        if(!showBonfireMarkers) {
+            for (marker in bonfireMarkers) {
+                marker.isVisible = false
+            }
+        } else {
+            for(marker in bonfireMarkers) {
+                marker.isVisible = true
+            }
+        }
     }
 }
