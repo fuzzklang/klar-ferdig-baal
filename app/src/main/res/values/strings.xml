@@ -36,4 +36,24 @@
     <string name="app_title">Klar Ferdig Bål</string>
 
 
+    <string name="levels">Farenivåer</string>
+    <string name="moderate_description">Moderat farenivå vises når det finnes en
+    risiko for farlige situasjoner som kan forårsake lokale skader.</string>
+    <string name="severe_description">Betydelig skogbrannfare vises når det er vesentlig risiko
+    for fare som kan ha omfattende konsekvenser for mange mennesker.</string>
+
+    <string name="loading">Loading…</string>
+    <string name="close_infobox_button">Close infobox button</string>
+    <string name="overlay_button">Overlay Button</string>
+    <string name="info_button">Info Button</string>
+    <string name="sok">Søk…</string>
+    <string name="farevarselniva">Farevarselnivå</string>
+    <string name="nivaer">Nivåer</string>
+    <string name="informasjon">Informasjon</string>
+    <string name="dra_hit">Dra hit</string>
+    <string name="balplasser">Bålplasser</string>
+    <string name="popup">popup</string>
+    <string name="menu_button">Menu button</string>
+
+
 </resources>

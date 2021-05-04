@@ -15,6 +15,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.gson.Gson
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
+import java.util.*
 
 class MainRepository(private val apiService: ApiServiceImpl, private val fusedLocationProviderClient: FusedLocationProviderClient) {
     private val tag = "MainRepository"
@@ -51,8 +52,11 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
     suspend fun getRssFeed(lat: Double?, lon: Double?) : List<RssItem>? {
         val options = permanentOptions.toMutableList()
         if (lat != null && lon != null) {
-            options.add("lat=%.2f".format(lat))
-            options.add("lon=%.2f".format(lon))
+            // For å sikre at desimaltall skrives med punktum (og ikke komma) brukes Locale.US.
+            // kotlin.format bruker enhetens Locale som default. F.eks. ble desimaltall skrevet med
+            // komma når systemspråk er norsk. Førte til feil i API-kall.
+            options.add("lat=%.2f".format(Locale.US, lat))
+            options.add("lon=%.2f".format(Locale.US, lon))
         }
         // Kast IO Exception dersom API-kall feiler. Usikker på om dette er ideellt, men en iaf
         // midlertidig løsning for å sikre at httpResponse er initialisert.
@@ -94,16 +98,20 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
     * Den kaster bare en SecurityException dersom f.eks. bruker har avslått lokasjonstilgang ("permission")
     * @returns LiveData<Location>
     */
-    fun getLocation(): LiveData<Location> {
+    @Throws(SecurityException::class)
+    fun getLocation(): LiveData<Location?> {
         Log.d(tag, "getLocation ble kalt")
         val liveDataLocation = MutableLiveData<Location>()
         try {
             val locationTask = fusedLocationProviderClient.lastLocation
             locationTask.addOnSuccessListener {
-                Log.d(tag,"getLocation: onSuccessListener ${it.latitude}, ${it.longitude}")
+                // Resultat ("it") kan være null dersom system ikke har informasjon om nåværende lokasjon.
+                if (it == null) {
+                    Log.d(tag, "getLocation: onSuccessListener. Resultat (Location) er null.")
+                } else {
+                    Log.d(tag,"getLocation: onSuccessListener. Resultat: ${it.latitude}, ${it.longitude}")
+                }
                 liveDataLocation.postValue(it)
-            }.addOnCompleteListener {
-                Log.d(tag,"getLocation: task completed! Result: ${it.result}")
             }
         } catch (ex: SecurityException) {
             Log.w("MainRepo.getLocation", "Error when getting location")
