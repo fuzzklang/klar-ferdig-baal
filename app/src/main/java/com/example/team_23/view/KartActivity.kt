@@ -306,7 +306,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         var zoom: Float = -1f
         this.mMap.setOnCameraIdleListener {
             zoom = this.mMap.cameraPosition.zoom
-            if(zoom > 7 && status){
+            if(zoom > 8.5 && status){
                 for(i in baalMarkers) {
                     i.setVisible(true)
                 }
