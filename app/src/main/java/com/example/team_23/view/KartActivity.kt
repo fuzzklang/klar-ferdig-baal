@@ -302,7 +302,20 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
 
-
+        //viser kun baalikoner etter et angitt zoom-nivaa
+        var zoom: Float = -1f
+        this.mMap.setOnCameraIdleListener {
+            zoom = this.mMap.cameraPosition.zoom
+            if(zoom > 7 && status){
+                for(i in baalMarkers) {
+                    i.setVisible(true)
+                }
+            }else{
+                for(i in baalMarkers) {
+                    i.setVisible(false)
+                }
+            }
+        }
        this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(oslo, 6f))
 
         getLocationAccess()
