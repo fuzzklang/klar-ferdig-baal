@@ -53,6 +53,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var levelsPopup: View
     private lateinit var levelsPopupCloseBtn: ImageButton
     private var levelsPopupSynlig = true
+    // ----- Alert Polygons -----
+    private var polygonsVisible = true
+    private lateinit var polygonList: MutableList<Polygon>  // Listen med polygoner
 
 
     @SuppressLint("UseCompatLoadingForDrawables", "SetTextI18n")
@@ -190,9 +193,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 Toast.makeText(this, "Ingen varsler for dette området", Toast.LENGTH_SHORT).show()  // TODO: flytt streng resources
             }
         })
-
-
-        kartViewModel.getAllAlerts()  // Hent alle varsler ved oppstart av app
     }
 
     /**
@@ -308,6 +308,30 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         getLocationAccess()
         Log.d("KartActivity.onMapReady", "mMap.isMyLocationEnabled: ${mMap.isMyLocationEnabled}")
         //kartViewModel.updateLocation()  // Må hente lokasjon på et tidspunkt. HVOR?
+
+
+        // ===== OVERLAY =====
+        polygonList = mutableListOf<Polygon>()
+        kartViewModel.getAllAlerts()  // Hent alle varsler ved oppstart av app
+        kartViewModel.allAlerts.observe(this, {alertList ->
+            alertList.forEach {alert ->
+                // Fargelegg varsel-soner på kart
+                val latLngList = alert.getPolygon()
+                val color = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    Color.argb(0.2f, 1.0f, 0.35f, 0.15f)
+                } else {
+                    Color.argb(50, 255, 80, 35)
+                }
+                val polygonOptions = PolygonOptions()
+                        .addAll(latLngList)
+                        .fillColor(color)
+                        .strokeWidth(1.0f)
+                        .visible(polygonsVisible)
+                        .clickable(false)
+                val polygon = mMap.addPolygon(polygonOptions)
+                polygonList.add(polygon)
+            }
+        })
 
         // Når bruker trykker på kartet lages det en marker
         mMap.setOnMapClickListener {
