@@ -1,4 +1,4 @@
-package com.example.team_23.model.api.metalerts_dataclasses
+package com.example.team_23.model.dataclasses.metalerts_dataclasses
 
 import com.google.android.gms.maps.model.LatLng
 

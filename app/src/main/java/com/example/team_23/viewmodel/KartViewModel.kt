@@ -6,8 +6,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.team_23.model.MainRepository
-import com.example.team_23.model.api.map_dataclasses.Routes
-import com.example.team_23.model.api.metalerts_dataclasses.Alert
+import com.example.team_23.model.dataclasses.Bonfire
+import com.example.team_23.model.dataclasses.Routes
+import com.example.team_23.model.dataclasses.metalerts_dataclasses.Alert
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.PolyUtil
 import kotlinx.coroutines.CoroutineScope
@@ -106,6 +107,10 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
             }
             allAlerts.postValue(varselListe)
         }
+    }
+
+    fun getBonfireSpots(): List<Bonfire> {
+        return repo.getBonfireSpots()
     }
 
     /* Hjelpemetode for findRoute()
