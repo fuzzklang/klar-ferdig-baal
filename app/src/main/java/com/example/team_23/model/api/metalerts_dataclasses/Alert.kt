@@ -17,13 +17,11 @@ class Alert (
     fun getPolygon(): List<LatLng> {
         val latLngList = mutableListOf<LatLng>()
         val polygonString = infoItemsNo[0].area.polygon  // TODO: dobbeltsjekk at vi kan anta kun ett info-item per varsel!
-        if (polygonString != null)
-        // Splitt strengen ved whitespace (resulterer i en liste av "<Desimaltall>,<Desimaltall>")
-            polygonString.split(" ").forEach {latLngString ->
-                // For hvert streng med slik tallpar, splitt ved komma og konverter hver desimaltall til Double (vha. map).
-                val latLngValues = latLngString.split(",").map { it.toDouble() }
-                latLngList.add(LatLng(latLngValues[0], latLngValues[1]))
-            }
+        polygonString?.split(" ")?.forEach { latLngString ->
+            // For hvert streng med slik tallpar, splitt ved komma og konverter hver desimaltall til Double (vha. map).
+            val latLngValues = latLngString.split(",").map { it.toDouble() }
+            latLngList.add(LatLng(latLngValues[0], latLngValues[1]))
+        }
         return latLngList
     }
 }
