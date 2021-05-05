@@ -28,26 +28,37 @@ class Alert (
     }
 
     // Hent grad av fare (gul, oransje eller rød)
+    // Se her for beregning av farge: https://www.met.no/vaer-og-klima/ekstremvaervarsler-og-andre-farevarsler/faregradering-i-farger
     // Kilde: https://www.met.no/vaer-og-klima/ekstremvaervarsler-og-andre-farevarsler/faregradering-i-farger/_/attachment/download/a3f74362-7899-41d1-bd5c-a10c88a62af8:eb0b2127d9e584a4feaefb3681d8207a5d5a48de/MET-report%2020-2017.pdf
-    // TODO: implementer certainty slik at denne kan brukes sammen med severity for avgjøre farenivå (og farge)
-    // TODO: Bruk enum class for returverdier
-    fun getAlertColor(): String {
+    // Sitat ang. Certainty: «MET vil bruke “Observed”, “Likely”, “Possible” og “Unlikely”»
+    // Sitat ang. Severity: Det brukes Minor, Moderate, Severe og Extreme.
+    fun getAlertColor(): AlertColors {
+        val certainty = infoNo.certainty?.toLowerCase(Locale.US)
         val severity = infoNo.severity?.toLowerCase(Locale.US)
-        Log.d("Alert", "Henter farge for varsel. Severity: $severity. "/*Certainty: $certainty*/)
-        /*
-        val certainty = info.certainty?.toLowerCase()
-        val alertColor: String = when (certainty) {
-            "observed" -> when (severity) {"moderate" -> "yellow"; "severe" -> "orange"; "extreme" -> "red";    else -> "unknown"}
-            "likely"   -> when (severity) {"moderate" -> "yellow"; "severe" -> "orange"; "extreme" -> "red";    else -> "unknown"}
-            "possible" -> when (severity) {                        "severe" -> "yellow"; "extreme" -> "orange"; else -> "unknown"}
-            "unlikely" -> when (severity) {"extreme" -> "yellow"; else -> "unkown"}
-        }
-         */
-        val alertColor = when (severity) {
-            "moderate" -> "yellow"
-            "severe" -> "orange"
-            "extreme" -> "red"
-            else -> "unkown"
+        Log.d("Alert", "Henter farge for varsel. Severity: $severity. Certainty: $certainty")
+        val alertColor: AlertColors = when (certainty) {
+            "observed" -> when (severity) {
+                "moderate" -> AlertColors.YELLOW
+                "severe" -> AlertColors.ORANGE
+                "extreme" -> AlertColors.RED
+                else -> AlertColors.UNKOWN
+            }
+            "likely" -> when (severity) {
+                "moderate" -> AlertColors.YELLOW
+                "severe" -> AlertColors.ORANGE
+                "extreme" -> AlertColors.RED
+                else -> AlertColors.UNKOWN
+            }
+            "possible" -> when (severity) {
+                "severe" -> AlertColors.YELLOW
+                "extreme" -> AlertColors.ORANGE
+                else -> AlertColors.UNKOWN
+            }
+            "unlikely" -> when (severity) {
+                "extreme" -> AlertColors.YELLOW
+                else -> AlertColors.UNKOWN
+            }
+            else -> AlertColors.UNKOWN
         }
         Log.d("Alert", "Farge for varsel: $alertColor")
         return alertColor

@@ -17,6 +17,7 @@ import androidx.core.content.res.ResourcesCompat
 import com.example.team_23.R
 import com.example.team_23.model.dataclasses.Bonfire
 import com.example.team_23.model.dataclasses.metalerts_dataclasses.Alert
+import com.example.team_23.model.dataclasses.metalerts_dataclasses.AlertColors
 import com.example.team_23.utils.ViewModelProvider
 import com.example.team_23.viewmodel.KartViewModel
 import com.google.android.gms.location.LocationServices
@@ -419,13 +420,11 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         alertList.forEach { alert ->
             val latLngList = alert.getPolygon()
             // Hent riktig farge basert på faregrad
-            // TODO: dobbeltsjekk at faregrad beregnes korrekt (sammenheng mellom alvorlighetsgrad og sannsynlighet)
-            // TODO: skriv om til enum-class
             val color = when (alert.getAlertColor()) {
-                "yellow" -> getColor(R.color.alertYellowTransparent)
-                "orange" -> getColor(R.color.alertOrangeTransparent)
-                "red" -> getColor(R.color.alertRedTransparent)
-                else -> {getColor(R.color.grey); Log.w(tag, "Ukjent fargen/nivå for varsel!")}
+                AlertColors.YELLOW -> getColor(R.color.alertYellowTransparent)
+                AlertColors.ORANGE -> getColor(R.color.alertOrangeTransparent)
+                AlertColors.RED -> getColor(R.color.alertRedTransparent)
+                AlertColors.UNKOWN -> {getColor(R.color.grey); Log.w(tag, "En feil har oppstått! Ukjent farge/nivå for varsel!")}
             }
             val polygonOptions = PolygonOptions()
                     .addAll(latLngList)
