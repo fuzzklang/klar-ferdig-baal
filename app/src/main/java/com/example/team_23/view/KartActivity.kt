@@ -62,8 +62,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var showBonfiresButton: Button
     private lateinit var bonfireSpots: List<Bonfire>
     private lateinit var bonfireMarkers: MutableList<Marker>
-    // ----- Alert Polygons -----
-    private var polygonsVisible = true
+    // ----- Overlay (Alerts) -----
+    private lateinit var overlayBtn: ToggleButton
+    private var overlayVisible = true
     private lateinit var polygonList: MutableList<Polygon>  // Listen med polygoner
 
 
@@ -218,9 +219,10 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         bonfireMarkers = mutableListOf<Marker>()  // Liste som holder på markørene
         showBonfireMarkers = true
         showBonfiresButton = findViewById<Button>(R.id.baalplass_button)
-
         // -- Overlay --
+        overlayVisible = true
         polygonList = mutableListOf<Polygon>()
+        overlayBtn = findViewById(R.id.overlay_button)
 
         // ===== LOKASJON =====
         // Sjekk at tilgang til lokasjon (skal også sette mMap.isMyLocationEnabled og oppdaterer lokasjon dersom tilgang)
@@ -245,7 +247,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                         .addAll(latLngList)
                         .fillColor(color)
                         .strokeWidth(1.0f)
-                        .visible(polygonsVisible)
+                        .visible(overlayVisible)
                         .clickable(false)
                 val polygon = mMap.addPolygon(polygonOptions)
                 polygonList.add(polygon)
@@ -253,7 +255,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         })
 
         // ===== ON CLICK LISTENERS =====
-        showBonfiresButton.setOnClickListener {toggleBonfires()}
+        showBonfiresButton.setOnClickListener { toggleBonfires() }
+
+        overlayBtn.setOnClickListener { toggleOverlay() }
 
         // Når bruker trykker på kartet lages det en marker
         mMap.setOnMapClickListener {
@@ -428,5 +432,10 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 marker.isVisible = true
             }
         }
+    }
+
+    private fun toggleOverlay() {
+        overlayVisible = !overlayVisible
+        polygonList.forEach {it.isVisible = overlayVisible}
     }
 }
