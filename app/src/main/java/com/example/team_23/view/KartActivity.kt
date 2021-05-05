@@ -128,9 +128,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
 
-        infoButton.setOnClickListener {toggleInfo()}      //Info knapp som endrer info sin synlighet
+        infoButton.setOnClickListener { toggleInfo() }      //Info knapp som endrer info sin synlighet
 
-        infoCloseButton.setOnClickListener{toggleInfo()}  //Info knapp som gjør info view usynelig
+        infoCloseButton.setOnClickListener{ toggleInfo() }  //Info knapp som gjør info view usynelig
 
         menuButton.setOnClickListener{toggleMenu()}
 
@@ -138,7 +138,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
         levelsPopupCloseBtn.setOnClickListener { toggleLevelsPopup() }
 
-        popupCloseButton.setOnClickListener{togglePopup()}
+        popupCloseButton.setOnClickListener{ togglePopup() }
 
         varslerHer.setOnClickListener{
             getLocationAccess()  // Sjekk at vi har tilgang til lokasjon fra system.
@@ -437,5 +437,21 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun toggleOverlay() {
         overlayVisible = !overlayVisible
         polygonList.forEach {it.isVisible = overlayVisible}
+    }
+
+    /*
+    * TODO: Metode som kalles ved oppstart og henter lagret konfigurasjon (tilstand) og setter variabler deretter.
+    *  (eks: skal overlay og bålplasser vises?)
+    */
+    private fun setUpUi() {
+        TODO("Implementer senere dersom vi får på plass lagring av tilstand")
+    }
+
+    private fun setUpOverlay() {
+
+    }
+
+    private fun allAlertsObserver(alertList: List<Alert>) {
+
     }
 }
