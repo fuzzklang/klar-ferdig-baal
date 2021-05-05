@@ -7,12 +7,14 @@ import androidx.lifecycle.MutableLiveData
 import com.example.team_23.model.api.ApiServiceImpl
 import com.example.team_23.model.api.CapParser
 import com.example.team_23.model.api.MetAlertsRssParser
-import com.example.team_23.model.api.map_dataclasses.Base
-import com.example.team_23.model.api.map_dataclasses.Routes
-import com.example.team_23.model.api.metalerts_dataclasses.Alert
-import com.example.team_23.model.api.metalerts_dataclasses.RssItem
+import com.example.team_23.model.dataclasses.Base
+import com.example.team_23.model.dataclasses.Bonfire
+import com.example.team_23.model.dataclasses.Routes
+import com.example.team_23.model.dataclasses.metalerts_dataclasses.Alert
+import com.example.team_23.model.dataclasses.metalerts_dataclasses.RssItem
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
 import java.util.*
@@ -117,5 +119,24 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
             Log.w("MainRepo.getLocation", "Error when getting location")
         }
         return liveDataLocation
+    }
+
+    /* Parser JSON-filen med bålplasser og returnerer en liste med HashMaps.
+    * TODO: gjøre om til asynkront Coroutine-kall (pga. fillesning)?
+    */
+    fun getBonfireSpots(): List<Bonfire> {
+        // Gjør det slik som dette for å unngå å gi Context som parameter.
+        // Men usikker på om dette får utilsiktede konsekvenser.
+        val file = "res/raw/bonfire_spots.json"
+        val bonfireSpotsStream = this.javaClass.classLoader?.getResourceAsStream(file)
+        val jsonString = bonfireSpotsStream?.bufferedReader()?.readText()
+        bonfireSpotsStream?.close()
+        Log.d(tag, "getBonfireSpots: henter bålplassoversikt fra res/raw. Returnert jsonString er ikke null eller tom: ${! jsonString.isNullOrEmpty()}")
+        /* Parse json-streng til bålplass-objekter */
+        val bType = object: TypeToken<List<Bonfire>>() {}.type
+        var bonfireList = mutableListOf<Bonfire>()
+        if (jsonString != null)
+            bonfireList = gson.fromJson(jsonString, bType)
+        return bonfireList
     }
 }
