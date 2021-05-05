@@ -156,13 +156,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
         // ===== OBSERVERS =====
-        // Observer path-livedata (i fra KartViewModel), tegn polyline ved oppdatering.
-        kartViewModel.path.observe(this, { paths ->
-            //går gjennom punktene i polyline for å skrive det ut til kartet.
-            for (i in 0 until paths.size) {
-                this.mMap.addPolyline(PolylineOptions().addAll(paths[i]).color(Color.RED))
-            }
-        })
 
         // TODO: skriv hjelpefunksjon og flytt ut av onCreate
         kartViewModel.alertAtPosition.observe(this, {
@@ -235,22 +228,14 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // NB: Denne skal brukes kun til varsel-overlay, og ikke til popup-boks
         kartViewModel.allAlerts.observe(this, {alertList ->
             Log.d(tag, "Endring observert i allAlerts-liste!")
-            alertList.forEach {alert ->
-                // Fargelegg varsel-soner på kart
-                val latLngList = alert.getPolygon()
-                val color = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                    Color.argb(0.2f, 1.0f, 0.35f, 0.15f)
-                } else {
-                    Color.argb(50, 255, 80, 35)
-                }
-                val polygonOptions = PolygonOptions()
-                        .addAll(latLngList)
-                        .fillColor(color)
-                        .strokeWidth(1.0f)
-                        .visible(overlayVisible)
-                        .clickable(false)
-                val polygon = mMap.addPolygon(polygonOptions)
-                polygonList.add(polygon)
+            allAlertsObserver(alertList)
+        })
+
+        // Observer path-livedata (i fra KartViewModel), tegn polyline ved oppdatering.
+        kartViewModel.path.observe(this, { paths ->
+            //går gjennom punktene i polyline for å skrive det ut til kartet.
+            for (i in 0 until paths.size) {
+                this.mMap.addPolyline(PolylineOptions().addAll(paths[i]).color(Color.RED))
             }
         })
 
@@ -271,21 +256,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // [Denne løsningen kan potensielt føre til en viss delay fra knappen blir klikket til kameraet flytter seg]
         mMap.setOnMyLocationButtonClickListener {
             Log.d(tag, "Klikk registrert på MyLocationButton")
-            val locationLiveData = kartViewModel.getLocation()
-            // Når LiveDataen får koordinater flyttes kamera til oppdatert posisjon
-            locationLiveData.observe(this, {
-                val location = locationLiveData.value
-                if (location!= null) {
-                    Toast.makeText(this, "Current pos: ${location.latitude}, ${location.longitude}", Toast.LENGTH_SHORT).show()
-                    val cameraPosition = CameraPosition.Builder()
-                        .target(LatLng(location.latitude, location.longitude))
-                        .zoom(6f)
-                        .build()
-                   mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
-                } else {
-                    Toast.makeText(this, "Ingen lokasjon tilgjengelig", Toast.LENGTH_SHORT).show()
-                }
-            })
+            myLocationButtonOnClickMethod()
             true
         }
         mMap.uiSettings.isScrollGesturesEnabled = false
@@ -295,31 +266,17 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         kartViewModel.getAllAlerts()  // Hent alle varsler ved oppstart av app, når kart er klart.
 
         // --- TEGNE BÅLPLASSER ---
-        // TODO: burde noe av dette flyttes til layout-filene?
-        val bonfireIconHeight = 50   // endrer stoerrelse paa campfire ikonet
-        val bonfireIconWidth = 50    // -- " ---
-        val bonfireIcon = ContextCompat.getDrawable(this, R.drawable.campfire) as BitmapDrawable
-        val smallBonfireMarkerBitmap = Bitmap.createScaledBitmap(bonfireIcon.bitmap, bonfireIconWidth, bonfireIconHeight, false) // Brukes når markørene lages under
-
-        bonfireSpots = kartViewModel.getBonfireSpots()
-        for (bonfire in bonfireSpots) {
-            val marker = mMap.addMarker(MarkerOptions()
-                    .position(LatLng(bonfire.lat, bonfire.lon))
-                    .title("${bonfire.name} (${bonfire.type})")
-                    .icon(BitmapDescriptorFactory.fromBitmap(smallBonfireMarkerBitmap)))
-            if (marker == null)
-                Log.w(tag, "onMapReady: en bonfireMarker er null! Ignorerer. Kan føre til uønsket oppførsel fra app.")
-            else
-                bonfireMarkers.add(marker)
-        }
+        drawBonfires()
 
         // --- FLYTT KAMERA ---
         val oslo = LatLng(59.911491, 10.757933)
         this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(oslo, 6f))  // TODO: Flyttes nå til Oslo. Velge annet sted?
     }
 
-
+    // =========================
     // ===== HJELPEMETODER =====
+    // =========================
+
     /* Hjelpemetode for å få tilgangsrettigheter for lokasjon */
     private fun getLocationAccess() {
         Log.d(tag, "getLocation: mMap.isMyLocationEnabled: ${mMap.isMyLocationEnabled}")
@@ -440,18 +397,71 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     /*
-    * TODO: Metode som kalles ved oppstart og henter lagret konfigurasjon (tilstand) og setter variabler deretter.
-    *  (eks: skal overlay og bålplasser vises?)
+    * Metode som kalles ved oppstart og henter lagret konfigurasjon (tilstand) og setter variabler deretter.
+    * (eks: skal overlay og bålplasser vises?)
     */
     private fun setUpUi() {
         TODO("Implementer senere dersom vi får på plass lagring av tilstand")
     }
 
-    private fun setUpOverlay() {
-
+    /* Hjelpemetode som kalles når "MyLocation"-knapp (i kart) trykkes på */
+    private fun myLocationButtonOnClickMethod() {
+        val locationLiveData = kartViewModel.getLocation()
+        // Når LiveDataen får koordinater flyttes kamera til oppdatert posisjon
+        locationLiveData.observe(this, {
+            val location = locationLiveData.value
+            if (location!= null) {
+                Toast.makeText(this, "Current pos: ${location.latitude}, ${location.longitude}", Toast.LENGTH_SHORT).show()
+                val cameraPosition = CameraPosition.Builder()
+                        .target(LatLng(location.latitude, location.longitude))
+                        .zoom(6f)
+                        .build()
+                mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+            } else {
+                Toast.makeText(this, "Ingen lokasjon tilgjengelig", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun allAlertsObserver(alertList: List<Alert>) {
+        alertList.forEach { alert ->
+            // Fargelegg varsel-soner på kart
+            val latLngList = alert.getPolygon()
+            // Hent riktig farge basert på faregrad
 
+            val color = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                Color.argb(0.2f, 1.0f, 0.35f, 0.15f)
+            } else {
+                Color.argb(50, 255, 80, 35)
+            }
+            val polygonOptions = PolygonOptions()
+                    .addAll(latLngList)
+                    .fillColor(color)
+                    .strokeWidth(1.0f)
+                    .visible(overlayVisible)
+                    .clickable(false)
+            val polygon = mMap.addPolygon(polygonOptions)
+            polygonList.add(polygon)
+        }
+    }
+
+    private fun drawBonfires() {
+        // TODO: burde noe av dette flyttes til layout-filene?
+        val bonfireIconHeight = 50   // endrer stoerrelse paa campfire ikonet
+        val bonfireIconWidth = 50    // -- " ---
+        val bonfireIcon = ContextCompat.getDrawable(this, R.drawable.campfire) as BitmapDrawable
+        val smallBonfireMarkerBitmap = Bitmap.createScaledBitmap(bonfireIcon.bitmap, bonfireIconWidth, bonfireIconHeight, false) // Brukes når markørene lages under
+
+        bonfireSpots = kartViewModel.getBonfireSpots()
+        for (bonfire in bonfireSpots) {
+            val marker = mMap.addMarker(MarkerOptions()
+                    .position(LatLng(bonfire.lat, bonfire.lon))
+                    .title("${bonfire.name} (${bonfire.type})")
+                    .icon(BitmapDescriptorFactory.fromBitmap(smallBonfireMarkerBitmap)))
+            if (marker == null)
+                Log.w(tag, "onMapReady: en bonfireMarker er null! Ignorerer. Kan føre til uønsket oppførsel fra app.")
+            else
+                bonfireMarkers.add(marker)
+        }
     }
 }
