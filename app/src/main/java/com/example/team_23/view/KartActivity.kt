@@ -87,19 +87,19 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         val varslerHer = findViewById<Button>(R.id.varsler_her)
 
         // ----- Meny -----
-        menu = findViewById<View>(R.id.menu)
-        menuButton = findViewById<ImageButton>(R.id.menuButton)
+        menu = findViewById(R.id.menu)
+        menuButton = findViewById(R.id.menuButton)
         val rulesActivityBtn = findViewById<Button>(R.id.send_rules)  // Knapp som sender bruker til reglene
 
         // ----- Info-boks -----
-        infoButton = findViewById<Button>(R.id.info_button)
-        infoCloseButton = findViewById<ImageButton>(R.id.info_close_button)
-        info = findViewById<View>(R.id.infoBox)
+        infoButton = findViewById(R.id.info_button)
+        infoCloseButton = findViewById(R.id.info_close_button)
+        info = findViewById(R.id.infoBox)
 
         // ----- Popup-boks -----
         // (varselvisning?)
-        popup = findViewById<View>(R.id.popup)
-        popupCloseButton = findViewById<ImageButton>(R.id.popupCloseButton)
+        popup = findViewById(R.id.popup)
+        popupCloseButton = findViewById(R.id.popupCloseButton)
         val warningArea = findViewById<TextView>(R.id.warningArea)
         val warningInfo = findViewById<TextView>(R.id.warningInfo)
         val warningLevel = findViewById<TextView>(R.id.warningLevel)
@@ -107,9 +107,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         val warningLevelColor = findViewById<View>(R.id.warningLevelColor)
 
         // ----- Levels -----
-        levelsButton = findViewById<Button>(R.id.levelsButton)
-        levelsPopup = findViewById<View>(R.id.levelsPopup)
-        levelsPopupCloseBtn = findViewById<ImageButton>(R.id.levelsCloseButton)
+        levelsButton = findViewById(R.id.levelsButton)
+        levelsPopup = findViewById(R.id.levelsPopup)
+        levelsPopupCloseBtn = findViewById(R.id.levelsCloseButton)
 
 
         // ===== (ONCLICK) LISTENERS =====
@@ -168,6 +168,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 warningArea.text = info.area.areaDesc
                 warningInfo.text = info.instruction
                 when {
+                    // TODO: bruke Alert.getAlertColor for å velge farge
                     info.severity.toString() == "Moderate" -> {
                         warningLevel.text = "Moderat skogbrannfare"
                         warningLevelImg.background = resources.getDrawable(R.drawable.yellowwarning,theme)
@@ -208,12 +209,12 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.setPadding(0, 2000, 0, 0)
 
         // -- Bålplasser --
-        bonfireMarkers = mutableListOf<Marker>()  // Liste som holder på markørene
+        bonfireMarkers = mutableListOf()  // Liste som holder på markørene
         showBonfireMarkers = true
-        showBonfiresButton = findViewById<Button>(R.id.baalplass_button)
+        showBonfiresButton = findViewById(R.id.baalplass_button)
         // -- Overlay --
         overlayVisible = true
-        polygonList = mutableListOf<Polygon>()
+        polygonList = mutableListOf()
         overlayBtn = findViewById(R.id.overlay_button)
 
         // ===== LOKASJON =====
