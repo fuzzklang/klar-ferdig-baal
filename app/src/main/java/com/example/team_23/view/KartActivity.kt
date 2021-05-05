@@ -163,13 +163,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         })
 
-        // Observer varsel-liste fra KartViewModel
-        // NB: Denne skal brukes kun til varsel-overlay, og ikke til popup-boks
-        kartViewModel.allAlerts.observe(this, {
-            Log.d(tag, "Endring skjedd i alerts-liste!")
-            // TODO: implementere overlay
-        })
-
         // TODO: skriv hjelpefunksjon og flytt ut av onCreate
         kartViewModel.alertAtPosition.observe(this, {
             // Observerer endringer i alertAtPosition (type LiveData<Alert>)
@@ -202,8 +195,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 Toast.makeText(this, "Ingen varsler for dette området", Toast.LENGTH_SHORT).show()  // TODO: flytt streng resources
             }
         })
-        kartViewModel.getBonfireSpots()
     }
+
 
     // ===== GOOGLE MAP READY =====
     /**
@@ -216,49 +209,30 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
      * installed Google Play services and returned to the app.
      */
     override fun onMapReady(googleMap: GoogleMap) {
+        // ===== VARIABLER =====
+        // ----- Kart -----
         mMap = googleMap
         mMap.setPadding(0, 2000, 0, 0)
 
-        // ===== FLYTT KAMERA =====
-        // Flyttes nå til Oslo. Velge annet sted?
-        val oslo = LatLng(59.911491, 10.757933) // Oslo
-        this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(oslo, 6f))
-
-        // ===== TEGNE BÅLPLASSER =====
-        showBonfireMarkers = true
-        bonfireSpots = kartViewModel.getBonfireSpots()
-        // TODO: burde noe av dette flyttes til layout-filene?
-        val bonfireIconHeight = 50   // endrer stoerrelse paa campfire ikonet
-        val bonfireIconWidth = 50    // -- " ---
-        val bonfireIcon = ContextCompat.getDrawable(this, R.drawable.campfire) as BitmapDrawable
-        val smallBonfireMarkerBitmap = Bitmap.createScaledBitmap(bonfireIcon.bitmap, bonfireIconWidth, bonfireIconHeight, false) // Brukes når markørene lages under
-
+        // -- Bålplasser --
         bonfireMarkers = mutableListOf<Marker>()  // Liste som holder på markørene
-        for (bonfire in bonfireSpots) {
-            val marker = mMap.addMarker(MarkerOptions()
-                .position(LatLng(bonfire.lat, bonfire.lon))
-                .title("${bonfire.name} (${bonfire.type})")
-                .icon(BitmapDescriptorFactory.fromBitmap(smallBonfireMarkerBitmap)))
-            if (marker == null)
-                Log.w(tag, "onMapReady: en bonfireMarker er null! Ignorerer. Kan føre til uønsket oppførsel fra app.")
-            else
-                bonfireMarkers.add(marker)
-        }
+        showBonfireMarkers = true
+        showBonfiresButton = findViewById<Button>(R.id.baalplass_button)
+
+        // -- Overlay --
+        polygonList = mutableListOf<Polygon>()
 
         // ===== LOKASJON =====
         // Sjekk at tilgang til lokasjon (skal også sette mMap.isMyLocationEnabled og oppdaterer lokasjon dersom tilgang)
         getLocationAccess()
         Log.d("KartActivity.onMapReady", "mMap.isMyLocationEnabled: ${mMap.isMyLocationEnabled}")
 
-        // ===== ON CLICK LISTENERS =====
-        showBonfiresButton = findViewById<Button>(R.id.baalplass_button)
-        showBonfiresButton.setOnClickListener {toggleBonfires()}
 
-
-        // ===== OVERLAY =====
-        polygonList = mutableListOf<Polygon>()
-        kartViewModel.getAllAlerts()  // Hent alle varsler ved oppstart av app
+        // ===== OBSERVERE =====
+        // Observer varsel-liste fra KartViewModel
+        // NB: Denne skal brukes kun til varsel-overlay, og ikke til popup-boks
         kartViewModel.allAlerts.observe(this, {alertList ->
+            Log.d(tag, "Endring observert i allAlerts-liste!")
             alertList.forEach {alert ->
                 // Fargelegg varsel-soner på kart
                 val latLngList = alert.getPolygon()
@@ -277,6 +251,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 polygonList.add(polygon)
             }
         })
+
+        // ===== ON CLICK LISTENERS =====
+        showBonfiresButton.setOnClickListener {toggleBonfires()}
 
         // Når bruker trykker på kartet lages det en marker
         mMap.setOnMapClickListener {
@@ -308,10 +285,37 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             true
         }
         mMap.uiSettings.isScrollGesturesEnabled = false
+
+
+        // ===== INITALISER - API-kall, konfigurasjon ++ =====
+        kartViewModel.getAllAlerts()  // Hent alle varsler ved oppstart av app, når kart er klart.
+
+        // --- TEGNE BÅLPLASSER ---
+        // TODO: burde noe av dette flyttes til layout-filene?
+        val bonfireIconHeight = 50   // endrer stoerrelse paa campfire ikonet
+        val bonfireIconWidth = 50    // -- " ---
+        val bonfireIcon = ContextCompat.getDrawable(this, R.drawable.campfire) as BitmapDrawable
+        val smallBonfireMarkerBitmap = Bitmap.createScaledBitmap(bonfireIcon.bitmap, bonfireIconWidth, bonfireIconHeight, false) // Brukes når markørene lages under
+
+        bonfireSpots = kartViewModel.getBonfireSpots()
+        for (bonfire in bonfireSpots) {
+            val marker = mMap.addMarker(MarkerOptions()
+                    .position(LatLng(bonfire.lat, bonfire.lon))
+                    .title("${bonfire.name} (${bonfire.type})")
+                    .icon(BitmapDescriptorFactory.fromBitmap(smallBonfireMarkerBitmap)))
+            if (marker == null)
+                Log.w(tag, "onMapReady: en bonfireMarker er null! Ignorerer. Kan føre til uønsket oppførsel fra app.")
+            else
+                bonfireMarkers.add(marker)
+        }
+
+        // --- FLYTT KAMERA ---
+        val oslo = LatLng(59.911491, 10.757933)
+        this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(oslo, 6f))  // TODO: Flyttes nå til Oslo. Velge annet sted?
     }
 
-    // ===== HJELPEMETODER =====
 
+    // ===== HJELPEMETODER =====
     /* Hjelpemetode for å få tilgangsrettigheter for lokasjon */
     private fun getLocationAccess() {
         Log.d(tag, "getLocation: mMap.isMyLocationEnabled: ${mMap.isMyLocationEnabled}")
