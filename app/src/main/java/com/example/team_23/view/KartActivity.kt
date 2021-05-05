@@ -17,7 +17,6 @@ import androidx.core.content.res.ResourcesCompat
 import com.example.team_23.R
 import com.example.team_23.model.dataclasses.Bonfire
 import com.example.team_23.model.dataclasses.metalerts_dataclasses.Alert
-import com.example.team_23.model.dataclasses.metalerts_dataclasses.Info
 import com.example.team_23.utils.ViewModelProvider
 import com.example.team_23.viewmodel.KartViewModel
 import com.google.android.gms.location.LocationServices
@@ -164,23 +163,22 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             Log.d(tag, "Oppdatering observert i alertAtPosition. Alert: $it")
             // Løkken viser kun siste info-item siden løkken overskriver tidligere info lagt inn.
             if (alert != null) {
-                alert.infoItemsNo.forEach { info: Info ->
-                    warningArea.text = info.area.areaDesc
-                    warningInfo.text = info.instruction
-                    when {
-                        info.severity.toString() == "Moderate" -> {
-                            warningLevel.text = "Moderat skogbrannfare"
-                            warningLevelImg.background = resources.getDrawable(R.drawable.yellowwarning,theme)
-                            warningLevelColor.background = resources.getDrawable(R.color.yellow,theme)
-                        }
-                        info.severity.toString() == "Severe" -> {
-                            warningLevel.text = "Betydelig skogbrannfare"
-                            warningLevelImg.background = resources.getDrawable(R.drawable.orangewarning,theme)
-                            warningLevelColor.background = resources.getDrawable(R.color.orange,theme)
-                        }
-                        else -> {
-                            warningLevel.text = "?"
-                        }
+                val info = alert.infoNo
+                warningArea.text = info.area.areaDesc
+                warningInfo.text = info.instruction
+                when {
+                    info.severity.toString() == "Moderate" -> {
+                        warningLevel.text = "Moderat skogbrannfare"
+                        warningLevelImg.background = resources.getDrawable(R.drawable.yellowwarning,theme)
+                        warningLevelColor.background = resources.getDrawable(R.color.yellow,theme)
+                    }
+                    info.severity.toString() == "Severe" -> {
+                        warningLevel.text = "Betydelig skogbrannfare"
+                        warningLevelImg.background = resources.getDrawable(R.drawable.orangewarning,theme)
+                        warningLevelColor.background = resources.getDrawable(R.color.orange,theme)
+                    }
+                    else -> {
+                        warningLevel.text = "?"
                     }
                 }
                 togglePopup()

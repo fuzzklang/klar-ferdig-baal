@@ -37,8 +37,10 @@ class CapParser {
         var status: String? = null
         var msgType: String? = null
         //var info = Info(null, null, null, Area(null, null))
-        val infoItemsNo = mutableListOf<Info>() // Instansier tom liste for info-elementer på norsk
-        val infoItemsEn = mutableListOf<Info>() // Instansier tom liste for info-elementer på engelsk
+        //val infoItemsNo = mutableListOf<Info>() // Instansier tom liste for info-elementer på norsk
+        //val infoItemsEn = mutableListOf<Info>() // Instansier tom liste for info-elementer på engelsk
+        lateinit var infoNo: Info
+        lateinit var infoEn: Info
 
         parser.require(XmlPullParser.START_TAG, ns, "alert")
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -51,13 +53,12 @@ class CapParser {
                 "sent" -> sent = readText(parser)
                 "status" -> status = readText(parser)
                 "msgType" -> msgType = readText(parser)
-                // Les alle Info-elementer i Alert.
+                // Kun ett info-element per språk i følge standarden fra MET/NVE
                 "info" -> {
                     val info: Info = readInfo(parser)
                     when (info.lang) {
-                        "no" -> infoItemsNo.add(info)
-                        // "en" -> infoItemsEn.add(info)  // Trengs denne?
-                        "en-GB" -> infoItemsEn.add(info)
+                        "no" -> infoNo = info
+                        "en-GB" -> infoEn = info
                         else -> Log.w(tag, "Ukjent språk (lang) for info-element")  // Kommer forhåpentligvis aldri hit.
                     }
                 }
@@ -65,7 +66,7 @@ class CapParser {
             }
         }
         // Gjør listene ikke-muterbare.
-        return Alert(identifier, sent, status, msgType, infoItemsNo.toList(), infoItemsEn.toList())
+        return Alert(identifier, sent, status, msgType, infoNo, infoEn)
     }
 
     @Throws(XmlPullParserException::class, IOException::class)
