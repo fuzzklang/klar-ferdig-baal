@@ -457,5 +457,19 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             else
                 bonfireMarkers.add(marker)
         }
+//viser kun baalikoner etter et angitt zoom-nivaa
+        var zoom: Float
+        this.mMap.setOnCameraIdleListener {
+            zoom = this.mMap.cameraPosition.zoom
+            if(zoom > 8.5 && showBonfireMarkers){
+                for(markers in bonfireMarkers) {
+                    markers.isVisible = true
+                }
+            }else{
+                for(markers in bonfireMarkers) {
+                    markers.isVisible = false
+                }
+            }
+        }
     }
 }
