@@ -242,7 +242,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // ===== ON CLICK LISTENERS =====
         showBonfiresButton.setOnClickListener { toggleBonfires() }
 
-        overlayBtn.setOnClickListener { toggleOverlay() }
+        overlayBtn.setOnCheckedChangeListener { _, isChecked ->
+            toggleOverlay(isChecked)
+        }
 
         // Når bruker trykker på kartet lages det en marker
         mMap.setOnMapClickListener {
@@ -380,19 +382,11 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun toggleBonfires() {
         showBonfireMarkers = !showBonfireMarkers
-        if(!showBonfireMarkers) {
-            for (marker in bonfireMarkers) {
-                marker.isVisible = false
-            }
-        } else {
-            for(marker in bonfireMarkers) {
-                marker.isVisible = true
-            }
-        }
+        bonfireMarkers.forEach {it.isVisible = showBonfireMarkers}
     }
 
-    private fun toggleOverlay() {
-        overlayVisible = !overlayVisible
+    private fun toggleOverlay(isChecked: Boolean) {
+        overlayVisible = isChecked
         polygonList.forEach {it.isVisible = overlayVisible}
     }
 
@@ -425,14 +419,15 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun allAlertsObserver(alertList: List<Alert>) {
         alertList.forEach { alert ->
-            // Fargelegg varsel-soner på kart
             val latLngList = alert.getPolygon()
             // Hent riktig farge basert på faregrad
-
-            val color = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                Color.argb(0.2f, 1.0f, 0.35f, 0.15f)
-            } else {
-                Color.argb(50, 255, 80, 35)
+            // TODO: dobbeltsjekk at faregrad beregnes korrekt (sammenheng mellom alvorlighetsgrad og sannsynlighet)
+            // TODO: skriv om til enum-class
+            val color = when (alert.getAlertColor()) {
+                "yellow" -> getColor(R.color.alertYellowTransparent)
+                "orange" -> getColor(R.color.alertOrangeTransparent)
+                "red" -> getColor(R.color.alertRedTransparent)
+                else -> {getColor(R.color.grey); Log.w(tag, "Ukjent fargen/nivå for varsel!")}
             }
             val polygonOptions = PolygonOptions()
                     .addAll(latLngList)
@@ -440,6 +435,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                     .strokeWidth(1.0f)
                     .visible(overlayVisible)
                     .clickable(false)
+            // Fargelegg varsel-soner på kart
             val polygon = mMap.addPolygon(polygonOptions)
             polygonList.add(polygon)
         }
