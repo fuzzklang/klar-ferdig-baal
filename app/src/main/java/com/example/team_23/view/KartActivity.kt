@@ -464,12 +464,12 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         this.mMap.setOnCameraIdleListener {
             zoom = this.mMap.cameraPosition.zoom
             if(zoom > 8.5 && showBonfireMarkers){
-                for(i in bonfireMarkers) {
-                    i.isVisible = true
+                for(markers in bonfireMarkers) {
+                    markers.isVisible = true
                 }
             }else{
-                for(i in bonfireMarkers) {
-                    i.isVisible = false
+                for(markers in bonfireMarkers) {
+                    markers.isVisible = false
                 }
             }
         }
