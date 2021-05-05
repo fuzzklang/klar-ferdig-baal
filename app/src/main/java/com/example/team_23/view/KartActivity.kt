@@ -13,9 +13,11 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import com.example.team_23.R
-import com.example.team_23.model.api.metalerts_dataclasses.Alert
-import com.example.team_23.model.api.metalerts_dataclasses.Info
+import com.example.team_23.model.dataclasses.Bonfire
+import com.example.team_23.model.dataclasses.metalerts_dataclasses.Alert
+import com.example.team_23.model.dataclasses.metalerts_dataclasses.Info
 import com.example.team_23.utils.ViewModelProvider
 import com.example.team_23.viewmodel.KartViewModel
 import com.google.android.gms.location.LocationServices
@@ -26,6 +28,8 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 
 class KartActivity : AppCompatActivity(), OnMapReadyCallback {
+    private val tag = "KartActivity"
+
     private lateinit var mMap: GoogleMap
     private lateinit var kartViewModel: KartViewModel
 
@@ -53,6 +57,11 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var levelsPopup: View
     private lateinit var levelsPopupCloseBtn: ImageButton
     private var levelsPopupSynlig = true
+    // ----- Bonfire -----
+    private var showBonfireMarkers = true
+    private lateinit var showBonfiresButton: Button
+    private lateinit var bonfireSpots: List<Bonfire>
+    private lateinit var bonfireMarkers: MutableList<Marker>
 
 
     @SuppressLint("UseCompatLoadingForDrawables", "SetTextI18n")
@@ -154,7 +163,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // Observer varsel-liste fra KartViewModel
         // NB: Denne skal brukes kun til varsel-overlay, og ikke til popup-boks
         kartViewModel.allAlerts.observe(this, {
-            Log.d("KartActivity", "Endring skjedd i alerts-liste!")
+            Log.d(tag, "Endring skjedd i alerts-liste!")
             // TODO: implementere overlay
         })
 
@@ -162,7 +171,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         kartViewModel.alertAtPosition.observe(this, {
             // Observerer endringer i alertAtPosition (type LiveData<Alert>)
             val alert: Alert? = kartViewModel.alertAtPosition.value
-            Log.d("KartActivity", "Oppdatering observert i alertAtPosition. Alert: $it")
+            Log.d(tag, "Oppdatering observert i alertAtPosition. Alert: $it")
             // Løkken viser kun siste info-item siden løkken overskriver tidligere info lagt inn.
             if (alert != null) {
                 alert.infoItemsNo.forEach { info: Info ->
@@ -193,8 +202,10 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
         kartViewModel.getAllAlerts()  // Hent alle varsler ved oppstart av app
+        kartViewModel.getBonfireSpots()
     }
 
+    // ===== GOOGLE MAP READY =====
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -208,85 +219,32 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap = googleMap
         mMap.setPadding(0, 2000, 0, 0)
 
-
-        val baalplassKnapp = findViewById<Button>(R.id.baalplass_button)
-        //endrer stoerrelse paa campfire ikonet
-        val height = 50
-        val width = 50
-        val baalikon = ContextCompat.getDrawable(this, R.drawable.campfire) as BitmapDrawable
-        val b = baalikon.bitmap
-        val smallMarker = Bitmap.createScaledBitmap(b, width, height, false)
+        // ===== FLYTT KAMERA =====
+        // Flyttes nå til Oslo. Velge annet sted?
         val oslo = LatLng(59.911491, 10.757933) // Oslo
-
         this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(oslo, 6f))
 
-        // Sjekk at tilgang til lokasjon
-        // hashmap av alle baalplasser i oslo med navn og koordinater
-        //TODO legg inn i egen fil eller strukturer et annet sted
-        val baalmap = HashMap<String, Array<Double>>()
-        baalmap["Rundvann (Ildsted)"] = arrayOf(59.851, 10.875)
-        baalmap["Askevann (Ildsted)"] = arrayOf(59.833, 10.901)
-        baalmap["Setertjern (Ildsted)"] = arrayOf(59.828, 10.894)
-        baalmap["Skjelbreia (Ildsted)"] = arrayOf(59.825, 10.950)
-        baalmap["Vangen (Ildsted)"] = arrayOf(59.818, 11.004)
-        baalmap["Bråten ved Nøklevann (Ildsted)"] = arrayOf(59.876, 10.862)
-        baalmap["Katissa (Ildsted)"] = arrayOf(59.873, 10.874)
-        baalmap["Bremsrud (Ildsted)"] = arrayOf(59.876, 10.881)
-        baalmap["Nord Elvåga (Ildsted)"] = arrayOf(59.901, 10.911)
-        baalmap["Ulsrudvann (Ildsted)"] = arrayOf(59.889, 10.868)
-        baalmap["Lutvann (Ildsted)"] = arrayOf(59.918, 10.881)
-        baalmap["Bogstadvannet nordøst (Ildsted)"] = arrayOf(59.976, 10.622)
-        baalmap["Jegersborgdammen (Ildsted)"] = arrayOf(59.975, 10.631)
-        baalmap["Sognsvann Sør (Ildsted)"] = arrayOf(59.971, 10.724)
-        baalmap["Sognsvann Øst (Ildsted)"] = arrayOf(59.974, 10.732)
-        baalmap["Nedre blanksjø (Ildsted)"] = arrayOf(59.981, 10.739)
-        baalmap["Sognsvann nord (Ildsted)"] = arrayOf(59.980, 10.726)
-        baalmap["Øvresetertjern (Ildsted)"] = arrayOf(59.982, 10.670)
-        baalmap["Lille Åklungen (Ildsted)"] = arrayOf(59.988, 10.714)
-        baalmap["Trollvann (Ildsted)"] = arrayOf(59.962, 10.808)
-        baalmap["Vesletjern (Ildsted)"] = arrayOf(59.960, 10.862)
-        baalmap["Steinbruvann sør (Ildsted)"] = arrayOf(59.975, 10.881)
-        baalmap["Steinbruvann nord (Ildsted)"] = arrayOf(59.980, 10.882)
-        baalmap["Finnerud (Ildsted)"] = arrayOf(60.030, 10.638)
-        baalmap["Store Åklungen (Ildsted)"] = arrayOf(60.001, 10.724)
-        baalmap["Lille Tryvannet (Ildsted)"] = arrayOf(60.000, 10.677)
-        baalmap["Skjennungen (Ildsted)"] = arrayOf(60.005, 10.683)
-        baalmap["Øyungen (Ildsted)"] = arrayOf(60.041, 10.752)
-        baalmap["Øyungen Damstokksletta (Ildsted)"] = arrayOf(60.042, 10.755)
-        baalmap["Kapteinsputten (Ildsted)"] = arrayOf(59.969, 10.815)
-        baalmap["Hvernvenbukta1 (Fastgrill)"] = arrayOf(59.831, 10.772)
-        baalmap["Hvernvenbukta2 (Fastgrill)"] = arrayOf(59.834, 10.773)
-        baalmap["Asperuddumpa (Fastgrill)"] = arrayOf(59.836, 10.799)
-        baalmap["Stensrudtjern (Fastgrill)"] = arrayOf(59.823, 10.869)
-        baalmap["Nordseterparken (Fastgrill)"] = arrayOf(59.873, 10.795)
-        baalmap["Manglerud Friområde (Fastgrill)"] = arrayOf(59.894, 10.817)
-        baalmap["Trolldalen (Fastgrill)"] = arrayOf(59.911, 10.855)
-        baalmap["Tveitaparken (Fastgrill)"] = arrayOf(59.918, 10.844)
-        baalmap["Haugerud friområde (Fastgrill)"] = arrayOf(59.919, 10.864)
-        baalmap["Haugerud friområde (Fastgrill)"] = arrayOf(59.920, 10.863)
-        baalmap["Ammerudgrenda Turvei D9 (Fastgrill)"] = arrayOf(59.962, 10.878)
-        baalmap["Teglverksdammen Nedre (Fastgrill)"] = arrayOf(59.923, 10.796)
-        baalmap["Teglverksdammen Øvre (Fastgrill)"] = arrayOf(59.923, 10.797)
-        baalmap["Kampen Trykkbassenget (Fastgrill)"] = arrayOf(59.915, 10.781)
-        baalmap["Sofienbergparken (Fastgrill)"] = arrayOf(59.923, 10.765)
-        baalmap["St.Hanshaugen park (Fastgrill)"] = arrayOf(59.926, 10.741)
-        baalmap["Frognerparken (Fastgrill)"] = arrayOf(59.924, 10.707)
-        baalmap["Hukodden (Fastgrill)"] = arrayOf(59.895, 10.675)
-        baalmap["Årvolldammen (Fastgrill)"] = arrayOf(59.948, 10.819)
-        baalmap["Svarttjern (Fastgrill)"] = arrayOf(59.968, 10.898)
-        baalmap["Smedstuaparken (Fastgrill)"] = arrayOf(59.954, 10.915)
-        baalmap["Furuset kulturpark (Fastgrill)"] = arrayOf(59.943, 10.889)
-        baalmap["Verdensparken (Fastgrill)"] = arrayOf(59.943, 10.895)
-        baalmap["Verdensparken (Fastgrill)"] = arrayOf(59.944, 10.896)
-        baalmap["Verdensparken (Fastgrill)"] = arrayOf(59.945, 10.896)
-        baalmap["Veitvettparken (Fastgrill)"] = arrayOf(59.942, 10.848)
-        baalmap["Tokerudbekken (Fastgrill)"] = arrayOf(59.972, 10.922)
-        baalmap["Jesperudjordet (Fastgrill)"] = arrayOf(59.962, 10.930)
-        baalmap["Alnaparken (Fastgrill)"] = arrayOf(59.942, 10.876)
-        val baalMarkers = mutableListOf<Marker>()
-        for ((k, v) in baalmap) {
-            baalMarkers.add(this.mMap.addMarker(MarkerOptions().position(LatLng(v[0],v[1])).title(k).icon(BitmapDescriptorFactory.fromBitmap(smallMarker))))
+        // ===== TEGNE BÅLPLASSER =====
+        showBonfireMarkers = true
+        bonfireSpots = kartViewModel.getBonfireSpots()
+        // TODO: burde noe av dette flyttes til layout-filene?
+        val bonfireIconHeight = 50   // endrer stoerrelse paa campfire ikonet
+        val bonfireIconWidth = 50    // -- " ---
+        val bonfireIcon = ContextCompat.getDrawable(this, R.drawable.campfire) as BitmapDrawable
+        val smallBonfireMarkerBitmap = Bitmap.createScaledBitmap(bonfireIcon.bitmap, bonfireIconWidth, bonfireIconHeight, false) // Brukes når markørene lages under
+
+        bonfireMarkers = mutableListOf<Marker>()  // Liste som holder på markørene
+        for (bonfire in bonfireSpots) {
+            val marker = mMap.addMarker(MarkerOptions()
+                .position(LatLng(bonfire.lat, bonfire.lon))
+                .title("${bonfire.name} (${bonfire.type})")
+                .icon(BitmapDescriptorFactory.fromBitmap(smallBonfireMarkerBitmap)))
+            if (marker == null)
+                Log.w(tag, "onMapReady: en bonfireMarker er null! Ignorerer. Kan føre til uønsket oppførsel fra app.")
+            else
+                bonfireMarkers.add(marker)
         }
+
         //her skjules/vises baalplassene
         var status = true
         baalplassKnapp.setOnClickListener {
@@ -318,9 +276,14 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         }
        this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(oslo, 6f))
 
+        // ===== LOKASJON =====
+        // Sjekk at tilgang til lokasjon (skal også sette mMap.isMyLocationEnabled og oppdaterer lokasjon dersom tilgang)
         getLocationAccess()
         Log.d("KartActivity.onMapReady", "mMap.isMyLocationEnabled: ${mMap.isMyLocationEnabled}")
-        //kartViewModel.updateLocation()  // Må hente lokasjon på et tidspunkt. HVOR?
+
+        // ===== ON CLICK LISTENERS =====
+        showBonfiresButton = findViewById<Button>(R.id.baalplass_button)
+        showBonfiresButton.setOnClickListener {toggleBonfires()}
 
         // Når bruker trykker på kartet lages det en marker
         mMap.setOnMapClickListener {
@@ -333,7 +296,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // Hent en LiveData-instans med lokasjon (fra ViewModel) som deretter blir observert
         // [Denne løsningen kan potensielt føre til en viss delay fra knappen blir klikket til kameraet flytter seg]
         mMap.setOnMyLocationButtonClickListener {
-            Log.d("KartActivity", "Klikk registrert på MyLocationButton")
+            Log.d(tag, "Klikk registrert på MyLocationButton")
             val locationLiveData = kartViewModel.getLocation()
             // Når LiveDataen får koordinater flyttes kamera til oppdatert posisjon
             locationLiveData.observe(this, {
@@ -357,13 +320,13 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
     /* Hjelpemetode for å få tilgangsrettigheter for lokasjon */
     private fun getLocationAccess() {
-        Log.d("KartActivity", "getLocation: mMap.isMyLocationEnabled: ${mMap.isMyLocationEnabled}")
+        Log.d(tag, "getLocation: mMap.isMyLocationEnabled: ${mMap.isMyLocationEnabled}")
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             hasLocationAccess = true
             mMap.isMyLocationEnabled = true
             kartViewModel.updateLocation()
         } else {
-            Log.d("KartActivity", "getLocation: ber om lokasjonsrettigheter")
+            Log.d(tag, "getLocation: ber om lokasjonsrettigheter")
             hasLocationAccess = false
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST)
         }
@@ -371,21 +334,21 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
     /* Metode kalles når svar ang. lokasjonstilgang kommer tilbake. Sjekker om tillatelse er innvilget */
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        Log.d("KartActivity", "onRequestPermissionsResult er kalt")
+        Log.d(tag, "onRequestPermissionsResult er kalt")
         if (requestCode == LOCATION_PERMISSION_REQUEST) {
             if (grantResults.contains(PackageManager.PERMISSION_GRANTED)) {
                 if (ActivityCompat.checkSelfPermission(
                                 this,
                                 Manifest.permission.ACCESS_FINE_LOCATION
                         ) != PackageManager.PERMISSION_GRANTED) {
-                    Log.i("KartActivity","onRequestPermissionsResult: checkSelfPermission gir negativt svar. Har ikke tilgang.")
+                    Log.i(tag,"onRequestPermissionsResult: checkSelfPermission gir negativt svar. Har ikke tilgang.")
                 } else {
-                    Log.d("KartActivity", "Lokasjonstilgang innvilget!")
+                    Log.d(tag, "Lokasjonstilgang innvilget!")
                     hasLocationAccess = true
                     mMap.isMyLocationEnabled = true
                 }
             } else {
-                Log.i("KartActivity", "Lokasjonsrettigheter ble ikke gitt. Appen trenger tilgang til lokasjon for enkelte funksjonaliteter")
+                Log.i(tag, "Lokasjonsrettigheter ble ikke gitt. Appen trenger tilgang til lokasjon for enkelte funksjonaliteter")
                 Toast.makeText(this, "Ikke tilgang til lokasjon.", Toast.LENGTH_SHORT).show()
             }
         }
@@ -401,7 +364,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             mMap.uiSettings.isScrollGesturesEnabled = false
             if(menuSynlig){
                 menu.visibility = View.GONE
-                menuButton.background = resources.getDrawable(R.drawable.menubutton,theme)
+                menuButton.background = ResourcesCompat.getDrawable(resources, R.drawable.menubutton,theme)
                 menuSynlig = !menuSynlig
             }
         }
@@ -417,7 +380,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             mMap.uiSettings.isScrollGesturesEnabled = false
             if(menuSynlig) {
                 menu.visibility = View.GONE
-                menuButton.background = resources.getDrawable(R.drawable.menubutton,theme)
+                menuButton.background = ResourcesCompat.getDrawable(resources, R.drawable.menubutton,theme)
                 menuSynlig = !menuSynlig
             }
         }
@@ -428,11 +391,11 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         if(menuSynlig) {
             menu.visibility = View.GONE
             mMap.uiSettings.isScrollGesturesEnabled = true
-            menuButton.background = resources.getDrawable(R.drawable.menubutton,theme)
+            menuButton.background = ResourcesCompat.getDrawable(resources, R.drawable.menubutton,theme)
         } else {
             menu.visibility = View.VISIBLE
             mMap.uiSettings.isScrollGesturesEnabled = false
-            menuButton.background = resources.getDrawable(R.drawable.closemenubutton,theme)
+            menuButton.background = ResourcesCompat.getDrawable(resources, R.drawable.closemenubutton,theme)
             if (infoSynlig) {
                 toggleInfo()
             }
@@ -443,7 +406,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         menuSynlig = !menuSynlig
     }
 
-    private fun toggleLevelsPopup(){
+    private fun toggleLevelsPopup() {
         if (levelsPopupSynlig){
             levelsPopup.visibility = View.VISIBLE
             popup.visibility = View.GONE
@@ -454,5 +417,18 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             mMap.uiSettings.isScrollGesturesEnabled = false
         }
         levelsPopupSynlig = !levelsPopupSynlig
+    }
+
+    private fun toggleBonfires() {
+        showBonfireMarkers = !showBonfireMarkers
+        if(!showBonfireMarkers) {
+            for (marker in bonfireMarkers) {
+                marker.isVisible = false
+            }
+        } else {
+            for(marker in bonfireMarkers) {
+                marker.isVisible = true
+            }
+        }
     }
 }
