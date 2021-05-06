@@ -20,10 +20,7 @@
          &#160;&#160;&#160;og annen søppel.\n\n<br/><br/>
         • Når du forlater bålplassen skal bålet være helt
          &#160;&#160;&#160;slokket.\n\n<br/><br/>
-
-
     </string>
-
 
     <string name="title">Regler</string>
     <string name="imgClose">Avslutt</string>
@@ -34,7 +31,6 @@
     <string name="overlay">Overlay</string>
     <string name="infoButtonText">Info</string>
     <string name="app_title">Klar Ferdig Bål</string>
-
 
     <string name="levels">Farenivåer</string>
     <string name="moderate_description">Moderat farenivå vises når det finnes en
@@ -55,6 +51,4 @@
     <string name="popup">popup</string>
     <string name="menu_button">Menu button</string>
     <string name="varsler_her">Varsler her</string>
-
-
 </resources>

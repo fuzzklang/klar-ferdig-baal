@@ -71,32 +71,32 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // TODO: beskriv variablene/hvor de brukes/hva de brukes til
         // ===== SETT VIEWS =====
         // ----- Varsler Her-knapp -----
-        val varslerHer = findViewById<Button>(R.id.varsler_her)
+        val varslerHer = findViewById<Button>(R.id.varslerHerButton)
 
         // ----- Meny -----
         menu = findViewById<View>(R.id.menu)
         menuButton = findViewById<ImageButton>(R.id.menuButton)
-        val rulesActivityBtn = findViewById<Button>(R.id.send_rules)  // Knapp som sender bruker til reglene
+        val rulesActivityBtn = findViewById<Button>(R.id.menuRulesButton)  // Knapp som sender bruker til reglene
 
         // ----- Info-boks -----
-        infoButton = findViewById<Button>(R.id.info_button)
-        infoCloseButton = findViewById<ImageButton>(R.id.info_close_button)
+        infoButton = findViewById<Button>(R.id.menuInfoButton)
+        infoCloseButton = findViewById<ImageButton>(R.id.infoboxCloseButton)
         info = findViewById<View>(R.id.infoBox)
 
         // ----- Popup-boks -----
         // (varselvisning?)
         popup = findViewById<View>(R.id.popup)
-        popupCloseButton = findViewById<ImageButton>(R.id.popupCloseButton)
-        val warningArea = findViewById<TextView>(R.id.warningArea)
-        val warningInfo = findViewById<TextView>(R.id.warningInfo)
-        val warningLevel = findViewById<TextView>(R.id.warningLevel)
+        popupCloseButton = findViewById<ImageButton>(R.id.popupAlertCloseButton)
+        val warningArea = findViewById<TextView>(R.id.popupAlertArea)
+        val warningInfo = findViewById<TextView>(R.id.popupAlertInfoContent)
+        val warningLevel = findViewById<TextView>(R.id.popupAlertLevelContent)
         val warningLevelImg = findViewById<ImageView>(R.id.warningLevelImg)
-        val warningLevelColor = findViewById<View>(R.id.warningLevelColor)
+        val warningLevelColor = findViewById<View>(R.id.popupAlertLevelColor)
 
         // ----- Levels -----
-        levelsButton = findViewById<Button>(R.id.levelsButton)
-        levelsPopup = findViewById<View>(R.id.levelsPopup)
-        levelsPopupCloseBtn = findViewById<ImageButton>(R.id.levelsCloseButton)
+        levelsButton = findViewById<Button>(R.id.popupAlertDescButton)
+        levelsPopup = findViewById<View>(R.id.levelsDesc)
+        levelsPopupCloseBtn = findViewById<ImageButton>(R.id.levelsDescCloseButton)
 
 
         // ===== (ONCLICK) LISTENERS =====
@@ -209,7 +209,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.setPadding(0, 2000, 0, 0)
 
 
-        val baalplassKnapp = findViewById<Button>(R.id.baalplass_button)
+        val baalplassKnapp = findViewById<Button>(R.id.menuCampfireButton)
         //endrer stoerrelse paa campfire ikonet
         val height = 50
         val width = 50
