@@ -36,10 +36,10 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
     private val gson = Gson()
 
     // Henter Json fra Direction API (Google) og parser ved hjelp av Gson til dataklasser.
-    suspend fun getRoutes(origin: String, destination: String, key: String, origin_lat : Double, origin_lon : Double, destination_lat : Double, destination_lon : Double): List<Routes>? {
+    suspend fun getRoutes(origin_lat : Double, origin_lon : Double, destination_lat : Double, destination_lon : Double): List<Routes>? {
         var routes: List<Routes>? = null
         Log.d(tag, "Henter ruter fra Google!")
-        val direction_path = "${origin}${origin_lat},${origin_lon}${destination}${destination_lat},${destination_lon}${key}"
+        val direction_path = "${directionsURL_origin}${origin_lat},${origin_lon}${directionsURL_destination}${destination_lat},${destination_lon}${directionsURL_key}"
         try {
             val httpResponse = apiService.fetchData(direction_path)
             if (httpResponse != null)  Log.d(tag, "Fikk respons fra Directions API")
