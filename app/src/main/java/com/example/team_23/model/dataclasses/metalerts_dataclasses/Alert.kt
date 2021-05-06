@@ -19,11 +19,13 @@ class Alert (
     fun getPolygon(): List<LatLng> {
         val latLngList = mutableListOf<LatLng>()
         val polygonString = infoNo.area.polygon
-        polygonString?.split(" ")?.forEach { latLngString ->
-            // For hvert streng med slik tallpar, splitt ved komma og konverter hver desimaltall til Double (vha. map).
-            val latLngValues = latLngString.split(",").map { it.toDouble() }
-            latLngList.add(LatLng(latLngValues[0], latLngValues[1]))
-        }
+        if (polygonString != null && polygonString.isNotBlank()) {
+                polygonString.split(" ").forEach { latLngString ->
+                    // For hvert streng med slik tallpar, splitt ved komma og konverter hver desimaltall til Double (vha. map).
+                    val latLngValues = latLngString.split(",").map { it.toDouble() }
+                    latLngList.add(LatLng(latLngValues[0], latLngValues[1]))
+                }
+            }
         return latLngList
     }
 
@@ -41,24 +43,24 @@ class Alert (
                 "moderate" -> AlertColors.YELLOW
                 "severe" -> AlertColors.ORANGE
                 "extreme" -> AlertColors.RED
-                else -> AlertColors.UNKOWN
+                else -> AlertColors.UNKNOWN
             }
             "likely" -> when (severity) {
                 "moderate" -> AlertColors.YELLOW
                 "severe" -> AlertColors.ORANGE
                 "extreme" -> AlertColors.RED
-                else -> AlertColors.UNKOWN
+                else -> AlertColors.UNKNOWN
             }
             "possible" -> when (severity) {
                 "severe" -> AlertColors.YELLOW
                 "extreme" -> AlertColors.ORANGE
-                else -> AlertColors.UNKOWN
+                else -> AlertColors.UNKNOWN
             }
             "unlikely" -> when (severity) {
                 "extreme" -> AlertColors.YELLOW
-                else -> AlertColors.UNKOWN
+                else -> AlertColors.UNKNOWN
             }
-            else -> AlertColors.UNKOWN
+            else -> AlertColors.UNKNOWN
         }
         Log.d("Alert", "Farge for varsel: $alertColor")
         return alertColor
