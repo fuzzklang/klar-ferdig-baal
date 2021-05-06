@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -156,34 +157,40 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
         // ===== OBSERVERS =====
-
         // TODO: skriv hjelpefunksjon og flytt ut av onCreate
         kartViewModel.alertAtPosition.observe(this, {
             // Observerer endringer i alertAtPosition (type LiveData<Alert>)
             val alert: Alert? = kartViewModel.alertAtPosition.value
             Log.d(tag, "Oppdatering observert i alertAtPosition. Alert: $it")
-            // Løkken viser kun siste info-item siden løkken overskriver tidligere info lagt inn.
             if (alert != null) {
                 val info = alert.infoNo
                 warningArea.text = info.area.areaDesc
                 warningInfo.text = info.instruction
-                when {
-                    // TODO: bruke Alert.getAlertColor for å velge farge
-                    info.severity.toString() == "Moderate" -> {
-                        warningLevel.text = "Moderat skogbrannfare"
-                        warningLevelImg.background = resources.getDrawable(R.drawable.yellowwarning,theme)
-                        warningLevelColor.background = resources.getDrawable(R.color.yellow,theme)
+                val alertColorLever = alert.getAlertColor()
+                val warningText: String
+                val background: Drawable
+                // TODO: tekst burde hentes fra resources
+                when (alertColorLever) {
+                    AlertColors.YELLOW -> {
+                        warningText = "Moderat skogbrannfare"
+                        background = resources.getDrawable(R.drawable.yellowwarning,theme)}
+                    AlertColors.ORANGE -> {
+                        warningText = "Betydelig skogbrannfare"
+                        background = resources.getDrawable(R.drawable.orangewarning,theme)}
+                    AlertColors.RED    -> {
+                        warningText = "Moderat skogbrannfare"
+                        background = resources.getDrawable(R.drawable.orangewarning,theme)  // TODO: hent rød varsel fra Githuben til YR!
+                        Log.w(tag, "Returnert alertColor er RED. Ikke forventet. Fortsetter kjøring.")
                     }
-                    info.severity.toString() == "Severe" -> {
-                        warningLevel.text = "Betydelig skogbrannfare"
-                        warningLevelImg.background = resources.getDrawable(R.drawable.orangewarning,theme)
-                        warningLevelColor.background = resources.getDrawable(R.color.orange,theme)
-                    }
-                    else -> {
-                        warningLevel.text = "?"
+                    AlertColors.UNKOWN -> {
+                        Log.w(tag, "Returnert alertColor er Unkown.")
+                        warningText = "?"
+                        background = resources.getDrawable(R.drawable.orangewarning,theme)  // TODO: bruk et '?'-symbol?
                     }
                 }
-                togglePopup()
+                warningLevel.text = warningText
+                warningLevelColor.background = background
+                togglePopup()  // TODO: endre toggling til 'showPopup'.
             } else {
                 // Ingen varsel (alert er null)
                 Toast.makeText(this, "Ingen varsler for dette området", Toast.LENGTH_SHORT).show()  // TODO: flytt streng resources
