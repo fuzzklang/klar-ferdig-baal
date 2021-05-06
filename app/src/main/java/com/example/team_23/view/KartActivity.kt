@@ -127,6 +127,22 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         go_here.setOnClickListener{
+            togglePopup()
+            Log.d("GO_HERE", "Går inn og logger")
+            val current_location = kartViewModel.getLocation()
+            val origin_lat = current_location.value?.latitude
+            val origin_lon = current_location.value?.longitude
+
+            Log.d("GO_HERE", origin_lat.toString())
+            Log.d("GO_HERE", origin_lon.toString())
+
+            val destination_lat = marker?.position?.latitude
+            val destination_lon = marker?.position?.longitude
+
+            Log.d("GO_HERE", destination_lat.toString())
+            Log.d("GO_HERE", destination_lon.toString())
+
+            kartViewModel.findRoute(origin_lat, origin_lon, destination_lat, destination_lon)
 
         }
 

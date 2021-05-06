@@ -34,10 +34,11 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
     private val directionsURL_destination = "&destination="
     private val directionsURL_key = "&key=AIzaSyAyK0NkgPMxOOTnWR5EFKdy2DzfDXGh-HI"
     private val gson = Gson()
+    var routes: List<Routes>? = null
 
     // Henter Json fra Direction API (Google) og parser ved hjelp av Gson til dataklasser.
-    suspend fun getRoutes(origin_lat : Double, origin_lon : Double, destination_lat : Double, destination_lon : Double): List<Routes>? {
-        var routes: List<Routes>? = null
+    suspend fun getRoutes(origin_lat : Double?, origin_lon : Double?, destination_lat : Double?, destination_lon : Double?): List<Routes>? {
+
         Log.d(tag, "Henter ruter fra Google!")
         val direction_path = "${directionsURL_origin}${origin_lat},${origin_lon}${directionsURL_destination}${destination_lat},${destination_lon}${directionsURL_key}"
         try {
@@ -50,6 +51,7 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
         }
         return routes
     }
+
 
     /* Henter XML-data (RSS-feed) fra MetAlerts-proxyen (IN2000) og parser responsen.
      * @return liste med RssItem eller null

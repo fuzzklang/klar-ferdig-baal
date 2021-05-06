@@ -65,7 +65,7 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
         return location
     }
 
-    fun findRoute(origin_lat : Double, origin_lon : Double, destination_lat : Double, destination_lon : Double) {
+    fun findRoute(origin_lat : Double?, origin_lon : Double?, destination_lat : Double?, destination_lon : Double?) {
         // Kaller på Directions API fra Google (via Repository) og oppdaterer routes-LiveData
         CoroutineScope(Dispatchers.Default).launch {
             val routesFromApi = repo.getRoutes(origin_lat, origin_lon, destination_lat, destination_lon)
@@ -76,6 +76,7 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
             }
         }
     }
+
 
     // Oppdaterer nåværende posisjon ved kall til repository.
     // Antar at appen har tilgang til lokasjon.
@@ -143,3 +144,4 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
         return tmpPathList
     }
 }
+
