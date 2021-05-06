@@ -53,7 +53,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var popup: View
     private lateinit var popupCloseButton: ImageButton
     private var popupSynlig = false
+    // ----- Travel here -------
     private lateinit var travelHereButton: ImageButton
+    private lateinit var travelPolylineList: MutableList<Polyline>
     // ----- Alert Levels Description -----
     private lateinit var alertLevelsDescButton: Button
     private lateinit var alertLevelsDescPopup: View
@@ -116,6 +118,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         alertLevelsDescButton = findViewById<Button>(R.id.popupAlertDescButton)
         alertLevelsDescPopup = findViewById<View>(R.id.levelsDesc)
         alertLevelsDescCloseBtn = findViewById<ImageButton>(R.id.levelsDescCloseButton)
+
+        // ------- Travel here -------
+        travelPolylineList = mutableListOf()
 
         // ===== (ONCLICK) LISTENERS =====
         rulesActivityBtn.setOnClickListener{
@@ -245,7 +250,10 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         kartViewModel.path.observe(this, { paths ->
             //går gjennom punktene i polyline for å skrive det ut til kartet.
             for (i in 0 until paths.size) {
-                this.mMap.addPolyline(PolylineOptions().addAll(paths[i]).color(Color.RED))
+                val polylineOptions = PolylineOptions().addAll(paths[i]).color(Color.RED)
+                val polyline = this.mMap.addPolyline(polylineOptions)
+                travelPolylineList.add(polyline)
+
             }
         })
 
@@ -272,22 +280,33 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         travelHereButton.setOnClickListener{
+            travelPolylineList.forEach{it.remove()}
+            travelPolylineList.clear()
+
             togglePopup()
-            Log.d("GO_HERE", "Går inn og logger")
-            val current_location = kartViewModel.getLocation()
-            val origin_lat = current_location.value?.latitude
-            val origin_lon = current_location.value?.longitude
+            getLocationAccess()
 
-            Log.d("GO_HERE", origin_lat.toString())
-            Log.d("GO_HERE", origin_lon.toString())
+            //TODO: sjekke hvis lokasjon er null
+            if (hasLocationAccess) {
+                val current_location = kartViewModel.getLocation()
 
-            val destination_lat = marker?.position?.latitude
-            val destination_lon = marker?.position?.longitude
+                current_location.observe(this, {
+                    val origin_lat = it?.latitude
+                    val origin_lon = it?.longitude
 
-            Log.d("GO_HERE", destination_lat.toString())
-            Log.d("GO_HERE", destination_lon.toString())
+                    Log.d("GO_HERE", origin_lat.toString())
+                    Log.d("GO_HERE", origin_lon.toString())
 
-            kartViewModel.findRoute(origin_lat, origin_lon, destination_lat, destination_lon)
+                    val destination_lat = marker?.position?.latitude
+                    val destination_lon = marker?.position?.longitude
+
+                    Log.d("GO_HERE", destination_lat.toString())
+                    Log.d("GO_HERE", destination_lon.toString())
+
+                    kartViewModel.findRoute(origin_lat, origin_lon, destination_lat, destination_lon)
+                })
+
+            }
 
         }
 
