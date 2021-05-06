@@ -49,15 +49,15 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var menu: View
     private lateinit var menuButton: ImageButton
     private var menuSynlig = false
-    // ----- Popup-boks -----
+    // ----- Alert Popup-box -----
     private lateinit var popup: View
     private lateinit var popupCloseButton: ImageButton
     private var popupSynlig = false
-    // ----- Levels -----
-    private lateinit var levelsButton: Button
-    private lateinit var levelsPopup: View
-    private lateinit var levelsPopupCloseBtn: ImageButton
-    private var levelsPopupSynlig = true
+    // ----- Alert Levels Description -----
+    private lateinit var alertLevelsDescButton: Button
+    private lateinit var alertLevelsDescPopup: View
+    private lateinit var alertLevelsDescCloseBtn: ImageButton
+    private var alertLevelsDescVisible = true
     // ----- Campfire -----
     private var menuCampfireButtonIsChecked = true  // Erstatt med direkte aksess til Switch
     private val ZOOM_LEVEL_SHOW_CAMPFIRES = 8.5
@@ -67,7 +67,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     // ----- Overlay (Alerts) -----
     private lateinit var menuOverlayBtn: ToggleButton
     private var overlayVisible = true
-    private lateinit var polygonList: MutableList<Polygon>  // Listen med polygoner
+    private lateinit var overlayPolygonList: MutableList<Polygon>  // Listen med polygoner
 
 
     @SuppressLint("UseCompatLoadingForDrawables", "SetTextI18n")
@@ -109,9 +109,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         val warningLevelColor = findViewById<View>(R.id.popupAlertLevelColor)
 
         // ----- Levels -----
-        levelsButton = findViewById<Button>(R.id.popupAlertDescButton)
-        levelsPopup = findViewById<View>(R.id.levelsDesc)
-        levelsPopupCloseBtn = findViewById<ImageButton>(R.id.levelsDescCloseButton)
+        alertLevelsDescButton = findViewById<Button>(R.id.popupAlertDescButton)
+        alertLevelsDescPopup = findViewById<View>(R.id.levelsDesc)
+        alertLevelsDescCloseBtn = findViewById<ImageButton>(R.id.levelsDescCloseButton)
 
         // ===== (ONCLICK) LISTENERS =====
         rulesActivityBtn.setOnClickListener{
@@ -135,9 +135,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
         menuButton.setOnClickListener{toggleMenu()}
 
-        levelsButton.setOnClickListener { toggleLevelsPopup() }
+        alertLevelsDescButton.setOnClickListener { toggleLevelsPopup() }
 
-        levelsPopupCloseBtn.setOnClickListener { toggleLevelsPopup() }
+        alertLevelsDescCloseBtn.setOnClickListener { toggleLevelsPopup() }
 
         popupCloseButton.setOnClickListener{ togglePopup() }
 
@@ -220,7 +220,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
       
         // -- Overlay --
         overlayVisible = true
-        polygonList = mutableListOf()
+        overlayPolygonList = mutableListOf()
         menuOverlayBtn = findViewById<ToggleButton>(R.id.menuOverlayButton)
 
         // ===== LOKASJON =====
@@ -371,16 +371,16 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun toggleLevelsPopup() {
-        if (levelsPopupSynlig){
-            levelsPopup.visibility = View.VISIBLE
+        if (alertLevelsDescVisible){
+            alertLevelsDescPopup.visibility = View.VISIBLE
             popup.visibility = View.GONE
             mMap.uiSettings.isScrollGesturesEnabled = true
         } else {
-            levelsPopup.visibility = View.GONE
+            alertLevelsDescPopup.visibility = View.GONE
             popup.visibility = View.VISIBLE
             mMap.uiSettings.isScrollGesturesEnabled = false
         }
-        levelsPopupSynlig = !levelsPopupSynlig
+        alertLevelsDescVisible = !alertLevelsDescVisible
     }
 
     private fun toggleCampfires(isChecked: Boolean) {
@@ -390,7 +390,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun toggleOverlay(isChecked: Boolean) {
         overlayVisible = isChecked
-        polygonList.forEach {it.isVisible = overlayVisible}
+        overlayPolygonList.forEach {it.isVisible = overlayVisible}
     }
 
     /*
@@ -427,7 +427,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             val color = when (alert.getAlertColor()) {
                 AlertColors.YELLOW -> getColor(R.color.alertYellowTransparent)
                 AlertColors.ORANGE -> getColor(R.color.alertOrangeTransparent)
-                AlertColors.RED -> getColor(R.color.alertRedTransparent)
+                AlertColors.RED    -> getColor(R.color.alertRedTransparent)
                 AlertColors.UNKOWN -> {getColor(R.color.grey); Log.w(tag, "En feil har oppstått! Ukjent farge/nivå for varsel!")}
             }
             val polygonOptions = PolygonOptions()
@@ -438,7 +438,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                     .clickable(false)
             // Fargelegg varsel-soner på kart
             val polygon = mMap.addPolygon(polygonOptions)
-            polygonList.add(polygon)
+            overlayPolygonList.add(polygon)
         }
     }
 
