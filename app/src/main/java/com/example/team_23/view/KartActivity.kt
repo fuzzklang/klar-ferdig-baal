@@ -247,7 +247,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
         //her skjules/vises baalplassene
         var status = true
-        baalplassKnapp.setOnClickListener {
+        menuCampfireButton.setOnClickListener {
             status = !status
             if(!status) {
                 for (i in baalMarkers) {
@@ -282,7 +282,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         Log.d("KartActivity.onMapReady", "mMap.isMyLocationEnabled: ${mMap.isMyLocationEnabled}")
 
         // ===== ON CLICK LISTENERS =====
-        showBonfiresButton = findViewById<Button>(R.id.baalplass_button)
+        showBonfiresButton = findViewById<Button>(R.id.menuCampfireButton)
         showBonfiresButton.setOnClickListener {toggleBonfires()}
 
         // Når bruker trykker på kartet lages det en marker
