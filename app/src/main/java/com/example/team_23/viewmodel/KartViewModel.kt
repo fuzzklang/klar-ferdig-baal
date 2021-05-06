@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.team_23.model.MainRepository
-import com.example.team_23.model.dataclasses.Bonfire
+import com.example.team_23.model.dataclasses.Campfire
 import com.example.team_23.model.dataclasses.Routes
 import com.example.team_23.model.dataclasses.metalerts_dataclasses.Alert
 import com.google.android.gms.maps.model.LatLng
@@ -19,19 +19,25 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
 class KartViewModel(private val repo: MainRepository): ViewModel() {
-    val allAlerts = MutableLiveData<MutableList<Alert>>()    // Liste med alle skogbrannfarevarsler utstedt av MetAlerts
-    val routes = MutableLiveData<List<Routes>>()             // Liste med responsen fra api-kall til Directions API
-    val path = MutableLiveData<MutableList<List<LatLng>>>()  // Liste som inneholder polyline-punktene fra routes (sørg for at hele tiden samsvarer med 'routes')
-    var location = MutableLiveData<Location?>()               // Enhetens lokasjon (GPS)
-    var alertAtPosition = MutableLiveData<Alert?>()          // Varsel for angitt sted.
+    /* MutableLiveDataen er privat slik at ikke andre klasser utilsiktet kan endre innholdet */
+    private val _allAlerts = MutableLiveData<MutableList<Alert>>()   // Liste med alle skogbrannfarevarsler utstedt av MetAlerts
+    val _routes = MutableLiveData<List<Routes>>()                    // Liste med responsen fra api-kall til Directions API
+    val _path = MutableLiveData<MutableList<List<LatLng>>>()         // Liste som inneholder polyline-punktene fra routes (sørg for at hele tiden samsvarer med 'routes')
+    private var _location = MutableLiveData<Location?>()             // Enhetens lokasjon (GPS)
+    private var _alertAtPosition = MutableLiveData<Alert?>()         // Varsel for angitt sted.
+
+    /* Immutable versjoner av LiveDataene over som er tilgjengelig for Viewene */
+    val allAlerts: LiveData<MutableList<Alert>> = _allAlerts
+    val alertAtPosition: LiveData<Alert?> = _alertAtPosition
+    var path: LiveData<MutableList<List<LatLng>>> = _path
 
     /* Grensesnitt til View.
      * Henter varsler for nåværende sted.
      * Er avhengig av at lokasjon (livedata 'location') er tilgjengelig og oppdatert.
      */
     fun getAlertCurrentLocation() {
-        val lat = location.value?.latitude
-        val lon = location.value?.longitude
+        val lat = _location.value?.latitude
+        val lon = _location.value?.longitude
         // Feilsjekking i tilfelle ikke lokasjon tilgjengelig?
         if (lat == null || lon == null) {
             Log.w("KartViewModel", "Advarsel: getAlertsCurrentLocation() ble kalt men lokasjon er ikke tilgjengelig.")
@@ -53,7 +59,7 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
             } else {
                 Log.d("KartActivity.getAlert", "Ingen varsel ble funnet")
             }
-            alertAtPosition.postValue(alert)  // Oppdater varsel-livedata med ny verdi
+            _alertAtPosition.postValue(alert)  // Oppdater varsel-livedata med ny verdi
         }
     }
 
@@ -61,8 +67,8 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
      * Returnerer en instans av livedata med lokasjon.
      */
     fun getLocation(): LiveData<Location?> {
-        Log.d("KartViewModel", "getLocation: ${location.value?.latitude}, ${location.value?.longitude}")
-        return location
+        Log.d("KartViewModel", "getLocation: ${_location.value?.latitude}, ${_location.value?.longitude}")
+        return _location
     }
 
     fun findRoute(origin_lat : Double?, origin_lon : Double?, destination_lat : Double?, destination_lon : Double?) {
@@ -70,8 +76,8 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
         CoroutineScope(Dispatchers.Default).launch {
             val routesFromApi = repo.getRoutes(origin_lat, origin_lon, destination_lat, destination_lon)
             if (routesFromApi != null) {
-                routes.postValue(routesFromApi)                 // Oppdater routes (hentet fra API)
-                path.postValue(getPolylinePoints(routes.value)) // Oppdater path (lat/lng-punkter) basert på ny rute
+                _routes.postValue(routesFromApi)                 // Oppdater routes (hentet fra API)
+                _path.postValue(getPolylinePoints(_routes.value)) // Oppdater _path (lat/lng-punkter) basert på ny rute
                 Log.d("KartViewModel.findRoute", "Path oppdatert")
             }
         }
@@ -81,7 +87,7 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
     // Oppdaterer nåværende posisjon ved kall til repository.
     // Antar at appen har tilgang til lokasjon.
     fun updateLocation() {
-        location = repo.getLocation() as MutableLiveData<Location?>
+        _location = repo.getLocation() as MutableLiveData<Location?>
     }
 
     /* Grensesnitt til View.
@@ -106,12 +112,12 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
                     }
                 }
             }
-            allAlerts.postValue(varselListe)
+            _allAlerts.postValue(varselListe)
         }
     }
 
-    fun getBonfireSpots(): List<Bonfire> {
-        return repo.getBonfireSpots()
+    fun getCampfireSpots(): List<Campfire> {
+        return repo.getCampfireSpots()
     }
 
     /* Hjelpemetode for findRoute()
