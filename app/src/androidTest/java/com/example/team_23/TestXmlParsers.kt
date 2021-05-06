@@ -5,13 +5,14 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.team_23.model.api.CapParser
 import com.example.team_23.model.api.MetAlertsRssParser
-import com.example.team_23.model.api.metalerts_dataclasses.Alert
-import com.example.team_23.model.api.metalerts_dataclasses.Area
-import com.example.team_23.model.api.metalerts_dataclasses.Info
-import com.example.team_23.model.api.metalerts_dataclasses.RssItem
+import com.example.team_23.model.dataclasses.metalerts_dataclasses.Alert
+import com.example.team_23.model.dataclasses.metalerts_dataclasses.Area
+import com.example.team_23.model.dataclasses.metalerts_dataclasses.Info
+import com.example.team_23.model.dataclasses.metalerts_dataclasses.RssItem
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.junit.Assert.*
 import org.xmlpull.v1.XmlPullParserException
 import java.io.InputStream
 
@@ -154,23 +155,12 @@ class TestXmlParsers {
     }
 
     @Test
-    fun testParseCapFeedCheckInfoCount() {
-        // Input: Gyldig varsel med ett info-element på hvert språk (norsk/engelsk).
-        // Det engelske Info-elementet er en oversettelse av det norske Info-elementet og ellers identisk.
-        // Forventer: at hver info-liste, (capAlert.infoItemsNo/En) inneholder nøyaktig ett element.
-        val input: InputStream = appContext.assets.open("testCapAlert.xml.test")
-        val capAlert: Alert = CapParser().parse(input)
-        assertEquals(1, capAlert.infoItemsNo.size)
-        assertEquals(1, capAlert.infoItemsEn.size)
-    }
-
-    @Test
     fun testParseCapFeedCheckAttributesInfoNorwegian() {
         // Input: gyldig varsel.
         // Sjekker at attributtene i Info-elementet (norsk) settes korrekt av parser.
         val input: InputStream = appContext.assets.open("testCapAlert.xml.test")
         val capAlert: Alert = CapParser().parse(input)
-        val info: Info = capAlert.infoItemsNo[0]
+        val info: Info = capAlert.infoNo
         assertEquals("no", info.lang)
         assertEquals("Skogbrannfare", info.event)
         assertEquals("Monitor", info.responseType)
@@ -183,7 +173,7 @@ class TestXmlParsers {
         // Sjekker at attributtene i Info-elementet (engelsk) settes korrekt av parser.
         val input: InputStream = appContext.assets.open("testCapAlert.xml.test")
         val capAlert: Alert = CapParser().parse(input)
-        val info: Info = capAlert.infoItemsEn[0]
+        val info: Info = capAlert.infoEn
         assertEquals("en-GB", info.lang)
         assertEquals("Forest fire danger", info.event)
         assertEquals("Monitor", info.responseType)
@@ -198,34 +188,8 @@ class TestXmlParsers {
         // Tester for øyeblikket ikke area.polygon (streng med koordinater)
         val input: InputStream = appContext.assets.open("testCapAlert.xml.test")
         val capAlert: Alert = CapParser().parse(input)
-        val info: Info = capAlert.infoItemsNo[0]
+        val info: Info = capAlert.infoNo
         val area: Area = info.area
         assertEquals("Hordaland", area.areaDesc)
-    }
-
-    @Test
-    fun testParseCapSeveralInfosNorwegian() {
-        // Input: gyldig varsel med mer enn ett Info-element på hvert språk.
-        // Sjekker at det andre Info-elementet i Info-listen (norsk) settes korrekt av parser.
-        val input: InputStream = appContext.assets.open("testCapAlertSeveralInfoElements.xml.test")
-        val capAlert: Alert = CapParser().parse(input)
-        val info: Info = capAlert.infoItemsNo[1]
-        assertEquals("no", info.lang)
-        assertEquals("Test Skogbrannfare 2", info.event)
-        assertEquals("Monitor", info.responseType)
-        assertEquals("Vær forsiktig med åpen ild.", info.instruction)
-    }
-
-    @Test
-    fun testParseCapSeveralInfosEnglish() {
-        // Input: gyldig varsel med mer enn ett Info-element på hvert språk.
-        // Sjekker at det andre Info-elementet i Info-listen (engelsk) settes korrekt av parser.
-        val input: InputStream = appContext.assets.open("testCapAlertSeveralInfoElements.xml.test")
-        val capAlert: Alert = CapParser().parse(input)
-        val info: Info = capAlert.infoItemsEn[1]
-        assertEquals("en-GB", info.lang)
-        assertEquals("Test Forest fire danger 2", info.event)
-        assertEquals("Monitor", info.responseType)
-        assertEquals("Be careful with open fire.", info.instruction)
     }
 }

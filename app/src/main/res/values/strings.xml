@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">KlarFerdigBål</string>
     <string name="rules">
-        • Respekter det nasjonale bålforbudet 15. april til 15. &#160;&#160;september
-         Ikke tenn bål i skog og utmark i denne &#160;&#160;&#160;perioden.\n\n<br/><br/>
+        • Respekter det nasjonale bålforbudet fra 15. april &#160;&#160;&#160;til 15.september.
+         Ikke tenn bål i skog og utmark i &#160;&#160;&#160;denne perioden.\n\n<br/><br/>
         •Følg med på skogbrannvarselet og følg rådene fra &#160;&#160;&#160;ditt lokale brannvesen\n\n<br/><br/>
-        •Bruk godkjente bålplasser hvis du skal tenne bål\n\n<br/><br/>
+        •Bruk godkjente bålplasser hvis du skal tenne bål.\n\n<br/><br/>
         •Ta hensyn til skogbrannfare og vindforhold.\n\n<br/><br/>
         • Det er alltid den som brenner bål som har ansvaret
         &#160;&#160;&#160;for brannsikkerheten.\n\n<br/><br/>
@@ -20,21 +20,17 @@
          &#160;&#160;&#160;og annen søppel.\n\n<br/><br/>
         • Når du forlater bålplassen skal bålet være helt
          &#160;&#160;&#160;slokket.\n\n<br/><br/>
-
-
     </string>
-
 
     <string name="title">Regler</string>
     <string name="imgClose">Avslutt</string>
     <string name="imgFire">flammeikon</string>
     <string name="info">Info</string>
     <string name="regler">Regler</string>
-    <string name="infoContent">Trykk på kartet for å sjekke skogbrannfaren for et området</string>
+    <string name="infoContent">Trykk på kartet for å sjekke skogbrannfaren for området</string>
     <string name="overlay">Overlay</string>
     <string name="infoButtonText">Info</string>
     <string name="app_title">Klar Ferdig Bål</string>
-
 
     <string name="levels">Farenivåer</string>
     <string name="moderate_description">Moderat farenivå vises når det finnes en
@@ -54,6 +50,5 @@
     <string name="balplasser">Bålplasser</string>
     <string name="popup">popup</string>
     <string name="menu_button">Menu button</string>
-
-
+    <string name="varsler_her">Varsler her</string>
 </resources>

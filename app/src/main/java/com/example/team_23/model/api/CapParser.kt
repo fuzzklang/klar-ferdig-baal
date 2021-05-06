@@ -2,9 +2,9 @@ package com.example.team_23.model.api
 
 import android.util.Log
 import android.util.Xml
-import com.example.team_23.model.api.metalerts_dataclasses.Alert
-import com.example.team_23.model.api.metalerts_dataclasses.Area
-import com.example.team_23.model.api.metalerts_dataclasses.Info
+import com.example.team_23.model.dataclasses.metalerts_dataclasses.Alert
+import com.example.team_23.model.dataclasses.metalerts_dataclasses.Area
+import com.example.team_23.model.dataclasses.metalerts_dataclasses.Info
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
@@ -37,8 +37,10 @@ class CapParser {
         var status: String? = null
         var msgType: String? = null
         //var info = Info(null, null, null, Area(null, null))
-        val infoItemsNo = mutableListOf<Info>() // Instansier tom liste for info-elementer på norsk
-        val infoItemsEn = mutableListOf<Info>() // Instansier tom liste for info-elementer på engelsk
+        //val infoItemsNo = mutableListOf<Info>() // Instansier tom liste for info-elementer på norsk
+        //val infoItemsEn = mutableListOf<Info>() // Instansier tom liste for info-elementer på engelsk
+        lateinit var infoNo: Info
+        lateinit var infoEn: Info
 
         parser.require(XmlPullParser.START_TAG, ns, "alert")
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -51,13 +53,12 @@ class CapParser {
                 "sent" -> sent = readText(parser)
                 "status" -> status = readText(parser)
                 "msgType" -> msgType = readText(parser)
-                // Les alle Info-elementer i Alert.
+                // Kun ett info-element per språk i følge standarden fra MET/NVE
                 "info" -> {
                     val info: Info = readInfo(parser)
                     when (info.lang) {
-                        "no" -> infoItemsNo.add(info)
-                        // "en" -> infoItemsEn.add(info)  // Trengs denne?
-                        "en-GB" -> infoItemsEn.add(info)
+                        "no" -> infoNo = info
+                        "en-GB" -> infoEn = info
                         else -> Log.w(tag, "Ukjent språk (lang) for info-element")  // Kommer forhåpentligvis aldri hit.
                     }
                 }
@@ -65,7 +66,7 @@ class CapParser {
             }
         }
         // Gjør listene ikke-muterbare.
-        return Alert(identifier, sent, status, msgType, infoItemsNo.toList(), infoItemsEn.toList())
+        return Alert(identifier, sent, status, msgType, infoNo, infoEn)
     }
 
     @Throws(XmlPullParserException::class, IOException::class)
@@ -78,10 +79,10 @@ class CapParser {
         var event: String? = null
         var responseType: String? = null
         var severity: String? = null
+        var certainty: String? = null
         // Disse kan inkluderes dersom vi trenger disse XML-elementene fra varselet.
         // Må defineres i dataklassen Info også.
         /*var urgency: String? = null
-        var certainty: String? = null
         var effective: String? = null
         var onset: String? = null
         var expires: String? = null*/
@@ -100,11 +101,12 @@ class CapParser {
                 "responseType" -> responseType = readText(parser)
                 "instruction" -> instruction = readText(parser)
                 "severity" -> severity = readText(parser)
+                "certainty" -> certainty = readText(parser)
                 "area" -> area = readArea(parser)
                 else -> skip(parser)
             }
         }
-        return Info(lang, event, responseType, severity, instruction, area)
+        return Info(lang, event, responseType, severity, certainty, instruction, area)
     }
 
     @Throws(XmlPullParserException::class, IOException::class)
