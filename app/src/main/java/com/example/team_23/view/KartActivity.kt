@@ -16,7 +16,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.example.team_23.R
-import com.example.team_23.model.dataclasses.Bonfire
+import com.example.team_23.model.dataclasses.Campfire
 import com.example.team_23.model.dataclasses.metalerts_dataclasses.Alert
 import com.example.team_23.model.dataclasses.metalerts_dataclasses.AlertColors
 import com.example.team_23.utils.ViewModelProvider
@@ -58,12 +58,12 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var levelsPopup: View
     private lateinit var levelsPopupCloseBtn: ImageButton
     private var levelsPopupSynlig = true
-    // ----- Bonfire -----
+    // ----- Campfire -----
     private var menuCampfireButtonIsChecked = true  // Erstatt med direkte aksess til Switch
     private val ZOOM_LEVEL_SHOW_CAMPFIRES = 8.5
     private lateinit var menuCampfireButton: ToggleButton
-    private lateinit var bonfireSpots: List<Bonfire>
-    private lateinit var bonfireMarkers: MutableList<Marker>
+    private lateinit var campfireSpots: List<Campfire>
+    private lateinit var campfireMarkers: MutableList<Marker>
     // ----- Overlay (Alerts) -----
     private lateinit var menuOverlayBtn: ToggleButton
     private var overlayVisible = true
@@ -216,7 +216,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.setPadding(0, 2000, 0, 0)
 
         // -- Bålplasser --
-        bonfireMarkers = mutableListOf()  // Liste som holder på markørene
+        campfireMarkers = mutableListOf()  // Liste som holder på markørene
       
         // -- Overlay --
         overlayVisible = true
@@ -246,7 +246,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         })
 
         // ===== ON CLICK LISTENERS =====
-        menuCampfireButton.setOnCheckedChangeListener {_, isChecked -> toggleBonfires(isChecked) }
+        menuCampfireButton.setOnCheckedChangeListener {_, isChecked -> toggleCampfires(isChecked) }
         menuOverlayBtn.setOnCheckedChangeListener { _, isChecked -> toggleOverlay(isChecked) }
 
         mMap.setOnCameraIdleListener { toogleCampfireZoomVisibility() }
@@ -271,7 +271,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         kartViewModel.getAllAlerts()  // Hent alle varsler ved oppstart av app, når kart er klart.
 
         // --- TEGNE BÅLPLASSER ---
-        drawBonfires()
+        drawCampfires()
 
         // --- FLYTT KAMERA ---
         val oslo = LatLng(59.911491, 10.757933) //TODO: flytt dette til en konfigurasjonsfil
@@ -383,9 +383,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         levelsPopupSynlig = !levelsPopupSynlig
     }
 
-    private fun toggleBonfires(isChecked: Boolean) {
+    private fun toggleCampfires(isChecked: Boolean) {
         menuCampfireButtonIsChecked = isChecked
-        bonfireMarkers.forEach {it.isVisible = isChecked}
+        campfireMarkers.forEach {it.isVisible = isChecked}
     }
 
     private fun toggleOverlay(isChecked: Boolean) {
@@ -442,23 +442,23 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun drawBonfires() {
+    private fun drawCampfires() {
         // TODO: burde noe av dette flyttes til layout-filene?
-        val bonfireIconHeight = 50   // endrer stoerrelse paa campfire ikonet
-        val bonfireIconWidth = 50    // -- " ---
-        val bonfireIcon = ContextCompat.getDrawable(this, R.drawable.campfire) as BitmapDrawable
-        val smallBonfireMarkerBitmap = Bitmap.createScaledBitmap(bonfireIcon.bitmap, bonfireIconWidth, bonfireIconHeight, false) // Brukes når markørene lages under
+        val campfireIconHeight = 50   // endrer stoerrelse paa campfire ikonet
+        val campfireIconWidth = 50    // -- " ---
+        val campfireIcon = ContextCompat.getDrawable(this, R.drawable.campfire) as BitmapDrawable
+        val smallCampfireMarkerBitmap = Bitmap.createScaledBitmap(campfireIcon.bitmap, campfireIconWidth, campfireIconHeight, false) // Brukes når markørene lages under
 
-        bonfireSpots = kartViewModel.getBonfireSpots()
-        for (bonfire in bonfireSpots) {
+        campfireSpots = kartViewModel.getCampfireSpots()
+        for (campfire in campfireSpots) {
             val marker = mMap.addMarker(MarkerOptions()
-                    .position(LatLng(bonfire.lat, bonfire.lon))
-                    .title("${bonfire.name} (${bonfire.type})")
-                    .icon(BitmapDescriptorFactory.fromBitmap(smallBonfireMarkerBitmap)))
+                    .position(LatLng(campfire.lat, campfire.lon))
+                    .title("${campfire.name} (${campfire.type})")
+                    .icon(BitmapDescriptorFactory.fromBitmap(smallCampfireMarkerBitmap)))
             if (marker == null)
-                Log.w(tag, "onMapReady: en bonfireMarker er null! Ignorerer. Kan føre til uønsket oppførsel fra app.")
+                Log.w(tag, "onMapReady: en campfireMarker er null! Ignorerer. Kan føre til uønsket oppførsel fra app.")
             else
-                bonfireMarkers.add(marker)
+                campfireMarkers.add(marker)
         }
     }
 
@@ -466,8 +466,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         //viser kun baalikoner etter et angitt zoom-nivaa
         val zoom = this.mMap.cameraPosition.zoom
         if (zoom > ZOOM_LEVEL_SHOW_CAMPFIRES && menuCampfireButtonIsChecked)
-            bonfireMarkers.forEach { it.isVisible = true }  // Vis bålplasser dersom Zoom langt inne nok og visning av bålplasser aktivert
+            campfireMarkers.forEach { it.isVisible = true }  // Vis bålplasser dersom Zoom langt inne nok og visning av bålplasser aktivert
         else
-            bonfireMarkers.forEach { it.isVisible = false }
+            campfireMarkers.forEach { it.isVisible = false }
     }
 }
