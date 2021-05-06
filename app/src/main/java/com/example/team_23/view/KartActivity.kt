@@ -59,7 +59,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private var levelsPopupSynlig = true
     // ----- Bonfire -----
     private var showBonfireMarkers = true
-    private lateinit var showBonfiresButton: Button
+    private lateinit var menuCampfireButton: Button
     private lateinit var bonfireSpots: List<Bonfire>
     private lateinit var bonfireMarkers: MutableList<Marker>
     // ----- Overlay (Alerts) -----
@@ -84,33 +84,32 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // TODO: beskriv variablene/hvor de brukes/hva de brukes til
         // ===== SETT VIEWS =====
         // ----- Varsler Her-knapp -----
-        val varslerHer = findViewById<Button>(R.id.varsler_her)
+        val varslerHer = findViewById<Button>(R.id.varslerHerButton)
 
         // ----- Meny -----
-        menu = findViewById(R.id.menu)
-        menuButton = findViewById(R.id.menuButton)
-        val rulesActivityBtn = findViewById<Button>(R.id.send_rules)  // Knapp som sender bruker til reglene
+        menu = findViewById<View>(R.id.menu)
+        menuButton = findViewById<ImageButton>(R.id.menuButton)
+        val rulesActivityBtn = findViewById<Button>(R.id.menuRulesButton)  // Knapp som sender bruker til reglene
 
         // ----- Info-boks -----
-        infoButton = findViewById(R.id.info_button)
-        infoCloseButton = findViewById(R.id.info_close_button)
-        info = findViewById(R.id.infoBox)
+        infoButton = findViewById<Button>(R.id.menuInfoButton)
+        infoCloseButton = findViewById<ImageButton>(R.id.infoboxCloseButton)
+        info = findViewById<View>(R.id.infoBox)
 
         // ----- Popup-boks -----
         // (varselvisning?)
-        popup = findViewById(R.id.popup)
-        popupCloseButton = findViewById(R.id.popupCloseButton)
-        val warningArea = findViewById<TextView>(R.id.warningArea)
-        val warningInfo = findViewById<TextView>(R.id.warningInfo)
-        val warningLevel = findViewById<TextView>(R.id.warningLevel)
+        popup = findViewById<View>(R.id.popup)
+        popupCloseButton = findViewById<ImageButton>(R.id.popupAlertCloseButton)
+        val warningArea = findViewById<TextView>(R.id.popupAlertArea)
+        val warningInfo = findViewById<TextView>(R.id.popupAlertInfoContent)
+        val warningLevel = findViewById<TextView>(R.id.popupAlertLevelContent)
         val warningLevelImg = findViewById<ImageView>(R.id.warningLevelImg)
-        val warningLevelColor = findViewById<View>(R.id.warningLevelColor)
+        val warningLevelColor = findViewById<View>(R.id.popupAlertLevelColor)
 
         // ----- Levels -----
-        levelsButton = findViewById(R.id.levelsButton)
-        levelsPopup = findViewById(R.id.levelsPopup)
-        levelsPopupCloseBtn = findViewById(R.id.levelsCloseButton)
-
+        levelsButton = findViewById<Button>(R.id.popupAlertDescButton)
+        levelsPopup = findViewById<View>(R.id.levelsDesc)
+        levelsPopupCloseBtn = findViewById<ImageButton>(R.id.levelsDescCloseButton)
 
         // ===== (ONCLICK) LISTENERS =====
         rulesActivityBtn.setOnClickListener{
@@ -212,10 +211,38 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         bonfireMarkers = mutableListOf()  // Liste som holder på markørene
         showBonfireMarkers = true
         showBonfiresButton = findViewById(R.id.baalplass_button)
+      
         // -- Overlay --
         overlayVisible = true
         polygonList = mutableListOf()
         overlayBtn = findViewById(R.id.overlay_button)
+
+        //her skjules/vises baalplassene
+        menuCampfireButton.setOnClickListener {
+            showBonfireMarkers = !showBonfireMarkers
+            if(!showBonfireMarkers) {
+                for (i in bonfireMarkers) {
+                    i.isVisible = false
+                }
+            }else{
+                for(i in bonfireMarkers) {
+                    i.isVisible = true
+                }
+            }
+        }
+
+        //viser kun baalikoner etter et angitt zoom-nivaa
+        var zoom: Float = -1f
+        this.mMap.setOnCameraIdleListener {
+            zoom = this.mMap.cameraPosition.zoom
+            if(zoom > 8.5 && showBonfireMarkers) {
+                showBonfireMarkers = true
+            } else {
+                showBonfireMarkers = false
+            }
+            bonfireMarkers.forEach { it.setVisible(showBonfireMarkers) }
+        }
+       this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(oslo, 6f))
 
         // ===== LOKASJON =====
         // Sjekk at tilgang til lokasjon (skal også sette mMap.isMyLocationEnabled og oppdaterer lokasjon dersom tilgang)
@@ -241,10 +268,11 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // ===== ON CLICK LISTENERS =====
         showBonfiresButton.setOnClickListener { toggleBonfires() }
-
         overlayBtn.setOnCheckedChangeListener { _, isChecked ->
             toggleOverlay(isChecked)
         }
+        menuCampfireButton = findViewById<Button>(R.id.menuCampfireButton)
+        menuCampfireButton.setOnClickListener {toggleBonfires()}
 
         // Når bruker trykker på kartet lages det en marker
         mMap.setOnMapClickListener {
@@ -261,8 +289,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             myLocationButtonOnClickMethod()
             true
         }
-        mMap.uiSettings.isScrollGesturesEnabled = false
-
 
         // ===== INITALISER - API-kall, konfigurasjon ++ =====
         kartViewModel.getAllAlerts()  // Hent alle varsler ved oppstart av app, når kart er klart.
