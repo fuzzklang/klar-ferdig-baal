@@ -59,7 +59,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private var levelsPopupSynlig = true
     // ----- Bonfire -----
     private var showBonfireMarkers = true
-    private lateinit var showBonfiresButton: Button
+    private lateinit var menuCampfireButton: Button
     private lateinit var bonfireSpots: List<Bonfire>
     private lateinit var bonfireMarkers: MutableList<Marker>
 
@@ -225,7 +225,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(oslo, 6f))
 
         // ===== TEGNE BÅLPLASSER =====
-        showBonfireMarkers = true
         bonfireSpots = kartViewModel.getBonfireSpots()
         // TODO: burde noe av dette flyttes til layout-filene?
         val bonfireIconHeight = 50   // endrer stoerrelse paa campfire ikonet
@@ -246,15 +245,14 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         //her skjules/vises baalplassene
-        var status = true
         menuCampfireButton.setOnClickListener {
-            status = !status
-            if(!status) {
-                for (i in baalMarkers) {
+            showBonfireMarkers = !showBonfireMarkers
+            if(!showBonfireMarkers) {
+                for (i in bonfireMarkers) {
                     i.isVisible = false
                 }
             }else{
-                for(i in baalMarkers) {
+                for(i in bonfireMarkers) {
                     i.isVisible = true
                 }
             }
@@ -264,15 +262,12 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         var zoom: Float = -1f
         this.mMap.setOnCameraIdleListener {
             zoom = this.mMap.cameraPosition.zoom
-            if(zoom > 8.5 && status){
-                for(i in baalMarkers) {
-                    i.setVisible(true)
-                }
-            }else{
-                for(i in baalMarkers) {
-                    i.setVisible(false)
-                }
+            if(zoom > 8.5 && showBonfireMarkers) {
+                showBonfireMarkers = true
+            } else {
+                showBonfireMarkers = false
             }
+            bonfireMarkers.forEach { it.setVisible(showBonfireMarkers) }
         }
        this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(oslo, 6f))
 
@@ -282,8 +277,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         Log.d("KartActivity.onMapReady", "mMap.isMyLocationEnabled: ${mMap.isMyLocationEnabled}")
 
         // ===== ON CLICK LISTENERS =====
-        showBonfiresButton = findViewById<Button>(R.id.menuCampfireButton)
-        showBonfiresButton.setOnClickListener {toggleBonfires()}
+        menuCampfireButton = findViewById<Button>(R.id.menuCampfireButton)
+        menuCampfireButton.setOnClickListener {toggleBonfires()}
 
         // Når bruker trykker på kartet lages det en marker
         mMap.setOnMapClickListener {
