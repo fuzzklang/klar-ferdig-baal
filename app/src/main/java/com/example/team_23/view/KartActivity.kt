@@ -90,7 +90,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         menu = findViewById<View>(R.id.menu)
         menuButton = findViewById<ImageButton>(R.id.menuButton)
         val rulesActivityBtn = findViewById<Button>(R.id.menuRulesButton)  // Knapp som sender bruker til reglene
-
+        menuCampfireButton = findViewById<Button>(R.id.menuCampfireButton)
         // ----- Info-boks -----
         infoButton = findViewById<Button>(R.id.menuInfoButton)
         infoCloseButton = findViewById<ImageButton>(R.id.infoboxCloseButton)
@@ -210,12 +210,11 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // -- Bålplasser --
         bonfireMarkers = mutableListOf()  // Liste som holder på markørene
         showBonfireMarkers = true
-        showBonfiresButton = findViewById(R.id.baalplass_button)
       
         // -- Overlay --
         overlayVisible = true
         polygonList = mutableListOf()
-        overlayBtn = findViewById(R.id.overlay_button)
+        overlayBtn = findViewById<ToggleButton>(R.id.menuOverlayButton)
 
         //her skjules/vises baalplassene
         menuCampfireButton.setOnClickListener {
@@ -232,7 +231,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         //viser kun baalikoner etter et angitt zoom-nivaa
-        var zoom: Float = -1f
+        var zoom: Float
         this.mMap.setOnCameraIdleListener {
             zoom = this.mMap.cameraPosition.zoom
             if(zoom > 8.5 && showBonfireMarkers) {
@@ -242,7 +241,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             }
             bonfireMarkers.forEach { it.setVisible(showBonfireMarkers) }
         }
-       this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(oslo, 6f))
 
         // ===== LOKASJON =====
         // Sjekk at tilgang til lokasjon (skal også sette mMap.isMyLocationEnabled og oppdaterer lokasjon dersom tilgang)
@@ -267,7 +265,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         })
 
         // ===== ON CLICK LISTENERS =====
-        showBonfiresButton.setOnClickListener { toggleBonfires() }
+        menuCampfireButton.setOnClickListener { toggleBonfires() }
         overlayBtn.setOnCheckedChangeListener { _, isChecked ->
             toggleOverlay(isChecked)
         }
@@ -297,7 +295,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         drawBonfires()
 
         // --- FLYTT KAMERA ---
-        val oslo = LatLng(59.911491, 10.757933)
+        val oslo = LatLng(59.911491, 10.757933) //TODO: flytt dette til en konfigurasjonsfil
         this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(oslo, 6f))  // TODO: Flyttes nå til Oslo. Velge annet sted?
     }
 
