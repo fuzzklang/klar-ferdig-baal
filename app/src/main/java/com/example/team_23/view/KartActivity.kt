@@ -52,6 +52,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var popup: View
     private lateinit var popupCloseButton: ImageButton
     private var popupSynlig = false
+    private lateinit var go_here : ImageButton
     // ----- Levels -----
     private lateinit var levelsButton: Button
     private lateinit var levelsPopup: View
@@ -96,6 +97,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // (varselvisning?)
         popup = findViewById<View>(R.id.popup)
         popupCloseButton = findViewById<ImageButton>(R.id.popupCloseButton)
+        go_here = findViewById(R.id.go_here)
         val warningArea = findViewById<TextView>(R.id.warningArea)
         val warningInfo = findViewById<TextView>(R.id.warningInfo)
         val warningLevel = findViewById<TextView>(R.id.warningLevel)
@@ -122,6 +124,10 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 menuButton.background = resources.getDrawable(R.drawable.menubutton,theme)
                 menuSynlig = !menuSynlig
             }
+        }
+
+        go_here.setOnClickListener{
+
         }
 
         infoButton.setOnClickListener {toggleInfo()}      //Info knapp som endrer info sin synlighet
