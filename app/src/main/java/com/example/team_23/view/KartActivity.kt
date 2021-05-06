@@ -63,7 +63,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var bonfireSpots: List<Bonfire>
     private lateinit var bonfireMarkers: MutableList<Marker>
     // ----- Overlay (Alerts) -----
-    private lateinit var overlayBtn: ToggleButton
+    private lateinit var menuOverlayBtn: ToggleButton
     private var overlayVisible = true
     private lateinit var polygonList: MutableList<Polygon>  // Listen med polygoner
 
@@ -214,33 +214,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // -- Overlay --
         overlayVisible = true
         polygonList = mutableListOf()
-        overlayBtn = findViewById<ToggleButton>(R.id.menuOverlayButton)
-
-        //her skjules/vises baalplassene
-        menuCampfireButton.setOnClickListener {
-            showBonfireMarkers = !showBonfireMarkers
-            if(!showBonfireMarkers) {
-                for (i in bonfireMarkers) {
-                    i.isVisible = false
-                }
-            }else{
-                for(i in bonfireMarkers) {
-                    i.isVisible = true
-                }
-            }
-        }
-
-        //viser kun baalikoner etter et angitt zoom-nivaa
-        var zoom: Float
-        this.mMap.setOnCameraIdleListener {
-            zoom = this.mMap.cameraPosition.zoom
-            if(zoom > 8.5 && showBonfireMarkers) {
-                showBonfireMarkers = true
-            } else {
-                showBonfireMarkers = false
-            }
-            bonfireMarkers.forEach { it.setVisible(showBonfireMarkers) }
-        }
+        menuOverlayBtn = findViewById<ToggleButton>(R.id.menuOverlayButton)
 
         // ===== LOKASJON =====
         // Sjekk at tilgang til lokasjon (skal også sette mMap.isMyLocationEnabled og oppdaterer lokasjon dersom tilgang)
@@ -266,11 +240,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // ===== ON CLICK LISTENERS =====
         menuCampfireButton.setOnClickListener { toggleBonfires() }
-        overlayBtn.setOnCheckedChangeListener { _, isChecked ->
-            toggleOverlay(isChecked)
-        }
-        menuCampfireButton = findViewById<Button>(R.id.menuCampfireButton)
-        menuCampfireButton.setOnClickListener {toggleBonfires()}
+        menuOverlayBtn.setOnCheckedChangeListener { _, isChecked -> toggleOverlay(isChecked) }
+
+        mMap.setOnCameraIdleListener { toogleCampfireZoomVisibility() }
 
         // Når bruker trykker på kartet lages det en marker
         mMap.setOnMapClickListener {
@@ -481,19 +453,16 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             else
                 bonfireMarkers.add(marker)
         }
-//viser kun baalikoner etter et angitt zoom-nivaa
-        var zoom: Float
-        this.mMap.setOnCameraIdleListener {
-            zoom = this.mMap.cameraPosition.zoom
-            if(zoom > 8.5 && showBonfireMarkers){
-                for(markers in bonfireMarkers) {
-                    markers.isVisible = true
-                }
-            }else{
-                for(markers in bonfireMarkers) {
-                    markers.isVisible = false
-                }
-            }
+    }
+
+    private fun toogleCampfireZoomVisibility() {
+        //viser kun baalikoner etter et angitt zoom-nivaa
+        val zoom = this.mMap.cameraPosition.zoom
+        if (zoom > 8.5) {
+            showBonfireMarkers = true
+        } else {
+            showBonfireMarkers = false
         }
+        bonfireMarkers.forEach { it.isVisible = showBonfireMarkers }
     }
 }
