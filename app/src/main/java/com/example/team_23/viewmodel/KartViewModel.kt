@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.team_23.model.MainRepository
-import com.example.team_23.model.dataclasses.Bonfire
+import com.example.team_23.model.dataclasses.Campfire
 import com.example.team_23.model.dataclasses.Routes
 import com.example.team_23.model.dataclasses.metalerts_dataclasses.Alert
 import com.google.android.gms.maps.model.LatLng
@@ -115,8 +115,8 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
         }
     }
 
-    fun getBonfireSpots(): List<Bonfire> {
-        return repo.getBonfireSpots()
+    fun getCampfireSpots(): List<Campfire> {
+        return repo.getCampfireSpots()
     }
 
     /* Hjelpemetode for findRoute()
