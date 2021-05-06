@@ -53,6 +53,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var popup: View
     private lateinit var popupCloseButton: ImageButton
     private var popupSynlig = false
+    private lateinit var travelHereButton: ImageButton
     // ----- Alert Levels Description -----
     private lateinit var alertLevelsDescButton: Button
     private lateinit var alertLevelsDescPopup: View
@@ -68,6 +69,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var menuOverlayBtn: ToggleButton
     private var overlayVisible = true
     private lateinit var overlayPolygonList: MutableList<Polygon>  // Listen med polygoner
+
+
 
 
     @SuppressLint("UseCompatLoadingForDrawables", "SetTextI18n")
@@ -107,6 +110,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         val warningLevel = findViewById<TextView>(R.id.popupAlertLevelContent)
         val warningLevelImg = findViewById<ImageView>(R.id.warningLevelImg)
         val warningLevelColor = findViewById<View>(R.id.popupAlertLevelColor)
+        travelHereButton = findViewById<ImageButton>(R.id.popupDraHitButton)
 
         // ----- Levels -----
         alertLevelsDescButton = findViewById<Button>(R.id.popupAlertDescButton)
@@ -265,6 +269,26 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             Log.d(tag, "Klikk registrert på MyLocationButton")
             myLocationButtonOnClickMethod()
             true
+        }
+
+        travelHereButton.setOnClickListener{
+            togglePopup()
+            Log.d("GO_HERE", "Går inn og logger")
+            val current_location = kartViewModel.getLocation()
+            val origin_lat = current_location.value?.latitude
+            val origin_lon = current_location.value?.longitude
+
+            Log.d("GO_HERE", origin_lat.toString())
+            Log.d("GO_HERE", origin_lon.toString())
+
+            val destination_lat = marker?.position?.latitude
+            val destination_lon = marker?.position?.longitude
+
+            Log.d("GO_HERE", destination_lat.toString())
+            Log.d("GO_HERE", destination_lon.toString())
+
+            kartViewModel.findRoute(origin_lat, origin_lon, destination_lat, destination_lon)
+
         }
 
         // ===== INITALISER - API-kall, konfigurasjon ++ =====
