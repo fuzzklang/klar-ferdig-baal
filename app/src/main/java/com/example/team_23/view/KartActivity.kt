@@ -58,8 +58,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var levelsPopupCloseBtn: ImageButton
     private var levelsPopupSynlig = true
     // ----- Bonfire -----
-    private var showBonfireMarkers = true
-    private lateinit var menuCampfireButton: Button
+    private var menuCampfireButtonIsChecked = true  // Erstatt med direkte aksess til Switch
+    private val ZOOM_LEVEL_SHOW_CAMPFIRES = 8.5
+    private lateinit var menuCampfireButton: ToggleButton
     private lateinit var bonfireSpots: List<Bonfire>
     private lateinit var bonfireMarkers: MutableList<Marker>
     // ----- Overlay (Alerts) -----
@@ -90,7 +91,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         menu = findViewById<View>(R.id.menu)
         menuButton = findViewById<ImageButton>(R.id.menuButton)
         val rulesActivityBtn = findViewById<Button>(R.id.menuRulesButton)  // Knapp som sender bruker til reglene
-        menuCampfireButton = findViewById<Button>(R.id.menuCampfireButton)
+        menuCampfireButton = findViewById<ToggleButton>(R.id.menuCampfireButton)
         // ----- Info-boks -----
         infoButton = findViewById<Button>(R.id.menuInfoButton)
         infoCloseButton = findViewById<ImageButton>(R.id.infoboxCloseButton)
@@ -209,7 +210,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // -- Bålplasser --
         bonfireMarkers = mutableListOf()  // Liste som holder på markørene
-        showBonfireMarkers = true
       
         // -- Overlay --
         overlayVisible = true
@@ -239,7 +239,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         })
 
         // ===== ON CLICK LISTENERS =====
-        menuCampfireButton.setOnClickListener { toggleBonfires() }
+        menuCampfireButton.setOnCheckedChangeListener {_, isChecked -> toggleBonfires(isChecked) }
         menuOverlayBtn.setOnCheckedChangeListener { _, isChecked -> toggleOverlay(isChecked) }
 
         mMap.setOnCameraIdleListener { toogleCampfireZoomVisibility() }
@@ -376,9 +376,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         levelsPopupSynlig = !levelsPopupSynlig
     }
 
-    private fun toggleBonfires() {
-        showBonfireMarkers = !showBonfireMarkers
-        bonfireMarkers.forEach {it.isVisible = showBonfireMarkers}
+    private fun toggleBonfires(isChecked: Boolean) {
+        menuCampfireButtonIsChecked = isChecked
+        bonfireMarkers.forEach {it.isVisible = isChecked}
     }
 
     private fun toggleOverlay(isChecked: Boolean) {
@@ -390,9 +390,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     * Metode som kalles ved oppstart og henter lagret konfigurasjon (tilstand) og setter variabler deretter.
     * (eks: skal overlay og bålplasser vises?)
     */
-    private fun setUpUi() {
+    /*private fun setUpUi() {
         TODO("Implementer senere dersom vi får på plass lagring av tilstand")
-    }
+    }*/
 
     /* Hjelpemetode som kalles når "MyLocation"-knapp (i kart) trykkes på */
     private fun myLocationButtonOnClickMethod() {
@@ -458,11 +458,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun toogleCampfireZoomVisibility() {
         //viser kun baalikoner etter et angitt zoom-nivaa
         val zoom = this.mMap.cameraPosition.zoom
-        if (zoom > 8.5) {
-            showBonfireMarkers = true
-        } else {
-            showBonfireMarkers = false
-        }
-        bonfireMarkers.forEach { it.isVisible = showBonfireMarkers }
+        if (zoom > ZOOM_LEVEL_SHOW_CAMPFIRES && menuCampfireButtonIsChecked)
+            bonfireMarkers.forEach { it.isVisible = true }  // Vis bålplasser dersom Zoom langt inne nok og visning av bålplasser aktivert
+        else
+            bonfireMarkers.forEach { it.isVisible = false }
     }
 }
