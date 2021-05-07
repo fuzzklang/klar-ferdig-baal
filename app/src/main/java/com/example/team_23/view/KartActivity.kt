@@ -48,11 +48,11 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     // ----- Meny -----
     private lateinit var menu: View
     private lateinit var menuButton: ImageButton
-    private var menuSynlig = false
+    private var menuVisible = false
     // ----- Alert Popup-box -----
     private lateinit var popup: View
     private lateinit var popupCloseButton: ImageButton
-    private var popupSynlig = false
+    private var popupVisible = false
     // ----- Alert Levels Description -----
     private lateinit var alertLevelsDescButton: Button
     private lateinit var alertLevelsDescPopup: View
@@ -98,8 +98,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         infoCloseButton = findViewById<ImageButton>(R.id.infoboxCloseButton)
         info = findViewById<View>(R.id.infoBox)
 
-        // ----- Popup-boks -----
-        // (varselvisning?)
+        // ----- Alert Popup-boks -----
         popup = findViewById<View>(R.id.popup)
         popupCloseButton = findViewById<ImageButton>(R.id.popupAlertCloseButton)
         val warningArea = findViewById<TextView>(R.id.popupAlertArea)
@@ -122,10 +121,10 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         rulesActivityBtn.setOnClickListener{
             val intent = Intent(this,RegelView::class.java)
             startActivity(intent)
-            if(menuSynlig){
+            if(menuVisible){
                 menu.visibility = View.GONE
                 menuButton.background = resources.getDrawable(R.drawable.menubutton,theme)
-                menuSynlig = !menuSynlig
+                menuVisible = !menuVisible
             }
         }
 
@@ -213,6 +212,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // ===== VARIABLER =====
         // ----- Kart -----
         mMap = googleMap
+        // Setter padding på toppen til kartet slik at kartet ikke havner bak den øverste fanen i appen.
         mMap.setPadding(0, 2000, 0, 0)
 
         // -- Bålplasser --
@@ -326,33 +326,33 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         } else {
             info.visibility = View.VISIBLE
             mMap.uiSettings.isScrollGesturesEnabled = false
-            if(menuSynlig){
+            if(menuVisible){
                 menu.visibility = View.GONE
                 menuButton.background = ResourcesCompat.getDrawable(resources, R.drawable.menubutton,theme)
-                menuSynlig = !menuSynlig
+                menuVisible = !menuVisible
             }
         }
         infoSynlig = !infoSynlig
     }
 
     private fun togglePopup(){
-        if (popupSynlig) {
+        if (popupVisible) {
             popup.visibility = View.GONE
             mMap.uiSettings.isScrollGesturesEnabled = true
         } else {
             popup.visibility = View.VISIBLE
             mMap.uiSettings.isScrollGesturesEnabled = false
-            if(menuSynlig) {
+            if(menuVisible) {
                 menu.visibility = View.GONE
                 menuButton.background = ResourcesCompat.getDrawable(resources, R.drawable.menubutton,theme)
-                menuSynlig = !menuSynlig
+                menuVisible = !menuVisible
             }
         }
-        popupSynlig = !popupSynlig
+        popupVisible = !popupVisible
     }
 
     private fun toggleMenu() {
-        if(menuSynlig) {
+        if(menuVisible) {
             menu.visibility = View.GONE
             mMap.uiSettings.isScrollGesturesEnabled = true
             menuButton.background = ResourcesCompat.getDrawable(resources, R.drawable.menubutton,theme)
@@ -363,11 +363,11 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             if(infoSynlig) {
                 toggleInfo()
             }
-            if(popupSynlig) {
+            if(popupVisible) {
                 togglePopup()
             }
         }
-        menuSynlig = !menuSynlig
+        menuVisible = !menuVisible
     }
 
     private fun toggleLevelsPopup() {
