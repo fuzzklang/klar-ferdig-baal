@@ -82,8 +82,18 @@ class TestAlert {
         assertEquals(expected, testAlert.getPolygon())
     }
 
+
+    /*
+    * ===== GET ALERT COLOR =====
+    * Testene under tester at Alert.getAlert returnerer forventet farevarsel-farge.
+    * Fargene (YELLOW, ORANGE, RED, UNKNOWN) er definert i AlertColors (en enum class).
+    * Farge for varsel beregnes ut ifra en kombinasjon av severity og certainty
+    * beskrevet på met.no: https://www.met.no/vaer-og-klima/ekstremvaervarsler-og-andre-farevarsler/faregradering-i-farger
+    */
     @Test
     fun testGetAlertColorObservedModerate() {
+        // Forventer at
+        // severity: moderate + certainty: observed -> gult farevarsel
         val area = Area(null, null)
         val infoItem = Info(null, null, null, "Moderate", "Observed", null, area)
         val testAlert = Alert(null, null, null, null, infoItem, infoItem)
@@ -92,6 +102,8 @@ class TestAlert {
 
     @Test
     fun testGetAlertColorObservedSevere() {
+        // Forventer at
+        // severity: severe + certainty: observed -> oransje farevarsel
         val area = Area(null, null)
         val infoItem = Info(null, null, null, "Severe", "Observed", null, area)
         val testAlert = Alert(null, null, null, null, infoItem, infoItem)
@@ -100,6 +112,8 @@ class TestAlert {
 
     @Test
     fun testGetAlertColorObservedExtreme() {
+        // Forventer at
+        // severity: extreme + certainty: observed -> rødt farevarsel
         val area = Area(null, null)
         val infoItem = Info(null, null, null, "Extreme", "Observed", null, area)
         val testAlert = Alert(null, null, null, null, infoItem, infoItem)
@@ -108,6 +122,8 @@ class TestAlert {
 
     @Test
     fun testGetAlertColorLikelyModerate() {
+        // Forventer at
+        // severity: moderate + certainty: likely -> gult farevarsel
         val area = Area(null, null)
         val infoItem = Info(null, null, null, "Moderate", "Likely", null, area)
         val testAlert = Alert(null, null, null, null, infoItem, infoItem)
@@ -116,6 +132,8 @@ class TestAlert {
 
     @Test
     fun testGetAlertColorLikelySevere() {
+        // Forventer at
+        // severity: severe + certainty: likely -> oransje farevarsel
         val area = Area(null, null)
         val infoItem = Info(null, null, null, "Severe", "Likely", null, area)
         val testAlert = Alert(null, null, null, null, infoItem, infoItem)
@@ -124,6 +142,8 @@ class TestAlert {
 
     @Test
     fun testGetAlertColorLikelyExtreme() {
+        // Forventer at
+        // severity: extreme + certainty: likely -> rødt farevarsel
         val area = Area(null, null)
         val infoItem = Info(null, null, null, "Extreme", "Likely", null, area)
         val testAlert = Alert(null, null, null, null, infoItem, infoItem)
@@ -132,6 +152,8 @@ class TestAlert {
 
     @Test
     fun testGetAlertColorPossibleModerate() {
+        // Forventer at
+        // severity: moderate + certainty: possible -> ikke gir farevarsel (returnerer UNKNOWN-type)
         val area = Area(null, null)
         val infoItem = Info(null, null, null, "Moderate", "Possible", null, area)
         val testAlert = Alert(null, null, null, null, infoItem, infoItem)
@@ -140,6 +162,8 @@ class TestAlert {
 
     @Test
     fun testGetAlertColorPossibleSevere() {
+        // Forventer at
+        // severity: severe + certainty: possible -> gult farevarsel
         val area = Area(null, null)
         val infoItem = Info(null, null, null, "Severe", "Possible", null, area)
         val testAlert = Alert(null, null, null, null, infoItem, infoItem)
@@ -148,6 +172,8 @@ class TestAlert {
 
     @Test
     fun testGetAlertColorPossibleExtreme() {
+        // Forventer at
+        // severity: extreme + certainty: possible -> oransje farevarsel
         val area = Area(null, null)
         val infoItem = Info(null, null, null, "Extreme", "Possible", null, area)
         val testAlert = Alert(null, null, null, null, infoItem, infoItem)
@@ -156,6 +182,8 @@ class TestAlert {
 
     @Test
     fun testGetAlertColorUnlikelyModerate() {
+        // Forventer at
+        // severity: moderate + certainty: unlikely -> ikke gir farevarsel (returnerer UNKNOWN-type)
         val area = Area(null, null)
         val infoItem = Info(null, null, null, "Moderate", "Unlikely", null, area)
         val testAlert = Alert(null, null, null, null, infoItem, infoItem)
@@ -164,6 +192,8 @@ class TestAlert {
 
     @Test
     fun testGetAlertColorUnlikelySevere() {
+        // Forventer at
+        // severity: severe + certainty: unlikely -> ikke gir farevarsel (returnerer UNKNOWN-type)
         val area = Area(null, null)
         val infoItem = Info(null, null, null, "Severe", "Unlikely", null, area)
         val testAlert = Alert(null, null, null, null, infoItem, infoItem)
@@ -172,6 +202,8 @@ class TestAlert {
 
     @Test
     fun testGetAlertColorUnlikelyExtreme() {
+        // Forventer at
+        // severity: extreme + certainty: unlikely -> gult farevarsel
         val area = Area(null, null)
         val infoItem = Info(null, null, null, "Extreme", "Unlikely", null, area)
         val testAlert = Alert(null, null, null, null, infoItem, infoItem)
@@ -180,7 +212,8 @@ class TestAlert {
 
     @Test
     fun testGetAlertInvalidCertainty() {
-        // Ugyldige beskrivelse i certainty. Forventer UNKNOWN
+        // Ugyldige beskrivelse i certainty.
+        // Forventer UNKNOWN. Heller kaste Exception?
         val area = Area(null, null)
         val infoItem = Info(null, null, null, "Moderate", "invalidValue", null, area)
         val testAlert = Alert(null, null, null, null, infoItem, infoItem)
@@ -189,7 +222,8 @@ class TestAlert {
 
     @Test
     fun testGetAlertInvalidSeverity() {
-        // Ugyldige beskrivelse i severity. Forventer UNKNOWN
+        // Ugyldige beskrivelse i severity.
+        // Forventer UNKNOWN. Heller kaste Exception?
         val area = Area(null, null)
         val infoItem = Info(null, null, null, "invalidValue", "Unlikely", null, area)
         val testAlert = Alert(null, null, null, null, infoItem, infoItem)
@@ -198,7 +232,8 @@ class TestAlert {
 
     @Test
     fun testGetAlertEmptySeverityAndEmptyCertainty() {
-        // Både severity og certainty er tomme strenger. Forventer UNKNOWN
+        // Både severity og certainty er tomme strenger.
+        // Forventer UNKNOWN. Heller kaste exception?
         val area = Area(null, null)
         val infoItem = Info(null, null, null, "", "", null, area)
         val testAlert = Alert(null, null, null, null, infoItem, infoItem)
@@ -207,7 +242,8 @@ class TestAlert {
 
     @Test
     fun testGetAlertNullValues() {
-        // Dersom verdiene er null returneres UNKNOWN. Kan muligens lede til feil, følg med.
+        // Dersom verdiene er null returneres UNKNOWN.
+        // Kan muligens lede til feil, følg med. Bør istedenfor en Exception kastes?
         val area = Area(null, null)
         val infoItem = Info(null, null, null, null, null, null, area)
         val testAlert = Alert(null, null, null, null, infoItem, infoItem)
