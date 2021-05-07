@@ -182,7 +182,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                         background = resources.getDrawable(R.drawable.orangewarning,theme)  // TODO: hent rød varsel fra Githuben til YR!
                         Log.w(tag, "Returnert alertColor er RED. Ikke forventet. Fortsetter kjøring.")
                     }
-                    AlertColors.UNKOWN -> {
+                    AlertColors.UNKNOWN -> {
                         Log.w(tag, "Returnert alertColor er Unkown.")
                         warningText = "?"
                         background = resources.getDrawable(R.drawable.orangewarning,theme)  // TODO: bruk et '?'-symbol?
@@ -428,7 +428,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 AlertColors.YELLOW -> getColor(R.color.alertYellowTransparent)
                 AlertColors.ORANGE -> getColor(R.color.alertOrangeTransparent)
                 AlertColors.RED    -> getColor(R.color.alertRedTransparent)
-                AlertColors.UNKOWN -> {getColor(R.color.grey); Log.w(tag, "En feil har oppstått! Ukjent farge/nivå for varsel!")}
+                AlertColors.UNKNOWN -> {getColor(R.color.grey); Log.w(tag, "En feil har oppstått! Ukjent farge/nivå for varsel!")}
             }
             val polygonOptions = PolygonOptions()
                     .addAll(latLngList)
