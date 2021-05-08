@@ -104,7 +104,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:text="Informasjon"
+                android:text="@string/informasjon"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toTopOf="@+id/menuInfoButton"
@@ -121,7 +121,7 @@
                 android:backgroundTint="@color/grey"
                 android:contentDescription="@string/info_button"
                 android:scaleType="fitCenter"
-                android:text="Info"
+                android:text="@string/info"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toTopOf="@+id/menuRulesButton"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -137,7 +137,7 @@
                 android:layout_marginTop="20dp"
                 android:backgroundTint="@color/grey"
                 android:contentDescription="@string/rules"
-                android:text="Regler"
+                android:text="@string/regler"
                 android:layout_marginBottom="20dp"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toTopOf="@+id/menuMapFunctionsSectionTitle"
@@ -151,7 +151,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:text="Kartfunksjoner"
+                android:text="@string/kartfunksjoner"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toTopOf="@+id/menuOverlayButton"
@@ -169,8 +169,8 @@
                 android:contentDescription="@string/overlay_button"
                 android:scaleType="fitCenter"
                 android:textColor="@color/black"
-                android:textOff="Overlay (AV)"
-                android:textOn="Overlay (PÅ)"
+                android:textOff="@string/overlay_av"
+                android:textOn="@string/overlay_paa"
                 app:layout_constraintBottom_toTopOf="@+id/menuCampfireButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -183,8 +183,8 @@
                 android:layout_height="40dp"
                 android:layout_marginTop="20dp"
                 android:backgroundTint="@color/grey"
-                android:textOff="Skjul Bålplasser"
-                android:textOn="Vis Bålplasser"
+                android:textOff="@string/skjul_baalplasser"
+                android:textOn="@string/vis_baalplasser"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.488"
@@ -467,7 +467,7 @@
                 android:id="@+id/popupDraHitButtonIcon"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginEnd="10dp"
                 android:layout_marginTop="1dp"
                 android:background="@null"
                 android:scaleType="fitCenter"
@@ -548,12 +548,12 @@
                 android:layout_height="391dp"
                 android:layout_marginTop="80dp"
                 android:background="@drawable/shape"
-                android:contentDescription="TODO"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.416" />
+                app:layout_constraintVertical_bias="0.416"
+                tools:ignore="ContentDescription" />
 
             <ImageView
                 android:id="@+id/levelsDescBackground"
@@ -567,7 +567,8 @@
                 app:layout_constraintHorizontal_bias="0.522"
                 app:layout_constraintStart_toStartOf="@+id/levelsDescShape"
                 app:layout_constraintTop_toTopOf="@+id/levelsDescShape"
-                app:layout_constraintVertical_bias="0.817" />
+                app:layout_constraintVertical_bias="0.817"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:id="@+id/levelsDescTitle"
@@ -591,7 +592,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="260dp"
                 android:gravity="center"
-                android:text="Moderat skogbrannfare"
+                android:text="@string/moderat_skogbrannfare"
                 android:textColor="@color/black"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="@id/levelsDescBackground"
@@ -608,7 +609,8 @@
                 app:layout_constraintEnd_toEndOf="@id/levelsDescBackground"
                 app:layout_constraintStart_toStartOf="@id/levelsDescBackground"
                 app:layout_constraintTop_toBottomOf="@id/levelsDescModerateTitle"
-                app:srcCompat="@drawable/yellowwarning" />
+                app:srcCompat="@drawable/yellowwarning"
+                android:contentDescription="@string/moderat_skogbrannfare_ikon" />
 
             <TextView
                 android:id="@+id/levelsDescModerateContent"
@@ -630,7 +632,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:gravity="center"
-                android:text="Betydelig skogbrannfare"
+                android:text="@string/betydelig_skogbrannfare"
                 android:textColor="@color/black"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="@id/levelsDescBackground"
@@ -645,7 +647,8 @@
                 app:layout_constraintEnd_toEndOf="@id/levelsDescBackground"
                 app:layout_constraintStart_toStartOf="@id/levelsDescBackground"
                 app:layout_constraintTop_toBottomOf="@id/levelsDescSevereTitle"
-                app:srcCompat="@drawable/orangewarning" />
+                app:srcCompat="@drawable/orangewarning"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:id="@+id/levelsDescSevereContent"
