@@ -7,14 +7,17 @@ import androidx.lifecycle.MutableLiveData
 import com.example.team_23.model.api.ApiServiceImpl
 import com.example.team_23.model.api.CapParser
 import com.example.team_23.model.api.MetAlertsRssParser
-import com.example.team_23.model.api.map_dataclasses.Base
-import com.example.team_23.model.api.map_dataclasses.Routes
-import com.example.team_23.model.api.metalerts_dataclasses.Alert
-import com.example.team_23.model.api.metalerts_dataclasses.RssItem
+import com.example.team_23.model.dataclasses.Base
+import com.example.team_23.model.dataclasses.Campfire
+import com.example.team_23.model.dataclasses.Routes
+import com.example.team_23.model.dataclasses.metalerts_dataclasses.Alert
+import com.example.team_23.model.dataclasses.metalerts_dataclasses.RssItem
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
+import java.util.*
 
 class MainRepository(private val apiService: ApiServiceImpl, private val fusedLocationProviderClient: FusedLocationProviderClient) {
     private val tag = "MainRepository"
@@ -51,8 +54,11 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
     suspend fun getRssFeed(lat: Double?, lon: Double?) : List<RssItem>? {
         val options = permanentOptions.toMutableList()
         if (lat != null && lon != null) {
-            options.add("lat=%.2f".format(lat))
-            options.add("lon=%.2f".format(lon))
+            // For å sikre at desimaltall skrives med punktum (og ikke komma) brukes Locale.US.
+            // kotlin.format bruker enhetens Locale som default. F.eks. ble desimaltall skrevet med
+            // komma når systemspråk er norsk. Førte til feil i API-kall.
+            options.add("lat=%.2f".format(Locale.US, lat))
+            options.add("lon=%.2f".format(Locale.US, lon))
         }
         // Kast IO Exception dersom API-kall feiler. Usikker på om dette er ideellt, men en iaf
         // midlertidig løsning for å sikre at httpResponse er initialisert.
@@ -94,20 +100,43 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
     * Den kaster bare en SecurityException dersom f.eks. bruker har avslått lokasjonstilgang ("permission")
     * @returns LiveData<Location>
     */
-    fun getLocation(): LiveData<Location> {
+    @Throws(SecurityException::class)
+    fun getLocation(): LiveData<Location?> {
         Log.d(tag, "getLocation ble kalt")
         val liveDataLocation = MutableLiveData<Location>()
         try {
             val locationTask = fusedLocationProviderClient.lastLocation
             locationTask.addOnSuccessListener {
-                Log.d(tag,"getLocation: onSuccessListener ${it.latitude}, ${it.longitude}")
+                // Resultat ("it") kan være null dersom system ikke har informasjon om nåværende lokasjon.
+                if (it == null) {
+                    Log.d(tag, "getLocation: onSuccessListener. Resultat (Location) er null.")
+                } else {
+                    Log.d(tag,"getLocation: onSuccessListener. Resultat: ${it.latitude}, ${it.longitude}")
+                }
                 liveDataLocation.postValue(it)
-            }.addOnCompleteListener {
-                Log.d(tag,"getLocation: task completed! Result: ${it.result}")
             }
         } catch (ex: SecurityException) {
             Log.w("MainRepo.getLocation", "Error when getting location")
         }
         return liveDataLocation
+    }
+
+    /* Parser JSON-filen med bålplasser og returnerer en liste med HashMaps.
+    * TODO: gjøre om til asynkront Coroutine-kall (pga. fillesning)?
+    */
+    fun getCampfireSpots(): List<Campfire> {
+        // Gjør det slik som dette for å unngå å gi Context som parameter.
+        // Men usikker på om dette får utilsiktede konsekvenser.
+        val file = "res/raw/campfire_spots.json"
+        val bonfireSpotsStream = this.javaClass.classLoader?.getResourceAsStream(file)
+        val jsonString = bonfireSpotsStream?.bufferedReader()?.readText()
+        bonfireSpotsStream?.close()
+        Log.d(tag, "getBonfireSpots: henter bålplassoversikt fra res/raw. Returnert jsonString er ikke null eller tom: ${! jsonString.isNullOrEmpty()}")
+        /* Parse json-streng til bålplass-objekter */
+        val bType = object: TypeToken<List<Campfire>>() {}.type
+        var bonfireList = mutableListOf<Campfire>()
+        if (jsonString != null)
+            bonfireList = gson.fromJson(jsonString, bType)
+        return bonfireList
     }
 }
