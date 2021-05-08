@@ -168,27 +168,33 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 val alertColorLever = alert.getAlertColor()
                 val warningText: String
                 val background: Drawable
+                val colorLevel : Drawable
                 // TODO: tekst burde hentes fra resources
                 when (alertColorLever) {
                     AlertColors.YELLOW -> {
                         warningText = "Moderat skogbrannfare"
-                        background = resources.getDrawable(R.drawable.yellowwarning,theme)}
+                        background = resources.getDrawable(R.drawable.yellowwarning,theme)
+                        colorLevel = resources.getDrawable(R.color.alertYellow, theme)}
                     AlertColors.ORANGE -> {
                         warningText = "Betydelig skogbrannfare"
-                        background = resources.getDrawable(R.drawable.orangewarning,theme)}
+                        background = resources.getDrawable(R.drawable.orangewarning,theme)
+                        colorLevel = resources.getDrawable(R.color.alertOrange, theme)}
                     AlertColors.RED    -> {
                         warningText = "Moderat skogbrannfare"
                         background = resources.getDrawable(R.drawable.orangewarning,theme)  // TODO: hent rød varsel fra Githuben til YR!
+                        colorLevel = resources.getDrawable(R.color.alertRed, theme)
                         Log.w(tag, "Returnert alertColor er RED. Ikke forventet. Fortsetter kjøring.")
                     }
                     AlertColors.UNKOWN -> {
                         Log.w(tag, "Returnert alertColor er Unkown.")
                         warningText = "?"
+                        colorLevel = resources.getDrawable(R.color.black, theme)
                         background = resources.getDrawable(R.drawable.orangewarning,theme)  // TODO: bruk et '?'-symbol?
                     }
                 }
                 warningLevel.text = warningText
-                warningLevelColor.background = background
+                warningLevelImg.background = background
+                warningLevelColor.background = colorLevel
                 togglePopup()  // TODO: endre toggling til 'showPopup'.
             } else {
                 // Ingen varsel (alert er null)
