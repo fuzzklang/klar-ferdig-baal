@@ -189,7 +189,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                         Log.w(tag, "Returnert alertColor er Unkown.")
                         warningText = "?"
                         colorLevel = resources.getDrawable(R.color.black, theme)
-                        background = resources.getDrawable(R.drawable.orangewarning,theme)  // TODO: bruk et '?'-symbol?
+                        background = resources.getDrawable(R.drawable.nivaaer,theme)
                     }
                 }
                 warningLevel.text = warningText
