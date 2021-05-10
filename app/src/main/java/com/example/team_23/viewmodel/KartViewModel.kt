@@ -21,8 +21,8 @@ import kotlinx.coroutines.withContext
 class KartViewModel(private val repo: MainRepository): ViewModel() {
     /* MutableLiveDataen er privat slik at ikke andre klasser utilsiktet kan endre innholdet */
     private val _allAlerts = MutableLiveData<MutableList<Alert>>()   // Liste med alle skogbrannfarevarsler utstedt av MetAlerts
-    var _routes = mutableListOf<Routes>()                            // Liste med responsen fra api-kall til Directions API
-    val _path = MutableLiveData<MutableList<List<LatLng>>>()         // Liste som inneholder polyline-punktene fra routes (sørg for at hele tiden samsvarer med 'routes')
+    private var _routes = mutableListOf<Routes>()                            // Liste med responsen fra api-kall til Directions API
+    private val _path = MutableLiveData<MutableList<List<LatLng>>>()         // Liste som inneholder polyline-punktene fra routes (sørg for at hele tiden samsvarer med 'routes')
     private var _location = MutableLiveData<Location?>()             // Enhetens lokasjon (GPS)
     private var _alertAtPosition = MutableLiveData<Alert?>()         // Varsel for angitt sted.
 
@@ -129,16 +129,16 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
     private fun getPolylinePoints(routes: List<Routes>?): MutableList<List<LatLng>> {
         // tmpPathList: Brukt for å konstruere hele polyline-listen, før LiveDataen oppdateres med den komplette listen.
         val tmpPathList = mutableListOf<List<LatLng>>()
-        val TAG = "Polyline Points"
-        Log.d(TAG, "Antall routes: ${routes?.size}")
+        val tag = "Polyline Points"
+        Log.d(tag, "Antall routes: ${routes?.size}")
         if (routes != null) {
             for (route in routes) {  // Sårbart for bugs, mutable data kan ha blitt endret.
                 val legs = route.legs
-                Log.d(TAG, "Antall legs (i route.legs): ${legs?.size}")
+                Log.d(tag, "Antall legs (i route.legs): ${legs?.size}")
                 if (legs != null) {
                     for (leg in legs) {
                         val steps = leg.steps
-                        Log.d(TAG, "Antall steps (i leg.steps): ${steps?.size}")
+                        Log.d(tag, "Antall steps (i leg.steps): ${steps?.size}")
                         if (steps != null) {
                             for (step in steps) {
                                 val points = step.polyline?.points
