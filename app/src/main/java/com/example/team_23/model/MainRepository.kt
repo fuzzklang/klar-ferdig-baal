@@ -32,6 +32,7 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
     private val mapsUrl = "https://maps.googleapis.com/maps/api/directions/json?origin=59.911491,10.757933&destination=59.26754,10.40762&key=AIzaSyAyK0NkgPMxOOTnWR5EFKdy2DzfDXGh-HI"  // Hardkodet for testing. TODO: noe som skal oppdateres?
     private val directionsURL_origin = "https://maps.googleapis.com/maps/api/directions/json?origin="
     private val directionsURL_destination = "&destination="
+    private val mode = "&mode=walking"
     private val directionsURL_key = "&key=AIzaSyAyK0NkgPMxOOTnWR5EFKdy2DzfDXGh-HI"
     private val gson = Gson()
     var routes: List<Routes>? = null
@@ -40,7 +41,7 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
     suspend fun getRoutes(origin_lat : Double?, origin_lon : Double?, destination_lat : Double?, destination_lon : Double?): List<Routes>? {
 
         Log.d(tag, "Henter ruter fra Google!")
-        val direction_path = "${directionsURL_origin}${origin_lat},${origin_lon}${directionsURL_destination}${destination_lat},${destination_lon}${directionsURL_key}"
+        val direction_path = "${directionsURL_origin}${origin_lat},${origin_lon}${directionsURL_destination}${destination_lat},${destination_lon}${mode}${directionsURL_key}"
         try {
             val httpResponse = apiService.fetchData(direction_path)
             if (httpResponse != null)  Log.d(tag, "Fikk respons fra Directions API")
