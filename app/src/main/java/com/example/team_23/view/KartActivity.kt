@@ -254,6 +254,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 val polyline = this.mMap.addPolyline(polylineOptions)
                 travelPolylineList.add(polyline)
                 Log.d("travelPolylineList", polyline.toString())
+                Log.d("travelHereButton", "Tegnet rute")
 
             }
         })
@@ -297,17 +298,16 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                     val origin_lat = it?.latitude
                     val origin_lon = it?.longitude
 
-                    Log.d("GO_HERE", origin_lat.toString())
-                    Log.d("GO_HERE", origin_lon.toString())
+                    Log.d("GO_HERE_current", origin_lat.toString())
+                    Log.d("GO_HERE_current", origin_lon.toString())
 
                     val destination_lat = marker?.position?.latitude
                     val destination_lon = marker?.position?.longitude
 
-                    Log.d("GO_HERE", destination_lat.toString())
-                    Log.d("GO_HERE", destination_lon.toString())
+                    Log.d("GO_HERE_marker", destination_lat.toString())
+                    Log.d("GO_HERE_marker", destination_lon.toString())
 
                     kartViewModel.findRoute(origin_lat, origin_lon, destination_lat, destination_lon)
-                    Log.d("travelHereButton", "Tegnet rute")
                 })
 
             }
