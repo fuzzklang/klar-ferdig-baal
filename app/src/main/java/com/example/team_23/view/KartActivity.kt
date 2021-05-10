@@ -293,6 +293,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 val current_location = kartViewModel.getLocation()
 
                 current_location.observe(this, {
+                    Log.d("testLog", "Inni her")
                     val origin_lat = it?.latitude
                     val origin_lon = it?.longitude
 
