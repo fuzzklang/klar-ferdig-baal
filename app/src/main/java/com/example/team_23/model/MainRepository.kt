@@ -46,7 +46,7 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
             if (httpResponse != null)  Log.d(tag, "Fikk respons fra Directions API")
             val response = gson.fromJson(httpResponse, Base::class.java)
             routes = response.routes
-        } catch (exception: Exception) {
+        } catch (exception: IOException) {
             Log.w(tag, "Feil under henting av rute: ${exception.message}")
         }
         return routes
