@@ -21,7 +21,7 @@ import kotlinx.coroutines.withContext
 class KartViewModel(private val repo: MainRepository): ViewModel() {
     /* MutableLiveDataen er privat slik at ikke andre klasser utilsiktet kan endre innholdet */
     private val _allAlerts = MutableLiveData<MutableList<Alert>>()   // Liste med alle skogbrannfarevarsler utstedt av MetAlerts
-    val _routes = MutableLiveData<List<Routes>>()                    // Liste med responsen fra api-kall til Directions API
+    var _routes = mutableListOf<Routes>()                 // Liste med responsen fra api-kall til Directions API
     val _path = MutableLiveData<MutableList<List<LatLng>>>()         // Liste som inneholder polyline-punktene fra routes (sørg for at hele tiden samsvarer med 'routes')
     private var _location = MutableLiveData<Location?>()             // Enhetens lokasjon (GPS)
     private var _alertAtPosition = MutableLiveData<Alert?>()         // Varsel for angitt sted.
@@ -77,8 +77,8 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
             val routesFromApi = repo.getRoutes(origin_lat, origin_lon, destination_lat, destination_lon)
             Log.d("KartViewModel.findRoute", routesFromApi.toString())
             if (routesFromApi != null) {
-                _routes.postValue(routesFromApi)                 // Oppdater routes (hentet fra API)
-                _path.postValue(getPolylinePoints(_routes.value)) // Oppdater _path (lat/lng-punkter) basert på ny rute
+                _routes = routesFromApi as MutableList<Routes>              // Oppdater routes (hentet fra API)
+                _path.postValue(getPolylinePoints(_routes)) // Oppdater _path (lat/lng-punkter) basert på ny rute
                 Log.d("KartViewModel.findRoute", "Path oppdatert")
             }
         }
