@@ -489,18 +489,18 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             val current_location = kartViewModel.getLocation()
             current_location.observe(this, {
                 Log.d(tag, "getAndShowDirections: endring observert i lokasjon")
-                val origin_lat = it?.latitude
-                val origin_lon = it?.longitude
-                val destination_lat = marker?.position?.latitude
-                val destination_lon = marker?.position?.longitude
-                Log.d(tag, "getAndShowDirections: origin_lat: $origin_lat, origin_lon: $origin_lon, destination_lat: $destination_lat, destination_lon: $destination_lon")
-                if (origin_lat == null || origin_lon == null || destination_lat == null || destination_lon == null) {
+                val originLat = it?.latitude
+                val originLon = it?.longitude
+                val destinationLat = marker?.position?.latitude
+                val destinationLon = marker?.position?.longitude
+                Log.d(tag, "getAndShowDirections: originLat: $originLat, originLon: $originLon, destinationLat: $destinationLat, destinationLon: $destinationLon")
+                if (originLat == null || originLon == null || destinationLat == null || destinationLon == null) {
                     Log.w(tag,"getAndShowDirections: minst en av posisjonsverdiene er null. Kan ikke hente Directions")
                     Toast.makeText(this, "Feil: mangler posisjon", Toast.LENGTH_SHORT).show()
                 } else {
                     // Har tilgang til alle posisjoner: hent rute
                     Log.d(tag, "getAndShowDirections: kaller på kartViewModel.findRoute()")
-                    kartViewModel.findRoute(origin_lat, origin_lon, destination_lat, destination_lon)
+                    kartViewModel.findRoute(originLat, originLon, destinationLat, destinationLon)
                 }
             })
         }
