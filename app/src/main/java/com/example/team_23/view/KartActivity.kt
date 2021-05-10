@@ -253,6 +253,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 val polylineOptions = PolylineOptions().addAll(paths[i]).color(Color.RED)
                 val polyline = this.mMap.addPolyline(polylineOptions)
                 travelPolylineList.add(polyline)
+                Log.d("travelPolylineList", polyline.toString())
 
             }
         })
@@ -279,6 +280,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             true
         }
 
+        //Ved klikk på "Dra hit"-knappen (i popup-menyen):
         travelHereButton.setOnClickListener{
             travelPolylineList.forEach{it.remove()}
             travelPolylineList.clear()
@@ -304,10 +306,10 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                     Log.d("GO_HERE", destination_lon.toString())
 
                     kartViewModel.findRoute(origin_lat, origin_lon, destination_lat, destination_lon)
+                    Log.d("travelHereButton", "Tegnet rute")
                 })
 
             }
-
         }
 
         // ===== INITALISER - API-kall, konfigurasjon ++ =====

@@ -75,6 +75,7 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
         // Kaller på Directions API fra Google (via Repository) og oppdaterer routes-LiveData
         CoroutineScope(Dispatchers.Default).launch {
             val routesFromApi = repo.getRoutes(origin_lat, origin_lon, destination_lat, destination_lon)
+            Log.d("KartViewModel.findRoute", routesFromApi.toString())
             if (routesFromApi != null) {
                 _routes.postValue(routesFromApi)                 // Oppdater routes (hentet fra API)
                 _path.postValue(getPolylinePoints(_routes.value)) // Oppdater _path (lat/lng-punkter) basert på ny rute
