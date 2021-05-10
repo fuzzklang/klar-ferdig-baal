@@ -21,7 +21,7 @@ import kotlinx.coroutines.withContext
 class KartViewModel(private val repo: MainRepository): ViewModel() {
     /* MutableLiveDataen er privat slik at ikke andre klasser utilsiktet kan endre innholdet */
     private val _allAlerts = MutableLiveData<MutableList<Alert>>()   // Liste med alle skogbrannfarevarsler utstedt av MetAlerts
-    var _routes = mutableListOf<Routes>()                 // Liste med responsen fra api-kall til Directions API
+    var _routes = mutableListOf<Routes>()                            // Liste med responsen fra api-kall til Directions API
     val _path = MutableLiveData<MutableList<List<LatLng>>>()         // Liste som inneholder polyline-punktene fra routes (sørg for at hele tiden samsvarer med 'routes')
     private var _location = MutableLiveData<Location?>()             // Enhetens lokasjon (GPS)
     private var _alertAtPosition = MutableLiveData<Alert?>()         // Varsel for angitt sted.
