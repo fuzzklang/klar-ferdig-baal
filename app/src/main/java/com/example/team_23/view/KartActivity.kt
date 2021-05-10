@@ -247,17 +247,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         })
 
         // Observer path-livedata (i fra KartViewModel), tegn polyline ved oppdatering.
-        kartViewModel.path.observe(this, { paths ->
-            //går gjennom punktene i polyline for å skrive det ut til kartet.
-            for (i in 0 until paths.size) {
-                val polylineOptions = PolylineOptions().addAll(paths[i]).color(Color.RED)
-                val polyline = this.mMap.addPolyline(polylineOptions)
-                travelPolylineList.add(polyline)
-                Log.d("travelPolylineList", polyline.toString())
-                Log.d("travelHereButton", "Tegnet rute")
-
-            }
-        })
+        kartViewModel.path.observe(this, { paths -> drawDirectionsPath(paths) })
 
         // ===== ON CLICK LISTENERS =====
         menuCampfireButton.setOnCheckedChangeListener {_, isChecked -> toggleCampfires(isChecked) }
@@ -281,37 +271,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             true
         }
 
-        //Ved klikk på "Dra hit"-knappen (i popup-menyen):
-        travelHereButton.setOnClickListener{
-            travelPolylineList.forEach{it.remove()}
-            travelPolylineList.clear()
-
-            togglePopup()
-            getLocationAccess()
-
-            //TODO: sjekke hvis lokasjon er null
-            if (hasLocationAccess) {
-                val current_location = kartViewModel.getLocation()
-
-                current_location.observe(this, {
-                    Log.d("testLog", "Inni her")
-                    val origin_lat = it?.latitude
-                    val origin_lon = it?.longitude
-
-                    Log.d("GO_HERE_current", origin_lat.toString())
-                    Log.d("GO_HERE_current", origin_lon.toString())
-
-                    val destination_lat = marker?.position?.latitude
-                    val destination_lon = marker?.position?.longitude
-
-                    Log.d("GO_HERE_marker", destination_lat.toString())
-                    Log.d("GO_HERE_marker", destination_lon.toString())
-
-                    kartViewModel.findRoute(origin_lat, origin_lon, destination_lat, destination_lon)
-                })
-
-            }
-        }
+        // Ved klikk på "Dra hit"-knappen (i popup-menyen):
+        travelHereButton.setOnClickListener{ getAndShowDirections() }
 
         // ===== INITALISER - API-kall, konfigurasjon ++ =====
         kartViewModel.getAllAlerts()  // Hent alle varsler ved oppstart av app, når kart er klart.
@@ -515,5 +476,47 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             campfireMarkers.forEach { it.isVisible = true }  // Vis bålplasser dersom Zoom langt inne nok og visning av bålplasser aktivert
         else
             campfireMarkers.forEach { it.isVisible = false }
+    }
+
+    private fun getAndShowDirections() {
+        travelPolylineList.forEach{ it.remove() }   // Fjern tidligere tidligere tegnet rute fra kart.
+        travelPolylineList.clear()                  // Nullstill liste
+
+        togglePopup()
+        getLocationAccess()
+
+        if (hasLocationAccess) {
+            val current_location = kartViewModel.getLocation()
+            current_location.observe(this, {
+                Log.d(tag, "getAndShowDirections: endring observert i lokasjon")
+                val origin_lat = it?.latitude
+                val origin_lon = it?.longitude
+                val destination_lat = marker?.position?.latitude
+                val destination_lon = marker?.position?.longitude
+                Log.d(tag, "getAndShowDirections: origin_lat: $origin_lat, origin_lon: $origin_lon, destination_lat: $destination_lat, destination_lon: $destination_lon")
+                if (origin_lat == null || origin_lon == null || destination_lat == null || destination_lon == null) {
+                    Log.w(tag,"getAndShowDirections: minst en av posisjonsverdiene er null. Kan ikke hente Directions")
+                    Toast.makeText(this, "Feil: mangler posisjon", Toast.LENGTH_SHORT).show()
+                } else {
+                    // Har tilgang til alle posisjoner: hent rute
+                    Log.d(tag, "getAndShowDirections: kaller på kartViewModel.findRoute()")
+                    kartViewModel.findRoute(origin_lat, origin_lon, destination_lat, destination_lon)
+                }
+            })
+        }
+    }
+
+    private fun drawDirectionsPath(paths: MutableList<List<LatLng>>) {
+        Log.d(tag, "drawDirectionsPath: Tegner rute")
+        if (paths.size == 0) {
+            Toast.makeText(this, "Fant ingen rute", Toast.LENGTH_SHORT).show()  // TODO: flytt streng resources
+        }
+        //går gjennom punktene i polyline for å skrive det ut til kartet.
+        for (i in 0 until paths.size) {
+            val polylineOptions = PolylineOptions().addAll(paths[i]).color(Color.RED)
+            val polyline = this.mMap.addPolyline(polylineOptions)
+            travelPolylineList.add(polyline)
+            Log.d(tag, "drawDirectionsPath: travelPolylineList: $polyline")
+        }
     }
 }
