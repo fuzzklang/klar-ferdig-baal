@@ -77,7 +77,8 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
             val routesFromApi = repo.getRoutes(origin_lat, origin_lon, destination_lat, destination_lon)
             Log.d("KartViewModel.findRoute", routesFromApi.toString())
             if (routesFromApi != null) {
-                _routes = routesFromApi as MutableList<Routes>              // Oppdater routes (hentet fra API)
+                _routes =
+                    routesFromApi as MutableList<Routes>              // Oppdater routes (hentet fra API)
                 _path.postValue(getPolylinePoints(_routes)) // Oppdater _path (lat/lng-punkter) basert på ny rute
                 Log.d("KartViewModel.findRoute", "Path oppdatert")
             }
