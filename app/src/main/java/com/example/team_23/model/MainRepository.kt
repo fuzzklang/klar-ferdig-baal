@@ -29,7 +29,6 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
     private val permanentOptions = listOf("event=forestFire")
 
     // Directions API
-    private val mapsUrl = "https://maps.googleapis.com/maps/api/directions/json?origin=59.911491,10.757933&destination=59.26754,10.40762&key=AIzaSyAyK0NkgPMxOOTnWR5EFKdy2DzfDXGh-HI"  // Hardkodet for testing. TODO: noe som skal oppdateres?
     private val directionsURL_origin = "https://maps.googleapis.com/maps/api/directions/json?origin="
     private val directionsURL_destination = "&destination="
     private val mode = "&mode=walking"
