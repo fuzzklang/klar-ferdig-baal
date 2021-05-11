@@ -171,13 +171,14 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             // Observerer endringer i alertAtPosition (type LiveData<Alert>)
             val alert: Alert? = kartViewModel.alertAtPosition.value
             Log.d(tag, "Oppdatering observert i alertAtPosition. Alert: $it")
+            val warningText: String
+            val background: Drawable
             if (alert != null) {
                 val info = alert.infoNo
                 warningArea.text = info.area.areaDesc
                 warningInfo.text = info.instruction
                 val alertColorLever = alert.getAlertColor()
-                val warningText: String
-                val background: Drawable
+
                 // TODO: tekst burde hentes fra resources
                 when (alertColorLever) {
                     AlertColors.YELLOW -> {
@@ -197,13 +198,18 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                         background = resources.getDrawable(R.drawable.orangewarning,theme)  // TODO: bruk et '?'-symbol?
                     }
                 }
-                warningLevel.text = warningText
-                warningLevelColor.background = background
-                togglePopup()  // TODO: endre toggling til 'showPopup'.
+
             } else {
                 // Ingen varsel (alert er null)
-                Toast.makeText(this, "Ingen varsler for dette området", Toast.LENGTH_SHORT).show()  // TODO: flytt streng resources
+                warningText = "Ingen varsel funnet"
+                background = resources.getDrawable(R.drawable.shape,theme)
+                warningArea.text = ""
+                warningInfo.text = "Ingen varsel i dette området"
+
             }
+            warningLevel.text = warningText
+            warningLevelColor.background = background
+            togglePopup()  // TODO: endre toggling til 'showPopup'.
         })
     }
 
@@ -258,7 +264,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // Når bruker trykker på kartet lages det en marker
         mMap.setOnMapClickListener {
             marker?.remove()
-            marker = mMap.addMarker(MarkerOptions().position(it).title("Marker on click"))
+            marker = mMap.addMarker(MarkerOptions().position(it))
             kartViewModel.getAlert(it.latitude, it.longitude)
         }
 
