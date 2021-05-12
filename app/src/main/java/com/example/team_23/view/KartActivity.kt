@@ -408,24 +408,22 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         menuCampfireButtonIsChecked = isChecked
 
         //overlayPolygonList.forEach {it.isVisible = overlayVisible}
-        if (isChecked){
+       // if (isChecked){
             campfireMarkers.forEach {it.isVisible = isChecked}
-        }
+            Log.d(tag, isChecked.toString())
+      //  }
         Log.d("checked","campfire")
-
-
     }
 
     private fun toggleOverlay(isChecked: Boolean) {
         overlayVisible = isChecked
 
         //overlayPolygonList.forEach {it.isVisible = overlayVisible}
-        if (isChecked){
+       // if (isChecked){
             Log.d("checked","overlay")
             overlayPolygonList.forEach {it.isVisible = isChecked}
-        }
-
-
+            Log.d(tag, isChecked.toString())
+        //}
     }
 
     /*
