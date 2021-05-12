@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import com.example.team_23.model.MainRepository
 import com.example.team_23.model.dataclasses.Campfire
 import com.example.team_23.model.dataclasses.Candidates
+import com.example.team_23.model.dataclasses.Locations
 import com.example.team_23.model.dataclasses.Routes
 import com.example.team_23.model.dataclasses.metalerts_dataclasses.Alert
 import com.google.android.gms.maps.model.LatLng
@@ -30,13 +31,13 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
     private var _location = MutableLiveData<Location?>()             // Enhetens lokasjon (GPS)
     private var _alertAtPosition = MutableLiveData<Alert?>()  // Varsel for angitt sted.
     private var _candidates = mutableListOf<Candidates>()
-    private val _places = MutableLiveData<Location>()
+    private val _places = MutableLiveData<List<LatLng>>()
 
     /* Immutable versjoner av LiveDataene over som er tilgjengelig for Viewene */
     val allAlerts: LiveData<MutableList<Alert>> = _allAlerts
     val alertAtPosition: LiveData<Alert?> = _alertAtPosition
     var path: LiveData<MutableList<List<LatLng>>> = _path
-    var places: LiveData<Location> = _places
+    var places: LiveData<List<LatLng>> = _places
 
     /* Grensesnitt til View.
      * Henter varsler for nåværende sted.
@@ -96,6 +97,7 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
                 _candidates = placesFromApi as MutableList<Candidates>
 
                 _places.postValue(getPlacesLatLng(_candidates))
+                Log.d("KartViewModel.findPlace", "Places oppdatert")
             }
         }
     }
@@ -189,8 +191,8 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
     }
 
 
-    private fun getPlacesLatLng(places: List<Candidates>?): Location? {
-        val location: Location? = null
+    private fun getPlacesLatLng(places: List<Candidates>?): MutableList<LatLng> {
+        val tmpPlaceList = mutableListOf<LatLng>()
         val tag = "Places LatLng"
         if (places != null) {
             for (geo in places) {
@@ -198,12 +200,15 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
                 Log.d(tag, "Candidates (i candidate.geometry): $geometry")
                 if (geometry != null) {
                     val location = geometry.location
-                    Log.d(tag, "Loaction points: $location")
+                    val lat = location?.lat?.toDouble()
+                    val lng = location?.lat?.toDouble()
+                    val latlng = LatLng(lat!!, lng!!)
+                    tmpPlaceList.add(latlng)
 
                 }
             }
         }
-        return location
+        return tmpPlaceList
     }
 
 }

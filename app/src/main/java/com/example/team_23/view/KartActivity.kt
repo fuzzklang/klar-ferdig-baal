@@ -268,6 +268,14 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // Observer path-livedata (i fra KartViewModel), tegn polyline ved oppdatering.
         kartViewModel.path.observe(this, { paths -> drawDirectionsPath(paths) })
 
+        kartViewModel.places.observe(this, {
+            Log.d("places.observe", it.toString())
+            marker = mMap.addMarker(MarkerOptions().position(it[0]))
+
+        })
+
+
+
         // ===== ON CLICK LISTENERS =====
         menuCampfireButton.setOnCheckedChangeListener {_, isChecked -> toggleCampfires(isChecked) }
         menuOverlayBtn.setOnCheckedChangeListener { _, isChecked -> toggleOverlay(isChecked) }
@@ -294,7 +302,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         searchButton.setOnClickListener {
             val input = searchBar.text.toString()
             kartViewModel.findPlace(input)
-            Log.d("Searchbutton", input)
+            Log.d("Searchbutton", kartViewModel.findPlace((input)).toString())
         }
 
         // Ved klikk på "Dra hit"-knappen (i popup-menyen):

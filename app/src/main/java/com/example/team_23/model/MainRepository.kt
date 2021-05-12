@@ -42,8 +42,10 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
     suspend fun searchLocation(place: String): List<Candidates>?{
         Log.d(tag, "Soker etter sted fra Google!")
         val places_path = "${placesURL_start}${place}${placesURL_end}"
+        Log.d("Pathing2", places_path)
         try{
         val httpResponse = apiService.fetchData(places_path)
+            Log.d("Pathing", places_path)
         if (httpResponse != null)  Log.d(tag, "Fikk respons fra Places API")
         val response = gson.fromJson(httpResponse, MainBase::class.java)
         places = response.candidates

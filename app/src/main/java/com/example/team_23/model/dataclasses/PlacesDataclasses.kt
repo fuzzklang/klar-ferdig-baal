@@ -4,9 +4,9 @@ data class MainBase(val candidates: List<Candidates>?, val status: String?)
 
 data class Candidates(val formatted_address: String?, val geometry: Geometry?, val name: String?)
 
-data class Geometry(val location: Location?, val viewport: Viewport?)
+data class Geometry(val location: Locations?, val viewport: Viewport?)
 
-data class Location(val lat: Number?, val lng: Number?)
+data class Locations(val lat: Number?, val lng: Number?)
 
 data class North(val lat: Number?, val lng: Number?)
 
