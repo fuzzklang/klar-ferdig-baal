@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.team_23.model.MainRepository
-import com.example.team_23.model.dataclasses.Bonfire
+import com.example.team_23.model.dataclasses.Campfire
 import com.example.team_23.model.dataclasses.Routes
 import com.example.team_23.model.dataclasses.metalerts_dataclasses.Alert
 import com.google.android.gms.maps.model.LatLng
@@ -21,8 +21,8 @@ import kotlinx.coroutines.withContext
 class KartViewModel(private val repo: MainRepository): ViewModel() {
     /* MutableLiveDataen er privat slik at ikke andre klasser utilsiktet kan endre innholdet */
     private val _allAlerts = MutableLiveData<MutableList<Alert>>()   // Liste med alle skogbrannfarevarsler utstedt av MetAlerts
-    val _routes = MutableLiveData<List<Routes>>()                    // Liste med responsen fra api-kall til Directions API
-    val _path = MutableLiveData<MutableList<List<LatLng>>>()         // Liste som inneholder polyline-punktene fra routes (sørg for at hele tiden samsvarer med 'routes')
+    private var _routes = mutableListOf<Routes>()                            // Liste med responsen fra api-kall til Directions API
+    private val _path = MutableLiveData<MutableList<List<LatLng>>>()         // Liste som inneholder polyline-punktene fra routes (sørg for at hele tiden samsvarer med 'routes')
     private var _location = MutableLiveData<Location?>()             // Enhetens lokasjon (GPS)
     private var _alertAtPosition = MutableLiveData<Alert?>()         // Varsel for angitt sted.
 
@@ -71,17 +71,20 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
         return _location
     }
 
-    fun findRoute() {
+    fun findRoute(origin_lat : Double?, origin_lon : Double?, destination_lat : Double?, destination_lon : Double?) {
         // Kaller på Directions API fra Google (via Repository) og oppdaterer routes-LiveData
         CoroutineScope(Dispatchers.Default).launch {
-            val routesFromApi = repo.getRoutes()
+            val routesFromApi = repo.getRoutes(origin_lat, origin_lon, destination_lat, destination_lon)
+            Log.d("KartViewModel.findRoute", routesFromApi.toString())
             if (routesFromApi != null) {
-                _routes.postValue(routesFromApi)                 // Oppdater routes (hentet fra API)
-                _path.postValue(getPolylinePoints(_routes.value)) // Oppdater _path (lat/lng-punkter) basert på ny rute
+                _routes =
+                    routesFromApi as MutableList<Routes>              // Oppdater routes (hentet fra API)
+                _path.postValue(getPolylinePoints(_routes)) // Oppdater _path (lat/lng-punkter) basert på ny rute
                 Log.d("KartViewModel.findRoute", "Path oppdatert")
             }
         }
     }
+
 
     // Oppdaterer nåværende posisjon ved kall til repository.
     // Antar at appen har tilgang til lokasjon.
@@ -115,8 +118,8 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
         }
     }
 
-    fun getBonfireSpots(): List<Bonfire> {
-        return repo.getBonfireSpots()
+    fun getCampfireSpots(): List<Campfire> {
+        return repo.getCampfireSpots()
     }
 
     /* Hjelpemetode for findRoute()
@@ -126,16 +129,16 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
     private fun getPolylinePoints(routes: List<Routes>?): MutableList<List<LatLng>> {
         // tmpPathList: Brukt for å konstruere hele polyline-listen, før LiveDataen oppdateres med den komplette listen.
         val tmpPathList = mutableListOf<List<LatLng>>()
-        val TAG = "Polyline Points"
-        Log.d(TAG, "Antall routes: ${routes?.size}")
+        val tag = "Polyline Points"
+        Log.d(tag, "Antall routes: ${routes?.size}")
         if (routes != null) {
             for (route in routes) {  // Sårbart for bugs, mutable data kan ha blitt endret.
                 val legs = route.legs
-                Log.d(TAG, "Antall legs (i route.legs): ${legs?.size}")
+                Log.d(tag, "Antall legs (i route.legs): ${legs?.size}")
                 if (legs != null) {
                     for (leg in legs) {
                         val steps = leg.steps
-                        Log.d(TAG, "Antall steps (i leg.steps): ${steps?.size}")
+                        Log.d(tag, "Antall steps (i leg.steps): ${steps?.size}")
                         if (steps != null) {
                             for (step in steps) {
                                 val points = step.polyline?.points
@@ -149,3 +152,4 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
         return tmpPathList
     }
 }
+

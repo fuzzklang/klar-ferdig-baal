@@ -8,7 +8,7 @@ import com.example.team_23.model.api.ApiServiceImpl
 import com.example.team_23.model.api.CapParser
 import com.example.team_23.model.api.MetAlertsRssParser
 import com.example.team_23.model.dataclasses.Base
-import com.example.team_23.model.dataclasses.Bonfire
+import com.example.team_23.model.dataclasses.Campfire
 import com.example.team_23.model.dataclasses.Routes
 import com.example.team_23.model.dataclasses.metalerts_dataclasses.Alert
 import com.example.team_23.model.dataclasses.metalerts_dataclasses.RssItem
@@ -29,23 +29,29 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
     private val permanentOptions = listOf("event=forestFire")
 
     // Directions API
-    private val mapsUrl = "https://maps.googleapis.com/maps/api/directions/json?origin=59.911491,10.757933&destination=59.26754,10.40762&key=AIzaSyAyK0NkgPMxOOTnWR5EFKdy2DzfDXGh-HI"  // Hardkodet for testing. TODO: noe som skal oppdateres?
+    private val directionsURL_origin = "https://maps.googleapis.com/maps/api/directions/json?origin="
+    private val directionsURL_destination = "&destination="
+    private val mode = "&mode=walking"
+    private val directionsURL_key = "&key=AIzaSyAyK0NkgPMxOOTnWR5EFKdy2DzfDXGh-HI"
     private val gson = Gson()
+    var routes: List<Routes>? = null
 
     // Henter Json fra Direction API (Google) og parser ved hjelp av Gson til dataklasser.
-    suspend fun getRoutes(): List<Routes>? {
-        var routes: List<Routes>? = null
+    suspend fun getRoutes(origin_lat : Double?, origin_lon : Double?, destination_lat : Double?, destination_lon : Double?): List<Routes>? {
+
         Log.d(tag, "Henter ruter fra Google!")
+        val direction_path = "${directionsURL_origin}${origin_lat},${origin_lon}${directionsURL_destination}${destination_lat},${destination_lon}${mode}${directionsURL_key}"
         try {
-            val httpResponse = apiService.fetchData(mapsUrl)
+            val httpResponse = apiService.fetchData(direction_path)
             if (httpResponse != null)  Log.d(tag, "Fikk respons fra Directions API")
             val response = gson.fromJson(httpResponse, Base::class.java)
             routes = response.routes
-        } catch (exception: Exception) {
+        } catch (exception: IOException) {
             Log.w(tag, "Feil under henting av rute: ${exception.message}")
         }
         return routes
     }
+
 
     /* Henter XML-data (RSS-feed) fra MetAlerts-proxyen (IN2000) og parser responsen.
      * @return liste med RssItem eller null
@@ -124,17 +130,17 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
     /* Parser JSON-filen med bålplasser og returnerer en liste med HashMaps.
     * TODO: gjøre om til asynkront Coroutine-kall (pga. fillesning)?
     */
-    fun getBonfireSpots(): List<Bonfire> {
+    fun getCampfireSpots(): List<Campfire> {
         // Gjør det slik som dette for å unngå å gi Context som parameter.
         // Men usikker på om dette får utilsiktede konsekvenser.
-        val file = "res/raw/bonfire_spots.json"
+        val file = "res/raw/campfire_spots.json"
         val bonfireSpotsStream = this.javaClass.classLoader?.getResourceAsStream(file)
         val jsonString = bonfireSpotsStream?.bufferedReader()?.readText()
         bonfireSpotsStream?.close()
         Log.d(tag, "getBonfireSpots: henter bålplassoversikt fra res/raw. Returnert jsonString er ikke null eller tom: ${! jsonString.isNullOrEmpty()}")
         /* Parse json-streng til bålplass-objekter */
-        val bType = object: TypeToken<List<Bonfire>>() {}.type
-        var bonfireList = mutableListOf<Bonfire>()
+        val bType = object: TypeToken<List<Campfire>>() {}.type
+        var bonfireList = mutableListOf<Campfire>()
         if (jsonString != null)
             bonfireList = gson.fromJson(jsonString, bType)
         return bonfireList
