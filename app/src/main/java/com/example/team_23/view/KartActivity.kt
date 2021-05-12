@@ -208,11 +208,12 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 background = resources.getDrawable(R.drawable.shape,theme)
                 warningArea.text = ""
                 warningInfo.text = "Ingen varsel i dette området"
+                colorLevel = resources.getDrawable(R.color.black, theme)
 
             }
             warningLevel.text = warningText
             warningLevelImg.background = background
-            warningLevelColor.background = background
+            warningLevelColor.background = colorLevel
             togglePopup()  // TODO: endre toggling til 'showPopup'.
         })
     }
