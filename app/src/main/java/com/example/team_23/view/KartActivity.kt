@@ -53,6 +53,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var popup: View
     private lateinit var popupCloseButton: ImageButton
     private var popupVisible = false
+    // ----- Travel here -------
+    private lateinit var travelHereButton: ImageButton
+    private lateinit var travelPolylineList: MutableList<Polyline>
     // ----- Alert Levels Description -----
     private lateinit var alertLevelsDescButton: Button
     private lateinit var alertLevelsDescPopup: View
@@ -68,6 +71,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var menuOverlayBtn: ToggleButton
     private var overlayVisible = true
     private lateinit var overlayPolygonList: MutableList<Polygon>  // Listen med polygoner
+
+
 
 
     @SuppressLint("UseCompatLoadingForDrawables", "SetTextI18n")
@@ -106,11 +111,15 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         val warningLevel = findViewById<TextView>(R.id.popupAlertLevelContent)
         val warningLevelImg = findViewById<ImageView>(R.id.warningLevelImg)
         val warningLevelColor = findViewById<View>(R.id.popupAlertLevelColor)
+        travelHereButton = findViewById<ImageButton>(R.id.popupDraHitButton)
 
         // ----- Levels -----
         alertLevelsDescButton = findViewById<Button>(R.id.popupAlertDescButton)
         alertLevelsDescPopup = findViewById<View>(R.id.levelsDesc)
         alertLevelsDescCloseBtn = findViewById<ImageButton>(R.id.levelsDescCloseButton)
+
+        // ------- Travel here -------
+        travelPolylineList = mutableListOf()
 
         // ===== (ONCLICK) LISTENERS =====
         rulesActivityBtn.setOnClickListener{
@@ -161,16 +170,17 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             // Observerer endringer i alertAtPosition (type LiveData<Alert>)
             val alert: Alert? = kartViewModel.alertAtPosition.value
             Log.d(tag, "Oppdatering observert i alertAtPosition. Alert: $it")
+            val warningText: String
+            val background: Drawable
+            val colorLevel : Drawable
             if (alert != null) {
                 val info = alert.infoNo
                 warningArea.text = info.area.areaDesc
                 warningInfo.text = info.instruction
-                val alertColorLever = alert.getAlertColor()
-                val warningText: String
-                val background: Drawable
-                val colorLevel : Drawable
+                val alertColorLevel = alert.getAlertColor()
+
                 // TODO: tekst burde hentes fra resources
-                when (alertColorLever) {
+                when (alertColorLevel) {
                     AlertColors.YELLOW -> {
                         warningText = "Moderat skogbrannfare"
                         background = resources.getDrawable(R.drawable.yellowwarning,theme)
@@ -185,21 +195,25 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                         colorLevel = resources.getDrawable(R.color.alertRed, theme)
                         Log.w(tag, "Returnert alertColor er RED. Ikke forventet. Fortsetter kjøring.")
                     }
-                    AlertColors.UNKOWN -> {
+                    AlertColors.UNKNOWN -> {
                         Log.w(tag, "Returnert alertColor er Unkown.")
                         warningText = "?"
                         colorLevel = resources.getDrawable(R.color.black, theme)
                         background = resources.getDrawable(R.drawable.nivaaer,theme)
                     }
                 }
-                warningLevel.text = warningText
-                warningLevelImg.background = background
-                warningLevelColor.background = colorLevel
-                togglePopup()  // TODO: endre toggling til 'showPopup'.
             } else {
                 // Ingen varsel (alert er null)
-                Toast.makeText(this, "Ingen varsler for dette området", Toast.LENGTH_SHORT).show()  // TODO: flytt streng resources
+                warningText = "Ingen varsel funnet"
+                background = resources.getDrawable(R.drawable.shape,theme)
+                warningArea.text = ""
+                warningInfo.text = "Ingen varsel i dette området"
+
             }
+            warningLevel.text = warningText
+            warningLevelImg.background = background
+            warningLevelColor.background = background
+            togglePopup()  // TODO: endre toggling til 'showPopup'.
         })
     }
 
@@ -244,12 +258,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         })
 
         // Observer path-livedata (i fra KartViewModel), tegn polyline ved oppdatering.
-        kartViewModel.path.observe(this, { paths ->
-            //går gjennom punktene i polyline for å skrive det ut til kartet.
-            for (i in 0 until paths.size) {
-                this.mMap.addPolyline(PolylineOptions().addAll(paths[i]).color(Color.RED))
-            }
-        })
+        kartViewModel.path.observe(this, { paths -> drawDirectionsPath(paths) })
 
         // ===== ON CLICK LISTENERS =====
         menuCampfireButton.setOnCheckedChangeListener {_, isChecked -> toggleCampfires(isChecked) }
@@ -260,7 +269,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // Når bruker trykker på kartet lages det en marker
         mMap.setOnMapClickListener {
             marker?.remove()
-            marker = mMap.addMarker(MarkerOptions().position(it).title("Marker on click"))
+            marker = mMap.addMarker(MarkerOptions().position(it))
             kartViewModel.getAlert(it.latitude, it.longitude)
         }
 
@@ -272,6 +281,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             myLocationButtonOnClickMethod()
             true
         }
+
+        // Ved klikk på "Dra hit"-knappen (i popup-menyen):
+        travelHereButton.setOnClickListener{ getAndShowDirections() }
 
         // ===== INITALISER - API-kall, konfigurasjon ++ =====
         kartViewModel.getAllAlerts()  // Hent alle varsler ved oppstart av app, når kart er klart.
@@ -434,7 +446,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 AlertColors.YELLOW -> getColor(R.color.alertYellowTransparent)
                 AlertColors.ORANGE -> getColor(R.color.alertOrangeTransparent)
                 AlertColors.RED    -> getColor(R.color.alertRedTransparent)
-                AlertColors.UNKOWN -> {getColor(R.color.grey); Log.w(tag, "En feil har oppstått! Ukjent farge/nivå for varsel!")}
+                AlertColors.UNKNOWN -> {getColor(R.color.grey); Log.w(tag, "En feil har oppstått! Ukjent farge/nivå for varsel!")}
             }
             val polygonOptions = PolygonOptions()
                     .addAll(latLngList)
@@ -475,5 +487,47 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             campfireMarkers.forEach { it.isVisible = true }  // Vis bålplasser dersom Zoom langt inne nok og visning av bålplasser aktivert
         else
             campfireMarkers.forEach { it.isVisible = false }
+    }
+
+    private fun getAndShowDirections() {
+        travelPolylineList.forEach{ it.remove() }   // Fjern tidligere tidligere tegnet rute fra kart.
+        travelPolylineList.clear()                  // Nullstill liste
+
+        togglePopup()
+        getLocationAccess()
+
+        if (hasLocationAccess) {
+            val current_location = kartViewModel.getLocation()
+            current_location.observe(this, {
+                Log.d(tag, "getAndShowDirections: endring observert i lokasjon")
+                val originLat = it?.latitude
+                val originLon = it?.longitude
+                val destinationLat = marker?.position?.latitude
+                val destinationLon = marker?.position?.longitude
+                Log.d(tag, "getAndShowDirections: originLat: $originLat, originLon: $originLon, destinationLat: $destinationLat, destinationLon: $destinationLon")
+                if (originLat == null || originLon == null || destinationLat == null || destinationLon == null) {
+                    Log.w(tag,"getAndShowDirections: minst en av posisjonsverdiene er null. Kan ikke hente Directions")
+                    Toast.makeText(this, "Feil: mangler posisjon", Toast.LENGTH_SHORT).show()
+                } else {
+                    // Har tilgang til alle posisjoner: hent rute
+                    Log.d(tag, "getAndShowDirections: kaller på kartViewModel.findRoute()")
+                    kartViewModel.findRoute(originLat, originLon, destinationLat, destinationLon)
+                }
+            })
+        }
+    }
+
+    private fun drawDirectionsPath(paths: MutableList<List<LatLng>>) {
+        Log.d(tag, "drawDirectionsPath: Tegner rute")
+        if (paths.size == 0) {
+            Toast.makeText(this, "Fant ingen rute", Toast.LENGTH_SHORT).show()  // TODO: flytt streng resources
+        }
+        //går gjennom punktene i polyline for å skrive det ut til kartet.
+        for (i in 0 until paths.size) {
+            val polylineOptions = PolylineOptions().addAll(paths[i]).color(Color.RED)
+            val polyline = this.mMap.addPolyline(polylineOptions)
+            travelPolylineList.add(polyline)
+            Log.d(tag, "drawDirectionsPath: travelPolylineList: $polyline")
+        }
     }
 }
