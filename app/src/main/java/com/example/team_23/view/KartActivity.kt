@@ -71,6 +71,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var menuOverlayBtn: ToggleButton
     private var overlayVisible = true
     private lateinit var overlayPolygonList: MutableList<Polygon>  // Listen med polygoner
+    //----- Search-function ------
+    private lateinit var searchButton: Button
+    private lateinit var searchBar: EditText
 
 
 
@@ -121,6 +124,10 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // ------- Travel here -------
         travelPolylineList = mutableListOf()
+
+        //--------- Search-function ----------
+        searchBar = findViewById<EditText>(R.id.searchBar)
+        searchButton = findViewById<Button>(R.id.searchLocation)
 
         // ===== (ONCLICK) LISTENERS =====
         rulesActivityBtn.setOnClickListener{
@@ -275,6 +282,13 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             Log.d(tag, "Klikk registrert på MyLocationButton")
             myLocationButtonOnClickMethod()
             true
+        }
+
+        //Ved klikk på "Search"-knappen:
+        searchButton.setOnClickListener {
+            val input = searchBar.text.toString()
+            kartViewModel.findPlace(input)
+            Log.d("Searchbutton", input)
         }
 
         // Ved klikk på "Dra hit"-knappen (i popup-menyen):
@@ -433,6 +447,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         })
     }
 
+
     private fun allAlertsObserver(alertList: List<Alert>) {
         alertList.forEach { alert ->
             val latLngList = alert.getPolygon()
@@ -482,6 +497,10 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             campfireMarkers.forEach { it.isVisible = true }  // Vis bålplasser dersom Zoom langt inne nok og visning av bålplasser aktivert
         else
             campfireMarkers.forEach { it.isVisible = false }
+    }
+
+    private fun getSearchInfo(place: String) {
+        val location = kartViewModel.findPlace(place)
     }
 
     private fun getAndShowDirections() {
