@@ -175,37 +175,32 @@
                 android:text="@string/kartfunksjoner"
                 android:textColor="@color/black"
                 android:textSize="18sp"
-                app:layout_constraintBottom_toTopOf="@+id/menuOverlayButton"
+                app:layout_constraintBottom_toTopOf="@+id/switchOverlay"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/menuAlignment"
                 app:layout_constraintVertical_bias="1.0" />
 
-            <ToggleButton
-                android:id="@+id/menuOverlayButton"
-                android:layout_width="160dp"
-                android:layout_height="40dp"
-                android:layout_marginTop="100dp"
-                android:backgroundTint="@color/grey"
-                android:contentDescription="@string/overlay_button"
-                android:scaleType="fitCenter"
-                android:textColor="@color/black"
-                android:textOff="@string/overlay_av"
-                android:textOn="@string/overlay_paa"
-                app:layout_constraintBottom_toTopOf="@+id/menuCampfireButton"
+
+
+
+
+
+            <Switch
+                android:id="@+id/switchOverlay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Overlay"
+                app:layout_constraintBottom_toTopOf="@+id/switchCampfire"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="1.0" />
-
-            <ToggleButton
-                android:id="@+id/menuCampfireButton"
-                android:layout_width="160dp"
-                android:layout_height="40dp"
-                android:layout_marginTop="20dp"
-                android:backgroundTint="@color/grey"
-                android:textOff="@string/skjul_baalplasser"
-                android:textOn="@string/vis_baalplasser"
+                app:layout_constraintVertical_bias="1.0" />/>
+            <Switch
+                android:id="@+id/switchCampfire"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bålplasser"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.488"

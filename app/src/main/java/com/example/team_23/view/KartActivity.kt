@@ -24,6 +24,7 @@ import com.example.team_23.viewmodel.KartViewModel
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import android.widget.Switch
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
@@ -64,11 +65,12 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     // ----- Campfire -----
     private var menuCampfireButtonIsChecked = true  // Erstatt med direkte aksess til Switch
     private val ZOOM_LEVEL_SHOW_CAMPFIRES = 8.5
-    private lateinit var menuCampfireButton: ToggleButton
+    private lateinit var switchCampfireButton: Switch
+
     private lateinit var campfireSpots: List<Campfire>
     private lateinit var campfireMarkers: MutableList<Marker>
     // ----- Overlay (Alerts) -----
-    private lateinit var menuOverlayBtn: ToggleButton
+    private lateinit var switchOverlayBtn: Switch
     private var overlayVisible = true
     private lateinit var overlayPolygonList: MutableList<Polygon>  // Listen med polygoner
 
@@ -97,7 +99,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         menu = findViewById<View>(R.id.menu)
         menuButton = findViewById<ImageButton>(R.id.menuButton)
         val rulesActivityBtn = findViewById<Button>(R.id.menuRulesButton)  // Knapp som sender bruker til reglene
-        menuCampfireButton = findViewById<ToggleButton>(R.id.menuCampfireButton)
+        switchCampfireButton = findViewById<Switch>(R.id.switchCampfire)
         // ----- Info-boks -----
         infoButton = findViewById<Button>(R.id.menuInfoButton)
         infoCloseButton = findViewById<ImageButton>(R.id.infoboxCloseButton)
@@ -242,7 +244,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // -- Overlay --
         overlayVisible = true
         overlayPolygonList = mutableListOf()
-        menuOverlayBtn = findViewById<ToggleButton>(R.id.menuOverlayButton)
+        switchOverlayBtn = findViewById<Switch>(R.id.switchOverlay)
 
         // ===== LOKASJON =====
         // Sjekk at tilgang til lokasjon (skal også sette mMap.isMyLocationEnabled og oppdaterer lokasjon dersom tilgang)
@@ -262,8 +264,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         kartViewModel.path.observe(this, { paths -> drawDirectionsPath(paths) })
 
         // ===== ON CLICK LISTENERS =====
-        menuCampfireButton.setOnCheckedChangeListener {_, isChecked -> toggleCampfires(isChecked) }
-        menuOverlayBtn.setOnCheckedChangeListener { _, isChecked -> toggleOverlay(isChecked) }
+        switchCampfireButton.setOnCheckedChangeListener {_, isChecked -> toggleCampfires(isChecked) }
+        switchOverlayBtn.setOnCheckedChangeListener { _, isChecked -> toggleOverlay(isChecked) }
 
         mMap.setOnCameraIdleListener { toogleCampfireZoomVisibility() }
 
@@ -404,12 +406,26 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun toggleCampfires(isChecked: Boolean) {
         menuCampfireButtonIsChecked = isChecked
-        campfireMarkers.forEach {it.isVisible = isChecked}
+
+        //overlayPolygonList.forEach {it.isVisible = overlayVisible}
+        if (isChecked){
+            campfireMarkers.forEach {it.isVisible = isChecked}
+        }
+        Log.d("checked","campfire")
+
+
     }
 
     private fun toggleOverlay(isChecked: Boolean) {
         overlayVisible = isChecked
-        overlayPolygonList.forEach {it.isVisible = overlayVisible}
+
+        //overlayPolygonList.forEach {it.isVisible = overlayVisible}
+        if (isChecked){
+            Log.d("checked","overlay")
+            overlayPolygonList.forEach {it.isVisible = isChecked}
+        }
+
+
     }
 
     /*
