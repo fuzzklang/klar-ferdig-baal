@@ -10,10 +10,9 @@
     <fragment
         android:id="@+id/map"
         class="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_marginTop="120dp"
         android:layout_marginBottom="0dp"
-        android:layout_width="415dp"
-        android:layout_height="733dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -59,6 +58,17 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.088" />
 
+        <View
+            android:id="@+id/topWhiteBar"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            android:background="@color/white"/>
+
         <Button
             android:id="@+id/searchLocation"
             android:layout_width="50dp"
@@ -88,11 +98,22 @@
             app:layout_constraintTop_toTopOf="parent" />
 
 
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:src="@drawable/klar_ferdig_bal"
+            app:layout_constraintBottom_toTopOf="@+id/searchBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/menu"
             android:layout_width="250dp"
             android:layout_height="match_parent"
-            android:layout_marginTop="120dp"
             android:elevation="2dp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -119,7 +140,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:text="Informasjon"
+                android:text="@string/informasjon"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toTopOf="@+id/menuInfoButton"
@@ -136,7 +157,7 @@
                 android:backgroundTint="@color/grey"
                 android:contentDescription="@string/info_button"
                 android:scaleType="fitCenter"
-                android:text="Info"
+                android:text="@string/info"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toTopOf="@+id/menuRulesButton"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -152,7 +173,7 @@
                 android:layout_marginTop="20dp"
                 android:backgroundTint="@color/grey"
                 android:contentDescription="@string/rules"
-                android:text="Regler"
+                android:text="@string/regler"
                 android:layout_marginBottom="20dp"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toTopOf="@+id/menuMapFunctionsSectionTitle"
@@ -166,7 +187,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:text="Kartfunksjoner"
+                android:text="@string/kartfunksjoner"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toTopOf="@+id/menuOverlayButton"
@@ -184,8 +205,8 @@
                 android:contentDescription="@string/overlay_button"
                 android:scaleType="fitCenter"
                 android:textColor="@color/black"
-                android:textOff="Overlay (AV)"
-                android:textOn="Overlay (PÅ)"
+                android:textOff="@string/overlay_av"
+                android:textOn="@string/overlay_paa"
                 app:layout_constraintBottom_toTopOf="@+id/menuCampfireButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -198,8 +219,8 @@
                 android:layout_height="40dp"
                 android:layout_marginTop="20dp"
                 android:backgroundTint="@color/grey"
-                android:textOff="Skjul Bålplasser"
-                android:textOn="Vis Bålplasser"
+                android:textOff="@string/skjul_baalplasser"
+                android:textOn="@string/vis_baalplasser"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.488"
@@ -219,7 +240,7 @@
             android:id="@+id/menuButton"
             android:layout_width="65dp"
             android:layout_height="70dp"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="80dp"
             android:layout_marginEnd="20dp"
             android:background="@drawable/menubutton"
             android:contentDescription="@string/menu_button"
@@ -352,7 +373,7 @@
 
             <TextView
                 android:id="@+id/popupAlertArea"
-                android:layout_width="wrap_content"
+                android:layout_width="180dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/loading"
@@ -372,10 +393,10 @@
                 android:background="@color/black"
                 app:layout_constraintBottom_toTopOf="@+id/popupAlertLevelBackground"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.502"
+                app:layout_constraintHorizontal_bias="0.497"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/popupAlertArea"
-                app:layout_constraintVertical_bias="0.14" />
+                app:layout_constraintVertical_bias="0.406" />
 
             <ImageButton
                 android:id="@+id/popupAlertCloseButton"
@@ -482,7 +503,7 @@
                 android:id="@+id/popupDraHitButtonIcon"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginEnd="10dp"
                 android:layout_marginTop="1dp"
                 android:background="@null"
                 android:scaleType="fitCenter"
@@ -563,12 +584,12 @@
                 android:layout_height="391dp"
                 android:layout_marginTop="80dp"
                 android:background="@drawable/shape"
-                android:contentDescription="TODO"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.416" />
+                app:layout_constraintVertical_bias="0.416"
+                tools:ignore="ContentDescription" />
 
             <ImageView
                 android:id="@+id/levelsDescBackground"
@@ -582,7 +603,8 @@
                 app:layout_constraintHorizontal_bias="0.522"
                 app:layout_constraintStart_toStartOf="@+id/levelsDescShape"
                 app:layout_constraintTop_toTopOf="@+id/levelsDescShape"
-                app:layout_constraintVertical_bias="0.817" />
+                app:layout_constraintVertical_bias="0.817"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:id="@+id/levelsDescTitle"
@@ -606,7 +628,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="260dp"
                 android:gravity="center"
-                android:text="Moderat skogbrannfare"
+                android:text="@string/moderat_skogbrannfare"
                 android:textColor="@color/black"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="@id/levelsDescBackground"
@@ -623,7 +645,8 @@
                 app:layout_constraintEnd_toEndOf="@id/levelsDescBackground"
                 app:layout_constraintStart_toStartOf="@id/levelsDescBackground"
                 app:layout_constraintTop_toBottomOf="@id/levelsDescModerateTitle"
-                app:srcCompat="@drawable/yellowwarning" />
+                app:srcCompat="@drawable/yellowwarning"
+                android:contentDescription="@string/moderat_skogbrannfare_ikon" />
 
             <TextView
                 android:id="@+id/levelsDescModerateContent"
@@ -645,7 +668,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:gravity="center"
-                android:text="Betydelig skogbrannfare"
+                android:text="@string/betydelig_skogbrannfare"
                 android:textColor="@color/black"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="@id/levelsDescBackground"
@@ -660,7 +683,8 @@
                 app:layout_constraintEnd_toEndOf="@id/levelsDescBackground"
                 app:layout_constraintStart_toStartOf="@id/levelsDescBackground"
                 app:layout_constraintTop_toBottomOf="@id/levelsDescSevereTitle"
-                app:srcCompat="@drawable/orangewarning" />
+                app:srcCompat="@drawable/orangewarning"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:id="@+id/levelsDescSevereContent"
