@@ -53,7 +53,6 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
     }
     return places
 
-
     }
 
     // Henter Json fra Direction API (Google) og parser ved hjelp av Gson til dataklasser.
