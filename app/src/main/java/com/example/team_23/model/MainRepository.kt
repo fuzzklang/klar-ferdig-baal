@@ -7,9 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.team_23.model.api.ApiServiceImpl
 import com.example.team_23.model.api.CapParser
 import com.example.team_23.model.api.MetAlertsRssParser
-import com.example.team_23.model.dataclasses.Base
-import com.example.team_23.model.dataclasses.Campfire
-import com.example.team_23.model.dataclasses.Routes
+import com.example.team_23.model.dataclasses.*
 import com.example.team_23.model.dataclasses.metalerts_dataclasses.Alert
 import com.example.team_23.model.dataclasses.metalerts_dataclasses.RssItem
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -36,6 +34,28 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
     private val gson = Gson()
     var routes: List<Routes>? = null
 
+    //Places API
+    private val placesURL_start = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input="
+    private val placesURL_end = "&inputtype=textquery&fields=formatted_address,name,geometry&key=AIzaSyAyK0NkgPMxOOTnWR5EFKdy2DzfDXGh-HI"
+    var places: List<Candidates>? = null
+
+    suspend fun searchLocation(place: String): List<Candidates>?{
+        Log.d(tag, "Soker etter sted fra Google!")
+        val places_path = "${placesURL_start}${place}${placesURL_end}"
+        try{
+        val httpResponse = apiService.fetchData(places_path)
+        if (httpResponse != null)  Log.d(tag, "Fikk respons fra Places API")
+        val response = gson.fromJson(httpResponse, MainBase::class.java)
+        places = response.candidates
+
+    } catch (exception: IOException) {
+        Log.w(tag, "Feil under henting av rute: ${exception.message}")
+    }
+    return places
+
+
+    }
+
     // Henter Json fra Direction API (Google) og parser ved hjelp av Gson til dataklasser.
     suspend fun getRoutes(origin_lat : Double?, origin_lon : Double?, destination_lat : Double?, destination_lon : Double?): List<Routes>? {
 
@@ -46,6 +66,7 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
             if (httpResponse != null)  Log.d(tag, "Fikk respons fra Directions API")
             val response = gson.fromJson(httpResponse, Base::class.java)
             routes = response.routes
+
         } catch (exception: IOException) {
             Log.w(tag, "Feil under henting av rute: ${exception.message}")
         }
