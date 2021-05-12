@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.team_23.model.MainRepository
 import com.example.team_23.model.dataclasses.Campfire
+import com.example.team_23.model.dataclasses.Candidates
 import com.example.team_23.model.dataclasses.Routes
 import com.example.team_23.model.dataclasses.metalerts_dataclasses.Alert
 import com.google.android.gms.maps.model.LatLng
@@ -69,6 +70,17 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
     fun getLocation(): LiveData<Location?> {
         Log.d("KartViewModel", "getLocation: ${_location.value?.latitude}, ${_location.value?.longitude}")
         return _location
+    }
+
+    fun findPlace(place: String){
+        //Kaller på Places API fra Google (via Repository) og oppdaterer places-Livedata
+        CoroutineScope(Dispatchers.Default).launch {
+            val placesFromApi = repo.searchLocation(place)
+            Log.d("Kartviewmodel.findplace", placesFromApi.toString())
+            if (placesFromApi != null){
+
+            }
+        }
     }
 
     fun findRoute(origin_lat : Double?, origin_lon : Double?, destination_lat : Double?, destination_lon : Double?) {
@@ -150,6 +162,27 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
             }
         }
         return tmpPathList
+    }
+
+
+    private fun getPlacesLatLng(places: List<Candidates>?): MutableList<Number?> {
+        val tmpPlacesList = mutableListOf<Number?>()
+        val tag = "Places LatLng"
+        if (places != null){
+            for (geo in places) {
+                val geometry = geo.geometry
+                Log.d(tag, "Candidates (i candidate.geometry): $geometry")
+                if (geometry != null){
+                    val location = geometry.location
+                    Log.d(tag, "Loaction points: $location")
+                    val lat = location?.lat
+                    val lng = location?.lng
+                    tmpPlacesList.add(lat)
+                    tmpPlacesList.add(lng)
+                }
+            }
+        }
+        return tmpPlacesList
     }
 }
 
