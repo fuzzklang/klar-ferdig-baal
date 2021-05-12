@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.team_23.model.MainRepository
 import com.example.team_23.model.dataclasses.Campfire
+import com.example.team_23.model.dataclasses.Candidates
 import com.example.team_23.model.dataclasses.Routes
 import com.example.team_23.model.dataclasses.metalerts_dataclasses.Alert
 import com.google.android.gms.maps.model.LatLng
@@ -20,16 +21,22 @@ import kotlinx.coroutines.withContext
 
 class KartViewModel(private val repo: MainRepository): ViewModel() {
     /* MutableLiveDataen er privat slik at ikke andre klasser utilsiktet kan endre innholdet */
-    private val _allAlerts = MutableLiveData<MutableList<Alert>>()   // Liste med alle skogbrannfarevarsler utstedt av MetAlerts
-    private var _routes = mutableListOf<Routes>()                            // Liste med responsen fra api-kall til Directions API
-    private val _path = MutableLiveData<MutableList<List<LatLng>>>()         // Liste som inneholder polyline-punktene fra routes (sørg for at hele tiden samsvarer med 'routes')
+    private val _allAlerts =
+        MutableLiveData<MutableList<Alert>>()   // Liste med alle skogbrannfarevarsler utstedt av MetAlerts
+    private var _routes =
+        mutableListOf<Routes>()                            // Liste med responsen fra api-kall til Directions API
+    private val _path =
+        MutableLiveData<MutableList<List<LatLng>>>()         // Liste som inneholder polyline-punktene fra routes (sørg for at hele tiden samsvarer med 'routes')
     private var _location = MutableLiveData<Location?>()             // Enhetens lokasjon (GPS)
-    private var _alertAtPosition = MutableLiveData<Alert?>()         // Varsel for angitt sted.
+    private var _alertAtPosition = MutableLiveData<Alert?>()  // Varsel for angitt sted.
+    private var _candidates = mutableListOf<Candidates>()
+    private val _places = MutableLiveData<Location>()
 
     /* Immutable versjoner av LiveDataene over som er tilgjengelig for Viewene */
     val allAlerts: LiveData<MutableList<Alert>> = _allAlerts
     val alertAtPosition: LiveData<Alert?> = _alertAtPosition
     var path: LiveData<MutableList<List<LatLng>>> = _path
+    var places: LiveData<Location> = _places
 
     /* Grensesnitt til View.
      * Henter varsler for nåværende sted.
@@ -40,7 +47,10 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
         val lon = _location.value?.longitude
         // Feilsjekking i tilfelle ikke lokasjon tilgjengelig?
         if (lat == null || lon == null) {
-            Log.w("KartViewModel", "Advarsel: getAlertsCurrentLocation() ble kalt men lokasjon er ikke tilgjengelig.")
+            Log.w(
+                "KartViewModel",
+                "Advarsel: getAlertsCurrentLocation() ble kalt men lokasjon er ikke tilgjengelig."
+            )
         } else {
             getAlert(lat, lon)
         }
@@ -49,12 +59,15 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
     /* Grensesnitt til View.
      * Henter varsler for sted angitt ved latitude og longitude.
      */
-    fun getAlert(lat: Double, lon: Double){
+    fun getAlert(lat: Double, lon: Double) {
         CoroutineScope(Dispatchers.Default).launch {
             var alert: Alert? = null
             val rssItemList = repo.getRssFeed(lat, lon)
             if (rssItemList != null && rssItemList.isNotEmpty()) {
-                Log.d("KartViewModel.getAlert", "Antall RSS-items returnert fra API: ${rssItemList.size}")
+                Log.d(
+                    "KartViewModel.getAlert",
+                    "Antall RSS-items returnert fra API: ${rssItemList.size}"
+                )
                 alert = repo.getCapAlert(rssItemList[0].link!!)
             } else {
                 Log.d("KartActivity.getAlert", "Ingen varsel ble funnet")
@@ -67,14 +80,36 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
      * Returnerer en instans av livedata med lokasjon.
      */
     fun getLocation(): LiveData<Location?> {
-        Log.d("KartViewModel", "getLocation: ${_location.value?.latitude}, ${_location.value?.longitude}")
+        Log.d(
+            "KartViewModel",
+            "getLocation: ${_location.value?.latitude}, ${_location.value?.longitude}"
+        )
         return _location
     }
 
-    fun findRoute(origin_lat : Double?, origin_lon : Double?, destination_lat : Double?, destination_lon : Double?) {
+    fun findPlace(place: String) {
+        //Kaller på Places API fra Google (via Repository) og oppdaterer places-Livedata
+        CoroutineScope(Dispatchers.Default).launch {
+            val placesFromApi = repo.searchLocation(place)
+            Log.d("Kartviewmodel.findplace", placesFromApi.toString())
+            if (placesFromApi != null) {
+                _candidates = placesFromApi as MutableList<Candidates>
+
+                _places.postValue(getPlacesLatLng(_candidates))
+            }
+        }
+    }
+
+    fun findRoute(
+        origin_lat: Double?,
+        origin_lon: Double?,
+        destination_lat: Double?,
+        destination_lon: Double?
+    ) {
         // Kaller på Directions API fra Google (via Repository) og oppdaterer routes-LiveData
         CoroutineScope(Dispatchers.Default).launch {
-            val routesFromApi = repo.getRoutes(origin_lat, origin_lon, destination_lat, destination_lon)
+            val routesFromApi =
+                repo.getRoutes(origin_lat, origin_lon, destination_lat, destination_lon)
             Log.d("KartViewModel.findRoute", routesFromApi.toString())
             if (routesFromApi != null) {
                 _routes =
@@ -106,7 +141,8 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
             // Bruker Mutex for å sikre at ingen av trådene skriver til varselListe samtidig (unngå mulig Race Condition).
             rssItems?.forEach {  // For hvert rssItem (løkke)
                 withContext(Dispatchers.Default) {          // dispatch med ny coroutine for hvert rssItem
-                    val alert = repo.getCapAlert(it.link!!) // Hent CAP-alert via repository. 'it': rssItem
+                    val alert =
+                        repo.getCapAlert(it.link!!) // Hent CAP-alert via repository. 'it': rssItem
                     if (alert != null) {
                         varselListeMutex.withLock { // Trådsikkert: ingen tråder modifiserer listen samtidig
                             varselListe.add(alert)
@@ -151,5 +187,24 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
         }
         return tmpPathList
     }
+
+
+    private fun getPlacesLatLng(places: List<Candidates>?): Location? {
+        val location: Location? = null
+        val tag = "Places LatLng"
+        if (places != null) {
+            for (geo in places) {
+                val geometry = geo.geometry
+                Log.d(tag, "Candidates (i candidate.geometry): $geometry")
+                if (geometry != null) {
+                    val location = geometry.location
+                    Log.d(tag, "Loaction points: $location")
+
+                }
+            }
+        }
+        return location
+    }
+
 }
 

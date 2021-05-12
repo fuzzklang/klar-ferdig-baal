@@ -69,6 +69,21 @@
             app:layout_constraintVertical_bias="0.0"
             android:background="@color/white"/>
 
+        <Button
+            android:id="@+id/searchLocation"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:background="@null"
+            android:backgroundTint="@color/black"
+            android:contentDescription="@string/menu_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.375"
+            app:layout_constraintStart_toEndOf="@+id/searchBar"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
         <TextView
             android:id="@+id/appTitle"
             android:layout_width="wrap_content"
