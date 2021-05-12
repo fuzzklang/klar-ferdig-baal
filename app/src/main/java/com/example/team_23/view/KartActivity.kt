@@ -48,11 +48,11 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     // ----- Meny -----
     private lateinit var menu: View
     private lateinit var menuButton: ImageButton
-    private var menuSynlig = false
+    private var menuVisible = false
     // ----- Alert Popup-box -----
     private lateinit var popup: View
     private lateinit var popupCloseButton: ImageButton
-    private var popupSynlig = false
+    private var popupVisible = false
     // ----- Travel here -------
     private lateinit var travelHereButton: ImageButton
     private lateinit var travelPolylineList: MutableList<Polyline>
@@ -103,8 +103,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         infoCloseButton = findViewById<ImageButton>(R.id.infoboxCloseButton)
         info = findViewById<View>(R.id.infoBox)
 
-        // ----- Popup-boks -----
-        // (varselvisning?)
+        // ----- Alert Popup-boks -----
         popup = findViewById<View>(R.id.popup)
         popupCloseButton = findViewById<ImageButton>(R.id.popupAlertCloseButton)
         val warningArea = findViewById<TextView>(R.id.popupAlertArea)
@@ -131,10 +130,10 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         rulesActivityBtn.setOnClickListener{
             val intent = Intent(this,RegelView::class.java)
             startActivity(intent)
-            if(menuSynlig){
+            if(menuVisible){
                 menu.visibility = View.GONE
                 menuButton.background = resources.getDrawable(R.drawable.menubutton,theme)
-                menuSynlig = !menuSynlig
+                menuVisible = !menuVisible
             }
         }
 
@@ -173,42 +172,48 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             Log.d(tag, "Oppdatering observert i alertAtPosition. Alert: $it")
             val warningText: String
             val background: Drawable
+            val colorLevel : Drawable
             if (alert != null) {
                 val info = alert.infoNo
                 warningArea.text = info.area.areaDesc
                 warningInfo.text = info.instruction
-                val alertColorLever = alert.getAlertColor()
+                val alertColorLevel = alert.getAlertColor()
 
                 // TODO: tekst burde hentes fra resources
-                when (alertColorLever) {
+                when (alertColorLevel) {
                     AlertColors.YELLOW -> {
                         warningText = "Moderat skogbrannfare"
-                        background = resources.getDrawable(R.drawable.yellowwarning,theme)}
+                        background = resources.getDrawable(R.drawable.yellowwarning,theme)
+                        colorLevel = resources.getDrawable(R.color.alertYellow, theme)}
                     AlertColors.ORANGE -> {
                         warningText = "Betydelig skogbrannfare"
-                        background = resources.getDrawable(R.drawable.orangewarning,theme)}
+                        background = resources.getDrawable(R.drawable.orangewarning,theme)
+                        colorLevel = resources.getDrawable(R.color.alertOrange, theme)}
                     AlertColors.RED    -> {
                         warningText = "Moderat skogbrannfare"
                         background = resources.getDrawable(R.drawable.orangewarning,theme)  // TODO: hent rød varsel fra Githuben til YR!
+                        colorLevel = resources.getDrawable(R.color.alertRed, theme)
                         Log.w(tag, "Returnert alertColor er RED. Ikke forventet. Fortsetter kjøring.")
                     }
                     AlertColors.UNKNOWN -> {
                         Log.w(tag, "Returnert alertColor er Unkown.")
                         warningText = "?"
-                        background = resources.getDrawable(R.drawable.orangewarning,theme)  // TODO: bruk et '?'-symbol?
+                        colorLevel = resources.getDrawable(R.color.black, theme)
+                        background = resources.getDrawable(R.drawable.nivaaer,theme)
                     }
                 }
-
             } else {
                 // Ingen varsel (alert er null)
                 warningText = "Ingen varsel funnet"
                 background = resources.getDrawable(R.drawable.shape,theme)
                 warningArea.text = ""
                 warningInfo.text = "Ingen varsel i dette området"
+                colorLevel = resources.getDrawable(R.color.black, theme)
 
             }
             warningLevel.text = warningText
-            warningLevelColor.background = background
+            warningLevelImg.background = background
+            warningLevelColor.background = colorLevel
             togglePopup()  // TODO: endre toggling til 'showPopup'.
         })
     }
@@ -228,6 +233,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // ===== VARIABLER =====
         // ----- Kart -----
         mMap = googleMap
+        // Setter padding på toppen til kartet slik at kartet ikke havner bak den øverste fanen i appen.
         mMap.setPadding(0, 2000, 0, 0)
 
         // -- Bålplasser --
@@ -339,33 +345,33 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         } else {
             info.visibility = View.VISIBLE
             mMap.uiSettings.isScrollGesturesEnabled = false
-            if(menuSynlig){
+            if(menuVisible){
                 menu.visibility = View.GONE
                 menuButton.background = ResourcesCompat.getDrawable(resources, R.drawable.menubutton,theme)
-                menuSynlig = !menuSynlig
+                menuVisible = !menuVisible
             }
         }
         infoSynlig = !infoSynlig
     }
 
     private fun togglePopup(){
-        if (popupSynlig) {
+        if (popupVisible) {
             popup.visibility = View.GONE
             mMap.uiSettings.isScrollGesturesEnabled = true
         } else {
             popup.visibility = View.VISIBLE
             mMap.uiSettings.isScrollGesturesEnabled = false
-            if(menuSynlig) {
+            if(menuVisible) {
                 menu.visibility = View.GONE
                 menuButton.background = ResourcesCompat.getDrawable(resources, R.drawable.menubutton,theme)
-                menuSynlig = !menuSynlig
+                menuVisible = !menuVisible
             }
         }
-        popupSynlig = !popupSynlig
+        popupVisible = !popupVisible
     }
 
     private fun toggleMenu() {
-        if(menuSynlig) {
+        if(menuVisible) {
             menu.visibility = View.GONE
             mMap.uiSettings.isScrollGesturesEnabled = true
             menuButton.background = ResourcesCompat.getDrawable(resources, R.drawable.menubutton,theme)
@@ -376,11 +382,11 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             if(infoSynlig) {
                 toggleInfo()
             }
-            if(popupSynlig) {
+            if(popupVisible) {
                 togglePopup()
             }
         }
-        menuSynlig = !menuSynlig
+        menuVisible = !menuVisible
     }
 
     private fun toggleLevelsPopup() {

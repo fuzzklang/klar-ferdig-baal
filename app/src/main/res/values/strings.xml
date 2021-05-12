@@ -51,4 +51,12 @@
     <string name="popup">popup</string>
     <string name="menu_button">Menu button</string>
     <string name="varsler_her">Varsler her</string>
+    <string name="kartfunksjoner">Kartfunksjoner</string>
+    <string name="overlay_av">Overlay (AV)</string>
+    <string name="overlay_paa">Overlay (PÅ)</string>
+    <string name="vis_baalplasser">Vis Bålplasser</string>
+    <string name="skjul_baalplasser">Skjul Bålplasser</string>
+    <string name="moderat_skogbrannfare">Moderat skogbrannfare</string>
+    <string name="moderat_skogbrannfare_ikon">Moderat skogbrannfare ikon</string>
+    <string name="betydelig_skogbrannfare">Betydelig skogbrannfare</string>
 </resources>
