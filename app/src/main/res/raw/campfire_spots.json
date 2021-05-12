@@ -94,5 +94,10 @@
     {"name": "Gardlaus markastue", "type": "Bål og grillplass", "lat": 59.933, "lon": 10.553},
     {"name": "Burudvann", "type": "Bål og grillplass", "lat": 59.970, "lon": 10.508},
     {"name": "Burudvann", "type": "Bål og grillplass", "lat": 59.969, "lon": 10.509},
-    {"name": "Fornebu", "type": "Bål og grillplass", "lat": 59.900, "lon": 10.634}
+    {"name": "Hellstranda Friområde", "type": "Grillplass", "lat": 63.448, "lon": 10.890},
+    {"name": "Holmberget friluftsområde", "type": "Grillplass", "lat": 63.475, "lon": 10.878},
+    {"name": "Monsberga friluftsområde", "type": "Grillplass", "lat": 63.478, "lon": 10.938},
+    {"name": "Håmmårsbukta friluftsområde", "type": "Grillplass", "lat": 63.539, "lon": 10.832},
+    {"name": "Solveien", "type": "Bålplass", "lat": 59.875, "lon": 10.781},
+    {"name": "Storvika friluftsområde", "type": "Grillplass", "lat": 63.471, "lon": 10.880}
 ]
