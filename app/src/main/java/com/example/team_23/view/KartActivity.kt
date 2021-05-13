@@ -201,7 +201,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                         Log.w(tag, "Returnert alertColor er Unkown.")
                         warningText = "?"
                         colorLevel = resources.getDrawable(R.color.black, theme)
-                        background = resources.getDrawable(R.drawable.nivaaer,theme)
+                        background = resources.getDrawable(R.drawable.questionmark,theme)
                     }
                 }
             } else {
@@ -210,7 +210,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 background = resources.getDrawable(R.drawable.shape,theme)
                 warningArea.text = ""
                 warningInfo.text = "Ingen varsel i dette området"
-                colorLevel = resources.getDrawable(R.color.black, theme)
+                colorLevel = resources.getDrawable(R.color.green, theme)
 
             }
             warningLevel.text = warningText
