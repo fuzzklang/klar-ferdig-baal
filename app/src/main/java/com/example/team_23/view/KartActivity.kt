@@ -276,7 +276,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         kartViewModel.places.observe(this, { places ->
             Log.d(tag, "Places: ${places}")
 
-            placeMarker(places[0])
+            placeMarker(places)
         })
 
 

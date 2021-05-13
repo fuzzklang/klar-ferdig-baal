@@ -30,13 +30,13 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
     private var _location = MutableLiveData<Location?>()             // Enhetens lokasjon (GPS)
     private var _alertAtPosition = MutableLiveData<Alert?>()  // Varsel for angitt sted.
     private var _candidates = mutableListOf<Candidates>()
-    private val _places = MutableLiveData<List<LatLng>>()
+    private val _places = MutableLiveData<LatLng>()
 
     /* Immutable versjoner av LiveDataene over som er tilgjengelig for Viewene */
     val allAlerts: LiveData<MutableList<Alert>> = _allAlerts
     val alertAtPosition: LiveData<Alert?> = _alertAtPosition
     var path: LiveData<MutableList<List<LatLng>>> = _path
-    var places: LiveData<List<LatLng>> = _places
+    var places: LiveData<LatLng> = _places
 
     /* Grensesnitt til View.
      * Henter varsler for nåværende sted.
@@ -189,24 +189,16 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
         return tmpPathList
     }
 
-    private fun getPlacesLatLng(places: List<Candidates>?): MutableList<LatLng> {
-        val tmpPlaceList = mutableListOf<LatLng>()
-        val tag = "Places LatLng"
-        if (places != null) {
-            for (geo in places) {
-                val geometry = geo.geometry
-                Log.d(tag, "Candidates (i candidate.geometry): $geometry")
-                if (geometry != null) {
-                    val location = geometry.location
-                    val lat = location?.lat?.toDouble()
-                    val lng = location?.lng?.toDouble()
-                    val latlng = LatLng(lat!!, lng!!)
-                    tmpPlaceList.add(latlng)
+    private fun getPlacesLatLng(places: List<Candidates>?): LatLng? {
+        val location = places?.get(0)?.geometry?.location
+        var latlng: LatLng? = null
 
-                }
-            }
+        if (location?.lat != null && location.lng != null){
+            latlng = LatLng(location.lat.toDouble(), location.lng.toDouble())
         }
-        return tmpPlaceList
+
+        return latlng
+
     }
 
 
