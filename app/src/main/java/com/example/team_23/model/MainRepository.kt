@@ -4,6 +4,7 @@ import android.location.Location
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.team_23.R
 import com.example.team_23.model.api.ApiServiceImpl
 import com.example.team_23.model.api.CapParser
 import com.example.team_23.model.api.MetAlertsRssParser
@@ -30,13 +31,14 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
     private val directionsURL_origin = "https://maps.googleapis.com/maps/api/directions/json?origin="
     private val directionsURL_destination = "&destination="
     private val mode = "&mode=walking"
-    private val directionsURL_key = "&key=AIzaSyAyK0NkgPMxOOTnWR5EFKdy2DzfDXGh-HI"
+    private val key: String = R.string.api_key.toString()
+    private val directionsURL_key = "&key=${key}"
     private val gson = Gson()
     var routes: List<Routes>? = null
 
     //Places API
     private val placesURL_start = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input="
-    private val placesURL_end = "&inputtype=textquery&fields=formatted_address,name,geometry&key=AIzaSyAyK0NkgPMxOOTnWR5EFKdy2DzfDXGh-HI"
+    private val placesURL_end = "&inputtype=textquery&fields=formatted_address,name,geometry&key=${key}"
     var places: List<Candidates>? = null
 
     suspend fun searchLocation(place: String): List<Candidates>?{
