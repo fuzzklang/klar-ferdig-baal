@@ -41,22 +41,36 @@
             app:layout_constraintVertical_bias="1.0"
             android:layout_marginBottom="5dp" />
 
-        <EditText
-            android:id="@+id/searchBar"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:autofillHints="Search"
-            android:background="@null"
-            android:elevation="3dp"
-            android:gravity="center"
-            android:hint="@string/sok"
-            android:inputType="text"
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="411dp"
+            android:layout_height="107dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.088" />
+            app:layout_constraintVertical_bias="0.0">
+
+            <fragment
+                android:id="@+id/search"
+                android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+                android:layout_width="190dp"
+                android:layout_height="168dp"
+                android:autofillHints="Search"
+                android:background="@null"
+                android:elevation="3dp"
+                android:gravity="center"
+                android:hint="@string/sok"
+                android:inputType="text"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0" />
+
+        </androidx.cardview.widget.CardView>
 
         <View
             android:id="@+id/topWhiteBar"
@@ -69,21 +83,6 @@
             app:layout_constraintVertical_bias="0.0"
             android:background="@color/white"/>
 
-        <Button
-            android:id="@+id/searchLocation"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:background="@null"
-            android:backgroundTint="@color/black"
-            android:contentDescription="@string/menu_button"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.375"
-            app:layout_constraintStart_toEndOf="@+id/searchBar"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
-
         <TextView
             android:id="@+id/appTitle"
             android:layout_width="wrap_content"
@@ -92,7 +91,6 @@
             android:text="@string/app_title"
             android:textColor="@color/black"
             android:textSize="25sp"
-            app:layout_constraintBottom_toTopOf="@+id/searchBar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -103,7 +101,6 @@
             android:layout_width="150dp"
             android:layout_height="50dp"
             android:src="@drawable/klar_ferdig_bal"
-            app:layout_constraintBottom_toTopOf="@+id/searchBar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"

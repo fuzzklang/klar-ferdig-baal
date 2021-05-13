@@ -9,6 +9,7 @@ import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.provider.VoicemailContract
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -25,12 +26,17 @@ import com.example.team_23.model.dataclasses.metalerts_dataclasses.Alert
 import com.example.team_23.model.dataclasses.metalerts_dataclasses.AlertColors
 import com.example.team_23.utils.ViewModelProvider
 import com.example.team_23.viewmodel.KartViewModel
+import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 
 class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private val tag = "KartActivity"
@@ -87,6 +93,36 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val apiKey: String = getString(R.string.api_key)
+        if (!Places.isInitialized()) {
+            Places.initialize(applicationContext, getString(R.string.api_key))
+        }
+
+        val placesClient = Places.createClient(this)
+
+
+        // Initialize the AutocompleteSupportFragment.
+        val autocompleteFragment =
+            supportFragmentManager.findFragmentById(R.id.search)
+                    as AutocompleteSupportFragment
+
+        // Specify the types of place data to return.
+        autocompleteFragment.setPlaceFields(listOf(Place.Field.ID, Place.Field.NAME))
+
+        // Set up a PlaceSelectionListener to handle the response.
+        autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
+            override fun onPlaceSelected(place: Place) {
+                Log.d("LATLNG", place.latLng.toString())
+                // TODO: Get info about the selected place.
+                Log.i("OnPlaceSelected", "Place: ${place.name}, ${place.latLng}")
+            }
+
+            override fun onError(p0: Status) {
+                // TODO: Handle the error.
+                Log.i("OnError", "An error occurred: $p0")
+            }
+        })
+
         // Setter KartViewModel og Kart tidlig.
         kartViewModel = ViewModelProvider.getKartViewModel(LocationServices.getFusedLocationProviderClient(applicationContext))
         // Henter SupportMapFragment og får beskjed når kartet (map) er klart til bruk. Se onMapReady-metoden.
@@ -129,8 +165,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         travelPolylineList = mutableListOf()
 
         //--------- Search-function ----------
-        searchBar = findViewById(R.id.searchBar)
-        searchButton = findViewById(R.id.searchLocation)
+        //searchBar = findViewById(R.id.searchBar)
+        //searchButton = findViewById(R.id.searchLocation)
 
         // ===== (ONCLICK) LISTENERS =====
         rulesActivityBtn.setOnClickListener{
@@ -307,11 +343,11 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         travelHereButton.setOnClickListener{ getAndShowDirections() }
 
         //Ved klikk på "Søk"-knappen
-        searchButton.setOnClickListener {
+        /*searchButton.setOnClickListener {
             val input = searchBar.text.toString()
             kartViewModel.findPlace(input)
             it.hideKeyboard()
-        }
+        }*/
 
         // ===== INITALISER - API-kall, konfigurasjon ++ =====
         kartViewModel.getAllAlerts()  // Hent alle varsler ved oppstart av app, når kart er klart.
