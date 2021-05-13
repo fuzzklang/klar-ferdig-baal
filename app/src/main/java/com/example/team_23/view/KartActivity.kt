@@ -72,7 +72,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private var overlayVisible = true
     private lateinit var overlayPolygonList: MutableList<Polygon>  // Listen med polygoner
 
-
+    //
 
 
     @SuppressLint("UseCompatLoadingForDrawables", "SetTextI18n")
