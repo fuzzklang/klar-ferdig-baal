@@ -341,7 +341,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun placeMarker(latlng: LatLng){
         marker?.remove()
         marker = mMap.addMarker(MarkerOptions().position(latlng))
-        togglePopup()
+        kartViewModel.getAlert(latlng.latitude, latlng.longitude)
+        
     }
 
     private fun View.hideKeyboard() {
