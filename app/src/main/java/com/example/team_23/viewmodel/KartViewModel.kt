@@ -190,7 +190,6 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
         return tmpPathList
     }
 
-
     private fun getPlacesLatLng(places: List<Candidates>?): MutableList<LatLng> {
         val tmpPlaceList = mutableListOf<LatLng>()
         val tag = "Places LatLng"
@@ -201,7 +200,7 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
                 if (geometry != null) {
                     val location = geometry.location
                     val lat = location?.lat?.toDouble()
-                    val lng = location?.lat?.toDouble()
+                    val lng = location?.lng?.toDouble()
                     val latlng = LatLng(lat!!, lng!!)
                     tmpPlaceList.add(latlng)
 
@@ -210,6 +209,7 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
         }
         return tmpPlaceList
     }
+
 
 }
 

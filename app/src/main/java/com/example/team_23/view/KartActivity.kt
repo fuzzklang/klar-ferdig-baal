@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.example.team_23.R
 import com.example.team_23.model.dataclasses.Campfire
+import com.example.team_23.model.dataclasses.Candidates
 import com.example.team_23.model.dataclasses.metalerts_dataclasses.Alert
 import com.example.team_23.model.dataclasses.metalerts_dataclasses.AlertColors
 import com.example.team_23.utils.ViewModelProvider
@@ -125,8 +126,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         travelPolylineList = mutableListOf()
 
         //--------- Search-function ----------
-        searchBar = findViewById<EditText>(R.id.searchBar)
-        searchButton = findViewById<Button>(R.id.searchLocation)
+        searchBar = findViewById(R.id.searchBar)
+        searchButton = findViewById(R.id.searchLocation)
 
         // ===== (ONCLICK) LISTENERS =====
         rulesActivityBtn.setOnClickListener{
@@ -268,11 +269,17 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // Observer path-livedata (i fra KartViewModel), tegn polyline ved oppdatering.
         kartViewModel.path.observe(this, { paths -> drawDirectionsPath(paths) })
 
-        kartViewModel.places.observe(this, {
-            Log.d("places.observe", it.toString())
-            marker = mMap.addMarker(MarkerOptions().position(it[0]))
+
+        kartViewModel.places.observe(this, { places -> placeMarker(places[0])
 
         })
+
+
+
+
+
+
+
 
 
 
@@ -298,15 +305,14 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             true
         }
 
-        //Ved klikk på "Search"-knappen:
-        searchButton.setOnClickListener {
-            val input = searchBar.text.toString()
-            kartViewModel.findPlace(input)
-            Log.d("Searchbutton", kartViewModel.findPlace((input)).toString())
-        }
 
         // Ved klikk på "Dra hit"-knappen (i popup-menyen):
         travelHereButton.setOnClickListener{ getAndShowDirections() }
+
+        searchButton.setOnClickListener {
+            val input = searchBar.text.toString()
+            kartViewModel.findPlace(input)
+        }
 
         // ===== INITALISER - API-kall, konfigurasjon ++ =====
         kartViewModel.getAllAlerts()  // Hent alle varsler ved oppstart av app, når kart er klart.
@@ -336,6 +342,11 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST)
         }
     }
+
+    private fun placeMarker(latlng: LatLng){
+        marker = mMap.addMarker(MarkerOptions().position(latlng))
+    }
+
 
     /* Metode kalles når svar ang. lokasjonstilgang kommer tilbake. Sjekker om tillatelse er innvilget */
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
