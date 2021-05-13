@@ -1,6 +1,7 @@
 package com.example.team_23.view
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -10,6 +11,7 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -304,7 +306,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         searchButton.setOnClickListener {
             val input = searchBar.text.toString()
             kartViewModel.findPlace(input)
-
+            it.hideKeyboard()
         }
 
         // ===== INITALISER - API-kall, konfigurasjon ++ =====
@@ -340,7 +342,11 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         marker?.remove()
         marker = mMap.addMarker(MarkerOptions().position(latlng))
         togglePopup()
+    }
 
+    private fun View.hideKeyboard() {
+        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(windowToken, 0)
     }
 
 
