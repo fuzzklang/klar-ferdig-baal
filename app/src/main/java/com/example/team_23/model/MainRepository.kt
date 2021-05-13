@@ -4,7 +4,6 @@ import android.location.Location
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.team_23.R
 import com.example.team_23.model.api.ApiServiceImpl
 import com.example.team_23.model.api.CapParser
 import com.example.team_23.model.api.MetAlertsRssParser
@@ -28,24 +27,23 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
     private val permanentOptions = listOf("event=forestFire")
 
     // Directions API
-    private val directionsURL_origin = "https://maps.googleapis.com/maps/api/directions/json?origin="
-    private val directionsURL_destination = "&destination="
+    private val directionsUrlOrigin = "https://maps.googleapis.com/maps/api/directions/json?origin="
+    private val directionsUrlDestination = "&destination="
     private val mode = "&mode=walking"
-    private val key: String = R.string.api_key.toString()
-    private val directionsURL_key = "&key=${key}"
+    private val directionsUrlKey = "&key=AIzaSyAyK0NkgPMxOOTnWR5EFKdy2DzfDXGh-HI"
     private val gson = Gson()
-    var routes: List<Routes>? = null
+    private var routes: List<Routes>? = null
 
     //Places API
-    private val placesURL_start = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input="
-    private val placesURL_end = "&inputtype=textquery&fields=formatted_address,name,geometry&key=AIzaSyAyK0NkgPMxOOTnWR5EFKdy2DzfDXGh-HI"
-    var places: List<Candidates>? = null
+    private val placesUrlStart = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input="
+    private val placesUrlEnd = "&inputtype=textquery&fields=formatted_address,name,geometry&key=AIzaSyAyK0NkgPMxOOTnWR5EFKdy2DzfDXGh-HI"
+    private var places: List<Candidates>? = null
 
     suspend fun searchLocation(place: String): List<Candidates>?{
         Log.d(tag, "Soker etter sted fra Google!")
-        val places_path = "${placesURL_start}${place}${placesURL_end}"
+        val placesPath = "${placesUrlStart}${place}${placesUrlEnd}"
         try{
-        val httpResponse = apiService.fetchData(places_path)
+        val httpResponse = apiService.fetchData(placesPath)
         if (httpResponse != null)  Log.d(tag, "Fikk respons fra Places API")
         val response = gson.fromJson(httpResponse, MainBase::class.java)
         places = response.candidates
@@ -62,9 +60,9 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
     suspend fun getRoutes(origin_lat : Double?, origin_lon : Double?, destination_lat : Double?, destination_lon : Double?): List<Routes>? {
 
         Log.d(tag, "Henter ruter fra Google!")
-        val direction_path = "${directionsURL_origin}${origin_lat},${origin_lon}${directionsURL_destination}${destination_lat},${destination_lon}${mode}${directionsURL_key}"
+        val directionPath = "${directionsUrlOrigin}${origin_lat},${origin_lon}${directionsUrlDestination}${destination_lat},${destination_lon}${mode}${directionsUrlKey}"
         try {
-            val httpResponse = apiService.fetchData(direction_path)
+            val httpResponse = apiService.fetchData(directionPath)
             if (httpResponse != null)  Log.d(tag, "Fikk respons fra Directions API")
             val response = gson.fromJson(httpResponse, Base::class.java)
             routes = response.routes
