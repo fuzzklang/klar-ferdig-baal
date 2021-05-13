@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.fragment.app.Fragment
 import com.example.team_23.R
 import com.example.team_23.model.dataclasses.Campfire
 import com.example.team_23.model.dataclasses.Candidates
@@ -269,18 +270,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // Observer path-livedata (i fra KartViewModel), tegn polyline ved oppdatering.
         kartViewModel.path.observe(this, { paths -> drawDirectionsPath(paths) })
 
-
-        kartViewModel.places.observe(this, { places -> placeMarker(places[0])
-
-        })
-
-
-
-
-
-
-
-
+        //Observerer places-livedata (i fra KartViewModel), plasserer marker på søkt sted ved oppdatering
+        kartViewModel.places.observe(this, { places -> placeMarker(places[0]) })
 
 
         // ===== ON CLICK LISTENERS =====
@@ -309,9 +300,11 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // Ved klikk på "Dra hit"-knappen (i popup-menyen):
         travelHereButton.setOnClickListener{ getAndShowDirections() }
 
+        //Ved klikk på "Søk"-knappen
         searchButton.setOnClickListener {
             val input = searchBar.text.toString()
             kartViewModel.findPlace(input)
+
         }
 
         // ===== INITALISER - API-kall, konfigurasjon ++ =====
@@ -344,7 +337,10 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun placeMarker(latlng: LatLng){
+        marker?.remove()
         marker = mMap.addMarker(MarkerOptions().position(latlng))
+        togglePopup()
+
     }
 
 
@@ -524,9 +520,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             campfireMarkers.forEach { it.isVisible = false }
     }
 
-    private fun getSearchInfo(place: String) {
-        val location = kartViewModel.findPlace(place)
-    }
 
     private fun getAndShowDirections() {
         travelPolylineList.forEach{ it.remove() }   // Fjern tidligere tidligere tegnet rute fra kart.
