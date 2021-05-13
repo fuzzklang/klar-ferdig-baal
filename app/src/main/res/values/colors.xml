@@ -13,6 +13,9 @@
     <color name="alertYellow">#FFFF00</color>
     <color name="alertOrange">#FF6600</color>
     <color name="alertRed">#FF0000</color>
+    <color name="mainColor">#465057</color>
+    <color name="themeColor1">#6E9A8B</color>
+    <color name="themeColor2">#A7BF88</color>
     <!-- Alpha på 0x55 tilsvarer ca. 33% -->
     <color name="alertYellowTransparent">#55FFFF00</color>
     <color name="alertOrangeTransparent">#55FF6600</color>

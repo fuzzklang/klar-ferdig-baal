@@ -383,7 +383,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         } else {
             menu.visibility = View.VISIBLE
             mMap.uiSettings.isScrollGesturesEnabled = false
-            menuButton.background = ResourcesCompat.getDrawable(resources, R.drawable.closemenubutton,theme)
+            menuButton.background = ResourcesCompat.getDrawable(resources, R.drawable.menubuttonclose,theme)
             if(infoSynlig) {
                 toggleInfo()
             }
