@@ -38,23 +38,21 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
 
     //Places API
     private val placesURL_start = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input="
-    private val placesURL_end = "&inputtype=textquery&fields=formatted_address,name,geometry&key=${key}"
+    private val placesURL_end = "&inputtype=textquery&fields=formatted_address,name,geometry&key=AIzaSyAyK0NkgPMxOOTnWR5EFKdy2DzfDXGh-HI"
     var places: List<Candidates>? = null
 
     suspend fun searchLocation(place: String): List<Candidates>?{
         Log.d(tag, "Soker etter sted fra Google!")
         val places_path = "${placesURL_start}${place}${placesURL_end}"
-        Log.d("Pathing2", places_path)
         try{
         val httpResponse = apiService.fetchData(places_path)
-            Log.d("Pathing", places_path)
         if (httpResponse != null)  Log.d(tag, "Fikk respons fra Places API")
         val response = gson.fromJson(httpResponse, MainBase::class.java)
         places = response.candidates
             Log.d("places", places.toString())
 
     } catch (exception: IOException) {
-        Log.w(tag, "Feil under henting av rute: ${exception.message}")
+        Log.w(tag, "Feil under henting av latlng til sted: ${exception.message}")
     }
     return places
 

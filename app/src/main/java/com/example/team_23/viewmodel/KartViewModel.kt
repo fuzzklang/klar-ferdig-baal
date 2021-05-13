@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel
 import com.example.team_23.model.MainRepository
 import com.example.team_23.model.dataclasses.Campfire
 import com.example.team_23.model.dataclasses.Candidates
-import com.example.team_23.model.dataclasses.Locations
 import com.example.team_23.model.dataclasses.Routes
 import com.example.team_23.model.dataclasses.metalerts_dataclasses.Alert
 import com.google.android.gms.maps.model.LatLng
