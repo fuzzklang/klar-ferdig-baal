@@ -11,6 +11,7 @@ import com.example.team_23.model.dataclasses.*
 import com.example.team_23.model.dataclasses.metalerts_dataclasses.Alert
 import com.example.team_23.model.dataclasses.metalerts_dataclasses.RssItem
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import org.xmlpull.v1.XmlPullParserException
@@ -38,6 +39,26 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
     private val placesUrlStart = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input="
     private val placesUrlEnd = "&inputtype=textquery&fields=formatted_address,name,geometry&key=AIzaSyAyK0NkgPMxOOTnWR5EFKdy2DzfDXGh-HI"
     private var places: List<Candidates>? = null
+
+    //Geocode API
+    private val placesURL = "https://maps.googleapis.com/maps/api/geocode/json?"
+    private val key = "AIzaSyAyK0NkgPMxOOTnWR5EFKdy2DzfDXGh-HI"
+    private var placeName: String? = null
+
+    /*suspend fun getPlaceFromLatLng(latlng: LatLng): String? {
+        Log.d(tag, "Soker etter sted fra Geocode API")
+        val geocodePath = "${placesURL}${latlng}${key}"
+        try{
+            val httpResponse = apiService.fetchData(geocodePath)
+            if (httpResponse != null)  Log.d(tag, "Fikk respons fra Geocode API")
+            val response = gson.fromJson(httpResponse, Address_components2::class.java)
+            placeName = response.long_name
+            Log.d("places", placeName.toString())
+        } catch (exception: IOException) {
+            Log.w(tag, "Feil under henting av types til sted: ${exception.message}")
+        }
+        return placeName
+    }*/
 
     suspend fun searchLocation(place: String): List<Candidates>?{
         Log.d(tag, "Soker etter sted fra Google!")

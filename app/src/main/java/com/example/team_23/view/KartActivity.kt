@@ -1,36 +1,41 @@
 package com.example.team_23.view
+
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.Point
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
-import androidx.fragment.app.Fragment
 import com.example.team_23.R
 import com.example.team_23.model.dataclasses.Campfire
-import com.example.team_23.model.dataclasses.Candidates
 import com.example.team_23.model.dataclasses.metalerts_dataclasses.Alert
 import com.example.team_23.model.dataclasses.metalerts_dataclasses.AlertColors
 import com.example.team_23.utils.ViewModelProvider
 import com.example.team_23.viewmodel.KartViewModel
+import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
+import java.util.*
+
 
 class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private val tag = "KartActivity"
@@ -75,9 +80,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var menuOverlayBtn: ToggleButton
     private var overlayVisible = true
     private lateinit var overlayPolygonList: MutableList<Polygon>  // Listen med polygoner
-    //----- Search-function ------
-    private lateinit var searchButton: Button
-    private lateinit var searchBar: EditText
+
 
 
 
@@ -86,6 +89,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
 
         // Setter KartViewModel og Kart tidlig.
         kartViewModel = ViewModelProvider.getKartViewModel(LocationServices.getFusedLocationProviderClient(applicationContext))
@@ -127,10 +131,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // ------- Travel here -------
         travelPolylineList = mutableListOf()
-
-        //--------- Search-function ----------
-        searchBar = findViewById(R.id.searchBar)
-        searchButton = findViewById(R.id.searchLocation)
 
         // ===== (ONCLICK) LISTENERS =====
         rulesActivityBtn.setOnClickListener{
@@ -217,7 +217,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 // Ingen varsel (alert er null)
                 warningText = "Ingen varsel funnet"
                 background = resources.getDrawable(R.drawable.shape,theme)
-                warningArea.text = ""
+                warningArea.text = kartViewModel.getPlaceName()
                 warningInfo.text = "Ingen varsel i dette området"
                 colorLevel = resources.getDrawable(R.color.black, theme)
 
@@ -226,6 +226,38 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             warningLevelImg.background = background
             warningLevelColor.background = colorLevel
             togglePopup()  // TODO: endre toggling til 'showPopup'.
+        })
+
+        if (!Places.isInitialized()) {
+            Places.initialize(applicationContext, getString(R.string.api_key))
+        }
+
+
+        // Initialize the AutocompleteSupportFragment.
+        val autocompleteFragment =
+            supportFragmentManager.findFragmentById(R.id.search)
+                    as AutocompleteSupportFragment
+
+        // Spesifiserer typen data som returneres
+        autocompleteFragment.setPlaceFields(listOf(Place.Field.ID, Place.Field.NAME))
+
+        // Setter opp en PlaceSelectionListener for å håndtere responsen
+        autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
+            override fun onPlaceSelected(place: Place) {
+                Log.d("LATLNG", place.latLng.toString())
+                // TODO: Get info about the selected place.
+                kartViewModel.findPlace(place.name!!)
+                warningArea.text = place.name
+                travelPolylineList.forEach{ it.remove() }   // Fjern tidligere tidligere tegnet rute fra kart.
+                travelPolylineList.clear()
+                Log.i("OnPlaceSelected", "Place: ${place.name}, ${place.latLng}")
+            }
+
+            //Ved feil
+            override fun onError(p0: Status) {
+                // TODO: Handle the error.
+                Log.i("OnError", "An error occurred: $p0")
+            }
         })
     }
 
@@ -289,7 +321,19 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // Når bruker trykker på kartet lages det en marker
         mMap.setOnMapClickListener {
             marker?.remove()
-            marker = mMap.addMarker(MarkerOptions().position(it))
+            travelPolylineList.forEach{ it.remove() }   // Fjern tidligere tidligere tegnet rute fra kart.
+            travelPolylineList.clear()
+
+            if (!popupVisible){
+                marker = mMap.addMarker(MarkerOptions().position(it))
+                val markerLatLng = LatLng(marker!!.position.latitude, marker!!.position.longitude)
+                Log.d("Sara", markerLatLng.toString())
+
+                /*val place = kartViewModel.getPlace(markerLatLng)*/
+                //Log.d("Tobias", place.toString())
+               // kartViewModel.findPlace()
+            }
+
             kartViewModel.getAlert(it.latitude, it.longitude)
         }
 
@@ -306,13 +350,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // Ved klikk på "Dra hit"-knappen (i popup-menyen):
         travelHereButton.setOnClickListener{ getAndShowDirections() }
 
-        //Ved klikk på "Søk"-knappen
-        searchButton.setOnClickListener {
-            val input = searchBar.text.toString()
-            kartViewModel.findPlace(input)
-            it.hideKeyboard()
-        }
-
         // ===== INITALISER - API-kall, konfigurasjon ++ =====
         kartViewModel.getAllAlerts()  // Hent alle varsler ved oppstart av app, når kart er klart.
 
@@ -322,11 +359,38 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // --- FLYTT KAMERA ---
         val oslo = LatLng(59.911491, 10.757933) //TODO: flytt dette til en konfigurasjonsfil
         this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(oslo, 6f))  // TODO: Flyttes nå til Oslo. Velge annet sted?
+
+
+        mMap.setOnMarkerClickListener {
+            callMarker(it)
+        }
+
     }
 
     // =========================
     // ===== HJELPEMETODER =====
     // =========================
+
+    fun callMarker(marker: Marker) : Boolean{
+        val container_height = findViewById<RelativeLayout>(R.id.root).height
+        val projection = mMap.projection
+        val markerLatLng = LatLng(marker.position.latitude, marker.position.longitude)
+        val markerScreenPosition: Point = projection.toScreenLocation(markerLatLng)
+        val pointHalfScreenAbove = Point(
+            markerScreenPosition.x,
+            markerScreenPosition.y - container_height + 3500
+        )
+
+        val aboveMarkerLatLng = projection
+            .fromScreenLocation(pointHalfScreenAbove)
+        //val zoom = CameraUpdateFactory.zoomTo(15F)
+        marker.showInfoWindow()
+        val center = CameraUpdateFactory.newLatLng(aboveMarkerLatLng)
+        mMap.animateCamera(center)
+        //mMap.animateCamera(zoom)
+
+        return true
+    }
 
     /* Hjelpemetode for å få tilgangsrettigheter for lokasjon */
     private fun getLocationAccess() {
@@ -347,11 +411,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         marker = mMap.addMarker(MarkerOptions().position(latlng))
         kartViewModel.getAlert(latlng.latitude, latlng.longitude)
         
-    }
-
-    private fun View.hideKeyboard() {
-        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(windowToken, 0)
     }
 
 
@@ -472,7 +531,25 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                         .target(LatLng(location.latitude, location.longitude))
                         .zoom(6f)
                         .build()
-                mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+                //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), 10f))
+                //mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+
+                val container_height = findViewById<RelativeLayout>(R.id.root).height
+                val projection = mMap.projection
+
+                val locationLatLng = LatLng(location.latitude, location.longitude)
+                val markerScreenPosition: Point = projection.toScreenLocation(locationLatLng)
+                val pointHalfScreenAbove = Point(
+                    markerScreenPosition.x,
+                    markerScreenPosition.y - container_height + 3500
+                )
+
+                val aboveMarkerLatLng = projection
+                    .fromScreenLocation(pointHalfScreenAbove)
+
+                val center = CameraUpdateFactory.newLatLng(aboveMarkerLatLng)
+                mMap.animateCamera(center)
+
             } else {
                 Toast.makeText(this, "Ingen lokasjon tilgjengelig", Toast.LENGTH_SHORT).show()
             }
@@ -515,6 +592,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                     .position(LatLng(campfire.lat, campfire.lon))
                     .title("${campfire.name} (${campfire.type})")
                     .icon(BitmapDescriptorFactory.fromBitmap(smallCampfireMarkerBitmap)))
+
             if (marker == null)
                 Log.w(tag, "onMapReady: en campfireMarker er null! Ignorerer. Kan føre til uønsket oppførsel fra app.")
             else
