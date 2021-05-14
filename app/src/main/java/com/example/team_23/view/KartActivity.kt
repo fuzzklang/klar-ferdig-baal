@@ -250,6 +250,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 // TODO: Get info about the selected place.
                 kartViewModel.findPlace(place.name!!)
                 warningArea.text = place.name
+
                 travelPolylineList.forEach{ it.remove() }   // Fjern tidligere tidligere tegnet rute fra kart.
                 travelPolylineList.clear()
                 Log.i("OnPlaceSelected", "Place: ${place.name}, ${place.latLng}")
@@ -415,7 +416,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         marker?.remove()
         marker = mMap.addMarker(MarkerOptions().position(latlng))
         kartViewModel.getAlert(latlng.latitude, latlng.longitude)
-        
+
+        callMarker(marker!!)
+
     }
 
 
