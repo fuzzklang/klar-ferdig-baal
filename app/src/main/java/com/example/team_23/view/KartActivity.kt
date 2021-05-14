@@ -45,7 +45,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var info: View
     private lateinit var infoButton: Button
     private lateinit var infoCloseButton: ImageButton
-    private var infoSynlig = true   // Variabel som holder styr paa synligheten til info view
+    private var infoSynlig = false   // Variabel som holder styr paa synligheten til info view
     // ----- Meny -----
     private lateinit var menu: View
     private lateinit var menuButton: ImageButton
@@ -130,7 +130,15 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             val intent = Intent(this,RegelView::class.java)
             startActivity(intent)
         }
-
+        rulesActivityBtn.setOnClickListener{
+            val intent = Intent(this,InfoView::class.java)
+            startActivity(intent)
+            if(infoSynlig){
+                info.visibility = View.GONE
+                infoButton.background = resources.getDrawable(R.drawable.menubutton,theme)
+                infoSynlig = !infoSynlig
+            }
+        }
         rulesActivityBtn.setOnClickListener{
             val intent = Intent(this,RegelView::class.java)
             startActivity(intent)
