@@ -93,34 +93,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        if (!Places.isInitialized()) {
-            Places.initialize(applicationContext, getString(R.string.api_key))
-        }
-
-
-        // Initialize the AutocompleteSupportFragment.
-        val autocompleteFragment =
-            supportFragmentManager.findFragmentById(R.id.search)
-                    as AutocompleteSupportFragment
-
-        // Spesifiserer typen data som returneres
-        autocompleteFragment.setPlaceFields(listOf(Place.Field.ID, Place.Field.NAME))
-
-        // Setter opp en PlaceSelectionListener for å håndtere responsen
-        autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
-            override fun onPlaceSelected(place: Place) {
-                Log.d("LATLNG", place.latLng.toString())
-                // TODO: Get info about the selected place.
-                kartViewModel.findPlace(place.name!!)
-                Log.i("OnPlaceSelected", "Place: ${place.name}, ${place.latLng}")
-            }
-
-            //Ved feil
-            override fun onError(p0: Status) {
-                // TODO: Handle the error.
-                Log.i("OnError", "An error occurred: $p0")
-            }
-        })
 
         // Setter KartViewModel og Kart tidlig.
         kartViewModel = ViewModelProvider.getKartViewModel(LocationServices.getFusedLocationProviderClient(applicationContext))
@@ -248,7 +220,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 // Ingen varsel (alert er null)
                 warningText = "Ingen varsel funnet"
                 background = resources.getDrawable(R.drawable.shape,theme)
-                warningArea.text = ""
+                warningArea.text = kartViewModel.getPlaceName().toString()
                 warningInfo.text = "Ingen varsel i dette området"
                 colorLevel = resources.getDrawable(R.color.black, theme)
 
@@ -257,6 +229,36 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             warningLevelImg.background = background
             warningLevelColor.background = colorLevel
             togglePopup()  // TODO: endre toggling til 'showPopup'.
+        })
+
+        if (!Places.isInitialized()) {
+            Places.initialize(applicationContext, getString(R.string.api_key))
+        }
+
+
+        // Initialize the AutocompleteSupportFragment.
+        val autocompleteFragment =
+            supportFragmentManager.findFragmentById(R.id.search)
+                    as AutocompleteSupportFragment
+
+        // Spesifiserer typen data som returneres
+        autocompleteFragment.setPlaceFields(listOf(Place.Field.ID, Place.Field.NAME))
+
+        // Setter opp en PlaceSelectionListener for å håndtere responsen
+        autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
+            override fun onPlaceSelected(place: Place) {
+                Log.d("LATLNG", place.latLng.toString())
+                // TODO: Get info about the selected place.
+                kartViewModel.findPlace(place.name!!)
+                warningArea.text = place.name
+                Log.i("OnPlaceSelected", "Place: ${place.name}, ${place.latLng}")
+            }
+
+            //Ved feil
+            override fun onError(p0: Status) {
+                // TODO: Handle the error.
+                Log.i("OnError", "An error occurred: $p0")
+            }
         })
     }
 
@@ -369,6 +371,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun placeMarker(latlng: LatLng){
         marker?.remove()
         marker = mMap.addMarker(MarkerOptions().position(latlng))
+
         kartViewModel.getAlert(latlng.latitude, latlng.longitude)
         
     }
