@@ -91,7 +91,7 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
         return _location
     }
 
-    fun getPlace(latlng: LatLng){
+    /*fun getPlace(latlng: LatLng){
         //Kaller på Geocode API (via Repository) og oppdaterer xx-Livedata
         CoroutineScope(Dispatchers.Default).launch {
             val latlangFromAPI = repo.getPlaceFromLatLng(latlng)
@@ -101,7 +101,7 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
                 Log.d("Kartviewmodel.getPlace", "placeName oppdatert")
             }
         }
-    }
+    }*/
 
     fun findPlace(place: String) {
         //Kaller på Places API fra Google (via Repository) og oppdaterer places-Livedata

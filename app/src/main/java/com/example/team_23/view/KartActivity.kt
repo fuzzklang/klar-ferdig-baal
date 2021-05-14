@@ -1,29 +1,24 @@
 package com.example.team_23.view
+
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.Point
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.location.Address
-import android.location.Geocoder
 import android.os.Bundle
-import android.provider.VoicemailContract
 import android.util.Log
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
-import androidx.fragment.app.Fragment
 import com.example.team_23.R
 import com.example.team_23.model.dataclasses.Campfire
-import com.example.team_23.model.dataclasses.Candidates
 import com.example.team_23.model.dataclasses.metalerts_dataclasses.Alert
 import com.example.team_23.model.dataclasses.metalerts_dataclasses.AlertColors
 import com.example.team_23.utils.ViewModelProvider
@@ -40,6 +35,7 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import java.util.*
+
 
 class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private val tag = "KartActivity"
@@ -252,6 +248,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 // TODO: Get info about the selected place.
                 kartViewModel.findPlace(place.name!!)
                 warningArea.text = place.name
+                travelPolylineList.forEach{ it.remove() }   // Fjern tidligere tidligere tegnet rute fra kart.
+                travelPolylineList.clear()
                 Log.i("OnPlaceSelected", "Place: ${place.name}, ${place.latLng}")
             }
 
@@ -331,9 +329,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 val markerLatLng = LatLng(marker!!.position.latitude, marker!!.position.longitude)
                 Log.d("Sara", markerLatLng.toString())
 
-                val place = kartViewModel.getPlace(markerLatLng)
-                Log.d("Tobias", place.toString())
-                kartViewModel.findPlace(place.toString())
+                /*val place = kartViewModel.getPlace(markerLatLng)*/
+                //Log.d("Tobias", place.toString())
+               // kartViewModel.findPlace()
             }
 
             kartViewModel.getAlert(it.latitude, it.longitude)
@@ -361,11 +359,38 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // --- FLYTT KAMERA ---
         val oslo = LatLng(59.911491, 10.757933) //TODO: flytt dette til en konfigurasjonsfil
         this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(oslo, 6f))  // TODO: Flyttes nå til Oslo. Velge annet sted?
+
+
+        mMap.setOnMarkerClickListener {
+            callMarker(it)
+        }
+
     }
 
     // =========================
     // ===== HJELPEMETODER =====
     // =========================
+
+    fun callMarker(marker: Marker) : Boolean{
+        val container_height = findViewById<RelativeLayout>(R.id.root).height
+        val projection = mMap.projection
+        val markerLatLng = LatLng(marker.position.latitude, marker.position.longitude)
+        val markerScreenPosition: Point = projection.toScreenLocation(markerLatLng)
+        val pointHalfScreenAbove = Point(
+            markerScreenPosition.x,
+            markerScreenPosition.y - container_height + 3500
+        )
+
+        val aboveMarkerLatLng = projection
+            .fromScreenLocation(pointHalfScreenAbove)
+        //val zoom = CameraUpdateFactory.zoomTo(15F)
+        marker.showInfoWindow()
+        val center = CameraUpdateFactory.newLatLng(aboveMarkerLatLng)
+        mMap.animateCamera(center)
+        //mMap.animateCamera(zoom)
+
+        return true
+    }
 
     /* Hjelpemetode for å få tilgangsrettigheter for lokasjon */
     private fun getLocationAccess() {
@@ -506,7 +531,25 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                         .target(LatLng(location.latitude, location.longitude))
                         .zoom(6f)
                         .build()
-                mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+                //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), 10f))
+                //mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+
+                val container_height = findViewById<RelativeLayout>(R.id.root).height
+                val projection = mMap.projection
+
+                val locationLatLng = LatLng(location.latitude, location.longitude)
+                val markerScreenPosition: Point = projection.toScreenLocation(locationLatLng)
+                val pointHalfScreenAbove = Point(
+                    markerScreenPosition.x,
+                    markerScreenPosition.y - container_height + 3500
+                )
+
+                val aboveMarkerLatLng = projection
+                    .fromScreenLocation(pointHalfScreenAbove)
+
+                val center = CameraUpdateFactory.newLatLng(aboveMarkerLatLng)
+                mMap.animateCamera(center)
+
             } else {
                 Toast.makeText(this, "Ingen lokasjon tilgjengelig", Toast.LENGTH_SHORT).show()
             }
@@ -549,6 +592,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                     .position(LatLng(campfire.lat, campfire.lon))
                     .title("${campfire.name} (${campfire.type})")
                     .icon(BitmapDescriptorFactory.fromBitmap(smallCampfireMarkerBitmap)))
+
             if (marker == null)
                 Log.w(tag, "onMapReady: en campfireMarker er null! Ignorerer. Kan føre til uønsket oppførsel fra app.")
             else
