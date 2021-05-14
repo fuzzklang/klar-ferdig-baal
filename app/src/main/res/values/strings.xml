@@ -55,5 +55,6 @@
     <string name="moderat_skogbrannfare">Moderat skogbrannfare</string>
     <string name="moderat_skogbrannfare_ikon">Moderat skogbrannfare ikon</string>
     <string name="betydelig_skogbrannfare">Betydelig skogbrannfare</string>
+    <string name="api_key">AIzaSyAyK0NkgPMxOOTnWR5EFKdy2DzfDXGh-HI</string>
     <string name="logo">Logo</string>
 </resources>
