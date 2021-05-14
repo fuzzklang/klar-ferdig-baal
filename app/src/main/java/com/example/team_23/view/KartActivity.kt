@@ -93,12 +93,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val apiKey: String = getString(R.string.api_key)
         if (!Places.isInitialized()) {
             Places.initialize(applicationContext, getString(R.string.api_key))
         }
-
-        val placesClient = Places.createClient(this)
 
 
         // Initialize the AutocompleteSupportFragment.
@@ -114,6 +111,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             override fun onPlaceSelected(place: Place) {
                 Log.d("LATLNG", place.latLng.toString())
                 // TODO: Get info about the selected place.
+                kartViewModel.findPlace(place.name!!)
                 Log.i("OnPlaceSelected", "Place: ${place.name}, ${place.latLng}")
             }
 
@@ -163,10 +161,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // ------- Travel here -------
         travelPolylineList = mutableListOf()
-
-        //--------- Search-function ----------
-        //searchBar = findViewById(R.id.searchBar)
-        //searchButton = findViewById(R.id.searchLocation)
 
         // ===== (ONCLICK) LISTENERS =====
         rulesActivityBtn.setOnClickListener{
@@ -342,13 +336,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // Ved klikk på "Dra hit"-knappen (i popup-menyen):
         travelHereButton.setOnClickListener{ getAndShowDirections() }
 
-        //Ved klikk på "Søk"-knappen
-        /*searchButton.setOnClickListener {
-            val input = searchBar.text.toString()
-            kartViewModel.findPlace(input)
-            it.hideKeyboard()
-        }*/
-
         // ===== INITALISER - API-kall, konfigurasjon ++ =====
         kartViewModel.getAllAlerts()  // Hent alle varsler ved oppstart av app, når kart er klart.
 
@@ -383,11 +370,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         marker = mMap.addMarker(MarkerOptions().position(latlng))
         kartViewModel.getAlert(latlng.latitude, latlng.longitude)
         
-    }
-
-    private fun View.hideKeyboard() {
-        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(windowToken, 0)
     }
 
 
