@@ -45,20 +45,22 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
     private val key = "AIzaSyAyK0NkgPMxOOTnWR5EFKdy2DzfDXGh-HI"
     private var placeName: String? = null
 
-    /*suspend fun getPlaceFromLatLng(latlng: LatLng): String? {
+    suspend fun getPlaceNameFromLatLng(latlng: LatLng): String? {
         Log.d(tag, "Soker etter sted fra Geocode API")
-        val geocodePath = "${placesURL}${latlng}${key}"
+
+        val geocodePath = "${placesURL}latlng=${latlng.latitude},${latlng.longitude}&key=${key}"
+        Log.d(tag, "url: $geocodePath")
         try{
             val httpResponse = apiService.fetchData(geocodePath)
             if (httpResponse != null)  Log.d(tag, "Fikk respons fra Geocode API")
             val response = gson.fromJson(httpResponse, Address_components2::class.java)
             placeName = response.long_name
-            Log.d("places", placeName.toString())
+            Log.d(tag, "getPlaceNameFromLatLng: $placeName")
         } catch (exception: IOException) {
             Log.w(tag, "Feil under henting av types til sted: ${exception.message}")
         }
         return placeName
-    }*/
+    }
 
     suspend fun searchLocation(place: String): List<Candidates>?{
         Log.d(tag, "Soker etter sted fra Google!")

@@ -18,7 +18,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import java.lang.Exception
 
 class KartViewModel(private val repo: MainRepository): ViewModel() {
     /* MutableLiveDataen er privat slik at ikke andre klasser utilsiktet kan endre innholdet */
@@ -91,17 +90,17 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
         return _location
     }
 
-    /*fun getPlace(latlng: LatLng){
+    fun getPlaceName(latlng: LatLng){
         //Kaller på Geocode API (via Repository) og oppdaterer xx-Livedata
         CoroutineScope(Dispatchers.Default).launch {
-            val latlangFromAPI = repo.getPlaceFromLatLng(latlng)
+            val latlangFromAPI = repo.getPlaceNameFromLatLng(latlng)
             Log.d("Kartviewmodel.getPlace", latlangFromAPI.toString())
             if (latlangFromAPI != null){
                 _placeName.postValue(latlangFromAPI)
                 Log.d("Kartviewmodel.getPlace", "placeName oppdatert")
             }
         }
-    }*/
+    }
 
     fun findPlace(place: String) {
         //Kaller på Places API fra Google (via Repository) og oppdaterer places-Livedata
