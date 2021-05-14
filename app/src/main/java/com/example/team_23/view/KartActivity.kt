@@ -130,15 +130,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             val intent = Intent(this,RegelView::class.java)
             startActivity(intent)
         }
-        rulesActivityBtn.setOnClickListener{
-            val intent = Intent(this,InfoView::class.java)
-            startActivity(intent)
-            if(infoSynlig){
-                info.visibility = View.GONE
-                infoButton.background = resources.getDrawable(R.drawable.menubutton,theme)
-                infoSynlig = !infoSynlig
-            }
-        }
+
         rulesActivityBtn.setOnClickListener{
             val intent = Intent(this,RegelView::class.java)
             startActivity(intent)
@@ -149,7 +141,22 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
 
-        infoButton.setOnClickListener { toggleInfo() }      //Info knapp som endrer info sin synlighet
+        // ===== (ONCLICK) LISTENERS FOR INFO =====
+
+        infoButton.setOnClickListener {
+            val intent = Intent(this,InfoView::class.java)
+            startActivity(intent)
+        }      //Info knapp som endrer info sin synlighet
+
+        infoButton.setOnClickListener{
+            val intent = Intent(this,InfoView::class.java)
+            startActivity(intent)
+            if(menuVisible){
+                menu.visibility = View.GONE
+                menuButton.background = resources.getDrawable(R.drawable.menubutton,theme)
+                menuVisible = !menuVisible
+            }
+        }
 
         infoCloseButton.setOnClickListener{ toggleInfo() }  //Info knapp som gjør info view usynelig
 
