@@ -8,6 +8,8 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.location.Address
+import android.location.Geocoder
 import android.os.Bundle
 import android.provider.VoicemailContract
 import android.util.Log
@@ -37,6 +39,7 @@ import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
+import java.util.*
 
 class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private val tag = "KartActivity"
@@ -81,9 +84,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var menuOverlayBtn: ToggleButton
     private var overlayVisible = true
     private lateinit var overlayPolygonList: MutableList<Polygon>  // Listen med polygoner
-    //----- Search-function ------
-    private lateinit var searchButton: Button
-    private lateinit var searchBar: EditText
+
 
 
 
@@ -220,7 +221,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 // Ingen varsel (alert er null)
                 warningText = "Ingen varsel funnet"
                 background = resources.getDrawable(R.drawable.shape,theme)
-                warningArea.text = kartViewModel.getPlaceName().toString()
+                warningArea.text = kartViewModel.getPlaceName()
                 warningInfo.text = "Ingen varsel i dette området"
                 colorLevel = resources.getDrawable(R.color.black, theme)
 
@@ -322,6 +323,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // Når bruker trykker på kartet lages det en marker
         mMap.setOnMapClickListener {
             marker?.remove()
+
             marker = mMap.addMarker(MarkerOptions().position(it))
             kartViewModel.getAlert(it.latitude, it.longitude)
         }

@@ -62,4 +62,7 @@ dependencies {
 
     //For å få opp forslag i søk-funksjon
     implementation 'com.google.android.libraries.places:places:2.4.0'
+
+    implementation 'com.android.support:support-v4:+'
+    implementation  'org.apache.commons:commons-lang3:3.0'
 }

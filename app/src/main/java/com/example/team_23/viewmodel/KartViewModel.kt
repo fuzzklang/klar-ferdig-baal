@@ -18,6 +18,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import java.lang.Exception
 
 class KartViewModel(private val repo: MainRepository): ViewModel() {
     /* MutableLiveDataen er privat slik at ikke andre klasser utilsiktet kan endre innholdet */
@@ -201,8 +202,13 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
     }
 
     fun getPlaceName(): String {
-        val placeName = _candidates[0].formatted_address!!
-
+        var placeName: String = " "
+        try {
+            placeName = _candidates[0].formatted_address!!
+        }
+        catch (e: Exception){
+            Log.d("kartViewModel.getPlace", e.toString())
+        }
         return placeName
     }
 
