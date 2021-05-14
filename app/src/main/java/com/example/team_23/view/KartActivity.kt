@@ -24,6 +24,7 @@ import com.example.team_23.viewmodel.KartViewModel
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import android.widget.Switch
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
@@ -64,11 +65,12 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     // ----- Campfire -----
     private var menuCampfireButtonIsChecked = true  // Erstatt med direkte aksess til Switch
     private val ZOOM_LEVEL_SHOW_CAMPFIRES = 8.5
-    private lateinit var menuCampfireButton: ToggleButton
+    private lateinit var switchCampfireButton: Switch
+
     private lateinit var campfireSpots: List<Campfire>
     private lateinit var campfireMarkers: MutableList<Marker>
     // ----- Overlay (Alerts) -----
-    private lateinit var menuOverlayBtn: ToggleButton
+    private lateinit var switchOverlayButton: Switch
     private var overlayVisible = true
     private lateinit var overlayPolygonList: MutableList<Polygon>  // Listen med polygoner
 
@@ -97,7 +99,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         menu = findViewById<View>(R.id.menu)
         menuButton = findViewById<ImageButton>(R.id.menuButton)
         val rulesActivityBtn = findViewById<Button>(R.id.menuRulesButton)  // Knapp som sender bruker til reglene
-        menuCampfireButton = findViewById<ToggleButton>(R.id.menuCampfireButton)
+        switchCampfireButton = findViewById<Switch>(R.id.switchCampfire)
         // ----- Info-boks -----
         infoButton = findViewById<Button>(R.id.menuInfoButton)
         infoCloseButton = findViewById<ImageButton>(R.id.infoboxCloseButton)
@@ -199,7 +201,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                         Log.w(tag, "Returnert alertColor er Unkown.")
                         warningText = "?"
                         colorLevel = resources.getDrawable(R.color.black, theme)
-                        background = resources.getDrawable(R.drawable.nivaaer,theme)
+                        background = resources.getDrawable(R.drawable.questionmark,theme)
                     }
                 }
             } else {
@@ -208,7 +210,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 background = resources.getDrawable(R.drawable.shape,theme)
                 warningArea.text = ""
                 warningInfo.text = "Ingen varsel i dette området"
-                colorLevel = resources.getDrawable(R.color.black, theme)
+                colorLevel = resources.getDrawable(R.color.green, theme)
 
             }
             warningLevel.text = warningText
@@ -242,7 +244,10 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // -- Overlay --
         overlayVisible = true
         overlayPolygonList = mutableListOf()
-        menuOverlayBtn = findViewById<ToggleButton>(R.id.menuOverlayButton)
+        switchOverlayButton = findViewById<Switch>(R.id.switchOverlay)
+
+        switchCampfireButton.isChecked = true
+        switchOverlayButton.isChecked = true
 
         // ===== LOKASJON =====
         // Sjekk at tilgang til lokasjon (skal også sette mMap.isMyLocationEnabled og oppdaterer lokasjon dersom tilgang)
@@ -262,8 +267,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         kartViewModel.path.observe(this, { paths -> drawDirectionsPath(paths) })
 
         // ===== ON CLICK LISTENERS =====
-        menuCampfireButton.setOnCheckedChangeListener {_, isChecked -> toggleCampfires(isChecked) }
-        menuOverlayBtn.setOnCheckedChangeListener { _, isChecked -> toggleOverlay(isChecked) }
+        switchCampfireButton.setOnCheckedChangeListener {_, isChecked -> toggleCampfires(isChecked) }
+        switchOverlayButton.setOnCheckedChangeListener { _, isChecked -> toggleOverlay(isChecked) }
 
         mMap.setOnCameraIdleListener { toogleCampfireZoomVisibility() }
 
@@ -378,7 +383,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         } else {
             menu.visibility = View.VISIBLE
             mMap.uiSettings.isScrollGesturesEnabled = false
-            menuButton.background = ResourcesCompat.getDrawable(resources, R.drawable.closemenubutton,theme)
+            menuButton.background = ResourcesCompat.getDrawable(resources, R.drawable.menubuttonclose,theme)
             if(infoSynlig) {
                 toggleInfo()
             }
@@ -402,14 +407,32 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         alertLevelsDescVisible = !alertLevelsDescVisible
     }
 
+    private fun toogleCampfireZoomVisibility() {
+        //viser kun baalikoner etter et angitt zoom-nivaa
+        val zoom = this.mMap.cameraPosition.zoom
+        if (zoom > ZOOM_LEVEL_SHOW_CAMPFIRES && menuCampfireButtonIsChecked)
+            campfireMarkers.forEach { it.isVisible = true }  // Vis bålplasser dersom Zoom langt inne nok og visning av bålplasser aktivert
+        else
+            campfireMarkers.forEach { it.isVisible = false }
+    }
+
     private fun toggleCampfires(isChecked: Boolean) {
         menuCampfireButtonIsChecked = isChecked
-        campfireMarkers.forEach {it.isVisible = isChecked}
+        //overlayPolygonList.forEach {it.isVisible = overlayVisible}
+       // if (isChecked){
+            campfireMarkers.forEach {it.isVisible = isChecked}
+            toogleCampfireZoomVisibility()
+      //  }
+        Log.d("checked","campfire")
     }
 
     private fun toggleOverlay(isChecked: Boolean) {
         overlayVisible = isChecked
-        overlayPolygonList.forEach {it.isVisible = overlayVisible}
+        //overlayPolygonList.forEach {it.isVisible = overlayVisible}
+       // if (isChecked){
+            overlayPolygonList.forEach {it.isVisible = isChecked}
+        //}
+        Log.d("checked","overlay")
     }
 
     /*
@@ -481,14 +504,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun toogleCampfireZoomVisibility() {
-        //viser kun baalikoner etter et angitt zoom-nivaa
-        val zoom = this.mMap.cameraPosition.zoom
-        if (zoom > ZOOM_LEVEL_SHOW_CAMPFIRES && menuCampfireButtonIsChecked)
-            campfireMarkers.forEach { it.isVisible = true }  // Vis bålplasser dersom Zoom langt inne nok og visning av bålplasser aktivert
-        else
-            campfireMarkers.forEach { it.isVisible = false }
-    }
 
     private fun getAndShowDirections() {
         travelPolylineList.forEach{ it.remove() }   // Fjern tidligere tidligere tegnet rute fra kart.

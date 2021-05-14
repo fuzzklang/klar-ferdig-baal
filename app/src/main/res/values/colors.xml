@@ -10,9 +10,14 @@
     <color name="grey">#C4C4C4</color>
     <color name="yellow">#FFE818</color>
     <color name="orange">#FF9634</color>
+    <color name="green">#8AE07C</color>
     <color name="alertYellow">#FFFF00</color>
     <color name="alertOrange">#FF6600</color>
     <color name="alertRed">#FF0000</color>
+    <color name="mainColor">#465057</color>
+    <color name="secondaryColor">#2B3033</color>
+    <color name="themeColor1">#5D8476</color>
+    <color name="themeColor2">#8E9F78</color>
     <!-- Alpha på 0x55 tilsvarer ca. 33% -->
     <color name="alertYellowTransparent">#55FFFF00</color>
     <color name="alertOrangeTransparent">#55FF6600</color>
