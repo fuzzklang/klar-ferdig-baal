@@ -198,7 +198,12 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
         }
 
         return latlng
+    }
 
+    fun getPlaceName(): String {
+        val placeName = _candidates[0].formatted_address!!
+
+        return placeName
     }
 
 
