@@ -327,7 +327,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/popupShape"
                 android:layout_width="279dp"
                 android:layout_height="411dp"

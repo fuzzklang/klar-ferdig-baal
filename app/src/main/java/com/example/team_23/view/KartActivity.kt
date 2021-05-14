@@ -326,17 +326,16 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             travelPolylineList.forEach{ it.remove() }   // Fjern tidligere tidligere tegnet rute fra kart.
             travelPolylineList.clear()
 
-            marker = mMap.addMarker(MarkerOptions().position(it))
-            val markerLatLng = LatLng(marker!!.position.latitude, marker!!.position.longitude)
-            Log.d("Sara", markerLatLng.toString())
+            if (!popupVisible){
+                marker = mMap.addMarker(MarkerOptions().position(it))
+                val markerLatLng = LatLng(marker!!.position.latitude, marker!!.position.longitude)
+                Log.d("Sara", markerLatLng.toString())
 
-            kartViewModel.placeName.observe(this, {
                 val place = kartViewModel.getPlace(markerLatLng)
-
                 Log.d("Tobias", place.toString())
-
                 kartViewModel.findPlace(place.toString())
-            })
+            }
+
             kartViewModel.getAlert(it.latitude, it.longitude)
         }
 
