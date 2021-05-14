@@ -103,10 +103,10 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             supportFragmentManager.findFragmentById(R.id.search)
                     as AutocompleteSupportFragment
 
-        // Specify the types of place data to return.
+        // Spesifiserer typen data som returneres
         autocompleteFragment.setPlaceFields(listOf(Place.Field.ID, Place.Field.NAME))
 
-        // Set up a PlaceSelectionListener to handle the response.
+        // Setter opp en PlaceSelectionListener for å håndtere responsen
         autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
             override fun onPlaceSelected(place: Place) {
                 Log.d("LATLNG", place.latLng.toString())
@@ -115,6 +115,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 Log.i("OnPlaceSelected", "Place: ${place.name}, ${place.latLng}")
             }
 
+            //Ved feil
             override fun onError(p0: Status) {
                 // TODO: Handle the error.
                 Log.i("OnError", "An error occurred: $p0")
