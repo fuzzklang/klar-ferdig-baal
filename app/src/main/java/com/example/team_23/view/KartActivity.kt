@@ -323,8 +323,20 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // Når bruker trykker på kartet lages det en marker
         mMap.setOnMapClickListener {
             marker?.remove()
+            travelPolylineList.forEach{ it.remove() }   // Fjern tidligere tidligere tegnet rute fra kart.
+            travelPolylineList.clear()
 
             marker = mMap.addMarker(MarkerOptions().position(it))
+            val markerLatLng = LatLng(marker!!.position.latitude, marker!!.position.longitude)
+            Log.d("Sara", markerLatLng.toString())
+
+            kartViewModel.placeName.observe(this, {
+                val place = kartViewModel.getPlace(markerLatLng)
+
+                Log.d("Tobias", place.toString())
+
+                kartViewModel.findPlace(place.toString())
+            })
             kartViewModel.getAlert(it.latitude, it.longitude)
         }
 
@@ -373,7 +385,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun placeMarker(latlng: LatLng){
         marker?.remove()
         marker = mMap.addMarker(MarkerOptions().position(latlng))
-
         kartViewModel.getAlert(latlng.latitude, latlng.longitude)
         
     }

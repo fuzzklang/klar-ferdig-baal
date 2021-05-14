@@ -32,17 +32,20 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
     private var _alertAtPosition = MutableLiveData<Alert?>()  // Varsel for angitt sted.
     private var _candidates = mutableListOf<Candidates>()
     private val _places = MutableLiveData<LatLng>()
+    private val _placeName = MutableLiveData<String>()
 
     /* Immutable versjoner av LiveDataene over som er tilgjengelig for Viewene */
     val allAlerts: LiveData<MutableList<Alert>> = _allAlerts
     val alertAtPosition: LiveData<Alert?> = _alertAtPosition
     var path: LiveData<MutableList<List<LatLng>>> = _path
     var places: LiveData<LatLng> = _places
+    var placeName: LiveData<String> = _placeName
 
     /* Grensesnitt til View.
      * Henter varsler for nåværende sted.
      * Er avhengig av at lokasjon (livedata 'location') er tilgjengelig og oppdatert.
      */
+
     fun getAlertCurrentLocation() {
         val lat = _location.value?.latitude
         val lon = _location.value?.longitude
@@ -86,6 +89,18 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
             "getLocation: ${_location.value?.latitude}, ${_location.value?.longitude}"
         )
         return _location
+    }
+
+    fun getPlace(latlng: LatLng){
+        //Kaller på Geocode API (via Repository) og oppdaterer xx-Livedata
+        CoroutineScope(Dispatchers.Default).launch {
+            val latlangFromAPI = repo.getPlaceFromLatLng(latlng)
+            Log.d("Kartviewmodel.getPlace", latlangFromAPI.toString())
+            if (latlangFromAPI != null){
+                _placeName.postValue(latlangFromAPI)
+                Log.d("Kartviewmodel.getPlace", "placeName oppdatert")
+            }
+        }
     }
 
     fun findPlace(place: String) {

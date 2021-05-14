@@ -2,6 +2,8 @@ package com.example.team_23.model.dataclasses
 
 data class Address_components(val long_name: String?, val short_name: String?, val types: List<String>?)
 
+data class Address_components2(val long_name: String?, val short_name: String?, val types: List<String>?)
+
 data class GeocodeBase(val plus_code: GeocodePlus_code?, val results: List<Any>?, val status: String?)
 
 data class GeocodeBounds(val northeast: Northeast?, val southwest: Southwest?)
