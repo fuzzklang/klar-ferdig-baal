@@ -330,7 +330,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             travelPolylineList.forEach{ it.remove() }   // Fjern tidligere tidligere tegnet rute fra kart.
             travelPolylineList.clear()
 
-            if (!popupVisible){
+            if (!popupVisible || !alertLevelsDescVisible){
                 marker = mMap.addMarker(MarkerOptions().position(it))
                 val markerLatLng = LatLng(marker!!.position.latitude, marker!!.position.longitude)
                 Log.d("Sara", markerLatLng.toString())
