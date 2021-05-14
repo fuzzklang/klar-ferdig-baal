@@ -56,6 +56,7 @@
                 android:id="@+id/search"
                 android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
                 android:layout_width="190dp"
+                android:layout_marginStart="110dp"
                 android:layout_height="168dp"
                 android:autofillHints="Search"
                 android:background="@null"
