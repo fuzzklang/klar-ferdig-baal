@@ -1,6 +1,6 @@
 package com.example.team_23.model.dataclasses
 
-data class Base(val geocoded_waypoints: List<GeocodedWaypoints>?, val routes: List<Routes>?, val status: String?)
+data class DirectionsBase(val geocoded_waypoints: List<Geocoded_waypoints>?, val routes: List<Routes>?, val status: String?)
 data class Bounds(val northeast: Northeast?, val southwest: Southwest?)
 data class Distance(val text: String?, val value: Number?)
 data class Duration(val text: String?, val value: Number?)

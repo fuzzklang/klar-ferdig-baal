@@ -27,7 +27,6 @@ import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import android.widget.Switch
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
@@ -85,12 +84,10 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     //
 
 
-
     @SuppressLint("UseCompatLoadingForDrawables", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
 
         // Setter KartViewModel og Kart tidlig.
         kartViewModel = ViewModelProvider.getKartViewModel(LocationServices.getFusedLocationProviderClient(applicationContext))
@@ -98,7 +95,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
-
 
         // TODO: beskriv variablene/hvor de brukes/hva de brukes til
         // ===== SETT VIEWS =====
@@ -233,16 +229,18 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 // Ingen varsel (alert er null)
                 warningText = "Ingen varsel funnet"
                 background = resources.getDrawable(R.drawable.shape,theme)
-                warningArea.text = kartViewModel.getPlaceName()
+                warningArea.text = "Henter stedsnavn..."
+                // Usikker på hvor stabil observeringen er. Oppstår mulige race conditions?
+                kartViewModel.placeName.observe(this, {placeName -> warningArea.text = placeName})
                 warningInfo.text = "Ingen varsel i dette området"
                 colorLevel = resources.getDrawable(R.color.green, theme)
-
             }
             warningLevel.text = warningText
             warningLevelImg.background = background
             warningLevelColor.background = colorLevel
-            togglePopup()  // TODO: endre toggling til 'showPopup'.
+            togglePopup()
         })
+
 
         if (!Places.isInitialized()) {
             Places.initialize(applicationContext, getString(R.string.api_key))
@@ -260,7 +258,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // Setter opp en PlaceSelectionListener for å håndtere responsen
         autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
             override fun onPlaceSelected(place: Place) {
-                Log.d("LATLNG", place.latLng.toString())
+                Log.d(tag, "latlng onPlaceSelected: ${place.latLng}")
                 // TODO: Get info about the selected place.
                 kartViewModel.findPlace(place.name!!)
                 warningArea.text = place.name
