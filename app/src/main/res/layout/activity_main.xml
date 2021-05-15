@@ -204,7 +204,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
                 android:backgroundTint="@color/white"
-                android:contentDescription="@string/rules"
+                android:contentDescription="@string/regler"
                 android:text="@string/regler"
                 android:textAllCaps="false"
                 android:textColor="@color/black"

@@ -1,6 +1,17 @@
 <resources>
     <string name="app_name">KlarFerdigBål</string>
 
+    <string name="info1">• Trykk på kartet for å sjekke skogbrannfare for et angitt område.</string>
+    <string name="info2">• Zoom inn på kartet for å se bålikoner ved godkjente bålplasser.
+        For øyeblikket kan du se bålplasser i for eksempel Oslo, Bærum, Sarpsborg, Mandal
+        og noen andre områder.</string>
+    <string name="info3">• Hvis det ikke er noen skogbrannfare-varsler i Norge for øyeblikket,
+        vil det ikke være noe fargefilter(overlay) på kartet.</string>
+    <string name="info4">• Det hentes kun skogbrannfare-varsler i Norge.</string>
+    <string name="info5">• En del av appens funksjonalitet er avhengig av å ha skrudd på GPS-lokasjon.</string>
+    <string name="info6">• Varsler her knappen viser varsler på din nåværende lokasjon.</string>
+    <string name="info7">• Dra-hit funksjonen viser sti og gangvei som kommer så nære markøren som mulig</string>
+
     <string name="rule1">• Respekter det nasjonale bålforbudet fra 15. april til 15.september.
          Ikke tenn bål i skog og utmark i denne perioden.</string>
     <string name="rule2">• Følg med på skogbrannvarselet og følg rådene fra ditt lokale brannvesen.</string>
@@ -22,6 +33,7 @@
         slokket.</string>
 
     <string name="title">Regler</string>
+    <string name="title2">Info</string>
     <string name="imgClose">Avslutt</string>
     <string name="imgFire">flammeikon</string>
     <string name="info">Info</string>

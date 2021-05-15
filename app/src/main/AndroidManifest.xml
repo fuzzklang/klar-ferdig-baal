@@ -22,6 +22,7 @@
             android:value="AIzaSyAyK0NkgPMxOOTnWR5EFKdy2DzfDXGh-HI" />
       
         <activity android:name=".view.RegelView"/>
+        <activity android:name=".view.InfoView"/>
         <activity android:name=".view.KartActivity">
 
         </activity>
