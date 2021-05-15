@@ -220,18 +220,5 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
 
         return latlng
     }
-
-    fun getPlaceName(): String {
-        var placeName: String = " "
-        try {
-            placeName = _candidates[0].formatted_address!!
-        }
-        catch (e: Exception){
-            Log.d("kartViewModel.getPlace", e.toString())
-        }
-        return placeName
-    }
-
-
 }
 
