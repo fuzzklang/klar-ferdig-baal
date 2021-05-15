@@ -43,18 +43,22 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
     //Geocode API
     private val placesURL = "https://maps.googleapis.com/maps/api/geocode/json?"
     private val key = "AIzaSyAyK0NkgPMxOOTnWR5EFKdy2DzfDXGh-HI"
-    private var placeName: String? = null
 
     suspend fun getPlaceNameFromLocation(latlng: LatLng): String? {
         Log.d(tag, "Soker etter sted fra Geocode API")
         val geocodePath = "${placesURL}latlng=${latlng.latitude},${latlng.longitude}&key=${key}"
         Log.d(tag, "url: $geocodePath")
+        var placeName: String? = null
         try {
-            val httpResponse = apiService.fetchData(geocodePath)
-            if (httpResponse != null)  Log.d(tag, "Fikk respons fra Geocode API")
-            val response = gson.fromJson(httpResponse, Address_components2::class.java)
-            placeName = response.long_name
-            Log.d(tag, "getPlaceNameFromLatLng: $placeName")
+            val httpResponse = apiService.fetchData(geocodePath) ?: throw IOException()
+            Log.d(tag, "Fikk respons fra Geocode API. Respons-streng (delstreng): ${httpResponse.subSequence(0, 30)}")
+            val parsedResponse: GeocodeBase = gson.fromJson(httpResponse, GeocodeBase::class.java)
+            if (parsedResponse.results != null && parsedResponse.results.isNotEmpty()) {
+                val addressComponentList = parsedResponse.results.get(1).address_components
+                if (addressComponentList != null && addressComponentList.size > 2)
+                    placeName = addressComponentList.get(1).long_name  // Mangler sjekk for antall returnerte resultater
+            }
+            Log.d(tag, "Parsed JSON. Returned long name: ${placeName}")
         } catch (exception: IOException) {
             Log.w(tag, "Feil under henting av types til sted: ${exception.message}")
         }
@@ -65,9 +69,8 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
         Log.d(tag, "Soker etter sted fra Google!")
         val placesPath = "${placesUrlStart}${place}${placesUrlEnd}"
         try {
-            val httpResponse = apiService.fetchData(placesPath)
-            if (httpResponse != null)
-                Log.d(tag, "Fikk respons fra Places API")
+            val httpResponse = apiService.fetchData(placesPath) ?: throw IOException()
+            Log.d(tag, "Fikk respons fra Geocode API. Respons-streng: ${httpResponse.subSequence(0, 30)}")
             val response = gson.fromJson(httpResponse, MainBase::class.java)
             places = response.candidates
             Log.d("places", places.toString())
@@ -82,9 +85,8 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
         Log.d(tag, "Henter ruter fra Google!")
         val directionPath = "${directionsUrlOrigin}${origin_lat},${origin_lon}${directionsUrlDestination}${destination_lat},${destination_lon}${mode}${directionsUrlKey}"
         try {
-            val httpResponse = apiService.fetchData(directionPath)
-            if (httpResponse != null)  Log.d(tag, "Fikk respons fra Directions API")
-            val response = gson.fromJson(httpResponse, Base::class.java)
+            val httpResponse = apiService.fetchData(directionPath) ?: throw IOException()
+            val response = gson.fromJson(httpResponse, DirectionsBase::class.java)
             routes = response.routes
         } catch (exception: IOException) {
             Log.w(tag, "Feil under henting av rute: ${exception.message}")
