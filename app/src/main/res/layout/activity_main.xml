@@ -204,7 +204,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
                 android:backgroundTint="@color/white"
-                android:contentDescription="@string/rules"
+                android:contentDescription="@string/regler"
                 android:text="@string/regler"
                 android:textAllCaps="false"
                 android:textColor="@color/black"
@@ -629,7 +629,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/levelsDescShape"
                 android:layout_width="279dp"
                 android:layout_height="391dp"
