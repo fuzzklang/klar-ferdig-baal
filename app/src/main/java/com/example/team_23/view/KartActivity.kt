@@ -27,7 +27,6 @@ import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import android.widget.Switch
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
@@ -35,7 +34,6 @@ import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
-import java.util.*
 
 
 class KartActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -183,8 +181,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             val warningText: String
             val background: Drawable
             val colorLevel : Drawable
-            var placeNameNoAlert = "Henter stedsnavn..."  // Navn for sted dersom ingen varsel
-            kartViewModel.placeName.observe(this, {placeName -> placeNameNoAlert = placeName})
             if (alert != null) {
                 val info = alert.infoNo
                 warningArea.text = info.area.areaDesc
@@ -218,10 +214,11 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 // Ingen varsel (alert er null)
                 warningText = "Ingen varsel funnet"
                 background = resources.getDrawable(R.drawable.shape,theme)
-                warningArea.text = placeNameNoAlert
+                warningArea.text = "Henter stedsnavn..."
+                // Usikker på hvor stabil observeringen er. Oppstår mulige race conditions?
+                kartViewModel.placeName.observe(this, {placeName -> warningArea.text = placeName})
                 warningInfo.text = "Ingen varsel i dette området"
                 colorLevel = resources.getDrawable(R.color.green, theme)
-
             }
             warningLevel.text = warningText
             warningLevelImg.background = background
