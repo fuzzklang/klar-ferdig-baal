@@ -95,6 +95,7 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
 
     private fun updatePlaceNameForNoAlert(lat: Double, lng: Double) {
         // Kaller på Geocode API (via Repository) og oppdaterer PlaceName-Livedata
+        _placeName.postValue("")
         CoroutineScope(Dispatchers.Default).launch {
             val latlng = LatLng(lat, lng)
             Log.d("Kartviewmodel.getPlace", "Henter stedsnavn for: lat $lat, lng: $lng")

@@ -229,7 +229,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 // Ingen varsel (alert er null)
                 warningText = "Ingen varsel funnet"
                 background = resources.getDrawable(R.drawable.shape,theme)
-                warningArea.text = "Henter stedsnavn..."
                 // Usikker på hvor stabil observeringen er. Oppstår mulige race conditions?
                 kartViewModel.placeName.observe(this, {placeName -> warningArea.text = placeName})
                 warningInfo.text = "Ingen varsel i dette området"
@@ -351,7 +350,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 //Log.d("Tobias", place.toString())
                // kartViewModel.findPlace()
             }
-
             kartViewModel.getAlert(it.latitude, it.longitude)
         }
 
