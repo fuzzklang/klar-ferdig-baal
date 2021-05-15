@@ -53,8 +53,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     // ----- Info-boks -----
     private lateinit var info: View
     private lateinit var infoButton: Button
-    private lateinit var infoCloseButton: ImageButton
-    private var infoSynlig = true   // Variabel som holder styr paa synligheten til info view
+    private var infoSynlig = false   // Variabel som holder styr paa synligheten til info view
     // ----- Meny -----
     private lateinit var menu: View
     private lateinit var menuButton: ImageButton
@@ -68,8 +67,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var travelPolylineList: MutableList<Polyline>
     // ----- Alert Levels Description -----
     private lateinit var alertLevelsDescButton: Button
+    private lateinit var alertLevelDescCloseButtonShape: ImageButton
     private lateinit var alertLevelsDescPopup: View
-    private lateinit var alertLevelsDescCloseBtn: ImageButton
+    private lateinit var alertLevelsDescCloseButton: ImageButton
     private var alertLevelsDescVisible = true
     // ----- Campfire -----
     private var menuCampfireButtonIsChecked = true  // Erstatt med direkte aksess til Switch
@@ -113,7 +113,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         switchCampfireButton = findViewById<Switch>(R.id.switchCampfire)
         // ----- Info-boks -----
         infoButton = findViewById<Button>(R.id.menuInfoButton)
-        infoCloseButton = findViewById<ImageButton>(R.id.infoboxCloseButton)
         info = findViewById<View>(R.id.infoBox)
 
         // ----- Alert Popup-boks -----
@@ -129,7 +128,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // ----- Levels -----
         alertLevelsDescButton = findViewById<Button>(R.id.popupAlertDescButton)
         alertLevelsDescPopup = findViewById<View>(R.id.levelsDesc)
-        alertLevelsDescCloseBtn = findViewById<ImageButton>(R.id.levelsDescCloseButton)
+        alertLevelsDescCloseButton = findViewById<ImageButton>(R.id.levelsDescCloseButton)
+        alertLevelDescCloseButtonShape = findViewById<ImageButton>(R.id.levelsDescShape)
 
         // ------- Travel here -------
         travelPolylineList = mutableListOf()
@@ -150,15 +150,30 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
 
-        infoButton.setOnClickListener { toggleInfo() }      //Info knapp som endrer info sin synlighet
+        // ===== (ONCLICK) LISTENERS FOR INFO =====
 
-        infoCloseButton.setOnClickListener{ toggleInfo() }  //Info knapp som gjør info view usynelig
+        infoButton.setOnClickListener {
+            val intent = Intent(this,InfoView::class.java)
+            startActivity(intent)
+        }      //Info knapp som endrer info sin synlighet
+
+        infoButton.setOnClickListener{
+            val intent = Intent(this,InfoView::class.java)
+            startActivity(intent)
+            if(menuVisible){
+                menu.visibility = View.GONE
+                menuButton.background = resources.getDrawable(R.drawable.menubutton,theme)
+                menuVisible = !menuVisible
+            }
+        }
 
         menuButton.setOnClickListener{toggleMenu()}
 
         alertLevelsDescButton.setOnClickListener { toggleLevelsPopup() }
 
-        alertLevelsDescCloseBtn.setOnClickListener { toggleLevelsPopup() }
+        alertLevelsDescCloseButton.setOnClickListener { toggleLevelsPopup() }
+
+        alertLevelDescCloseButtonShape.setOnClickListener{ toggleLevelsPopup() }
 
         popupCloseButton.setOnClickListener{ togglePopup() }
 

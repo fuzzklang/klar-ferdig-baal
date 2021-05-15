@@ -1,27 +1,17 @@
 <resources>
     <string name="app_name">KlarFerdigBål</string>
-    <string name="rules">
-        • Respekter det nasjonale bålforbudet fra 15. april til 15.september.
-         Ikke tenn bål i skog og utmark i denne perioden.<br/><br/>
-        • Følg med på skogbrannvarselet og følg rådene fra ditt lokale brannvesen\n\n<br/><br/>
-        • Bruk godkjente bålplasser hvis du skal tenne bål.\n\n<br/><br/>
-        • Ta hensyn til skogbrannfare og vindforhold.\n\n<br/><br/>
-        • Det er alltid den som brenner bål som har ansvaret
-       for brannsikkerheten.\n\n<br/><br/>
-        • Det bør være en voksen, edru person som er
-       ansvarlig for bålet.\n\n<br/><br/>
-        • Bålet må være i god avstand fra bebyggelse og
-        vegetasjon.\n\n<br/><br/>
-        • Det er ikke lov å brenne bål på svaberg.\n\n<br/><br/>
-        • Bålet må ikke være større enn at du har kontroll på
-       det og kan slokke ved behov.\n\n<br/><br/>
-        • Ha egnede slokkemidler lett tilgjengelig.\n\n<br/><br/>
-        • Det er forbudt å brenne plast, bygningsmaterialer
-        og annen søppel.\n\n<br/><br/>
-        • Når du forlater bålplassen skal bålet være helt
-        slokket.\n\n<br/><br/>
+    <string name="info2">
+        • Trykk på kartet for å sjekke skogbrannfare for et &#160;&#160;&#160;angitt område.\n\n<br/><br/>
+        • Zoom inn på kartet for å se bålikoner ved &#160;&#160;&#160;godkjente bålplasser.
+        For øyeblikket kan du se &#160;&#160;&#160;bålplasser i for eksempel Oslo, Bærum, Sarpsborg, &#160;&#160;&#160;Lindesnes
+        og noen andre områder.\n\n<br/><br/>
+        • Hvis det ikke er noen skogbrannfare-varsler &#160;&#160;&#160;i Norge for øyeblikket,
+        vil det ikke være noe &#160;&#160;&#160;fargefilter(overlay) på kartet. \n\n<br/><br/>
+        • Det hentes kun skogbrannfare-varsler i Norge.\n\n<br/><br/>
+        • En del av appens funksjonalitet er avhengig av å ha &#160;&#160;&#160;skrudd på GPS-lokasjon.\n\n<br/><br/>
+        • "Varsler her"-knappen viser varsler på din &#160;&#160;&#160;nåværende lokasjon. \n\n<br/><br/>
     </string>
-
+   
     <string name="rule1">• Respekter det nasjonale bålforbudet fra 15. april til 15.september.
          Ikke tenn bål i skog og utmark i denne perioden.</string>
     <string name="rule2">• Følg med på skogbrannvarselet og følg rådene fra ditt lokale brannvesen.</string>
@@ -43,6 +33,7 @@
         slokket.</string>
 
     <string name="title">Regler</string>
+    <string name="title2">Info</string>
     <string name="imgClose">Avslutt</string>
     <string name="imgFire">flammeikon</string>
     <string name="info">Info</string>
