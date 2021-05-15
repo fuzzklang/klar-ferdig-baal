@@ -17,7 +17,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:context=".view.RegelView"
+        tools:context=".view.InfoView"
         android:paddingBottom="150dp">
 
 
@@ -26,7 +26,7 @@
             android:layout_width="277dp"
             android:layout_height="43dp"
             android:gravity="center"
-            android:text="@string/title"
+            android:text="@string/title2"
             android:textColor="@color/white"
             android:textSize="32sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -53,24 +53,11 @@
             app:layout_constraintVertical_bias="0.054" />
 
         <TextView
+            android:id="@+id/textView1"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="@string/rule1"
-            android:textColor="@color/white"
-            android:textSize="17sp"
-            app:layout_constraintBottom_toTopOf="@+id/textView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.495"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title" />
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="120dp"
-            android:text="@string/rule2"
+            android:text="@string/info1"
             android:textColor="@color/white"
             android:textSize="17sp"
             app:layout_constraintBottom_toTopOf="@+id/textView2"
@@ -84,8 +71,8 @@
             android:id="@+id/textView2"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="180dp"
-            android:text="@string/rule3"
+            android:layout_marginTop="80dp"
+            android:text="@string/info2"
             android:textColor="@color/white"
             android:textSize="17sp"
             app:layout_constraintBottom_toTopOf="@+id/textView3"
@@ -93,14 +80,14 @@
             app:layout_constraintHorizontal_bias="0.495"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title"
-            app:layout_constraintVertical_bias="0.04" />
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/textView3"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="240dp"
-            android:text="@string/rule4"
+            android:layout_marginTop="200dp"
+            android:text="@string/info3"
             android:textColor="@color/white"
             android:textSize="17sp"
             app:layout_constraintBottom_toTopOf="@+id/textView4"
@@ -108,14 +95,14 @@
             app:layout_constraintHorizontal_bias="0.495"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title"
-            app:layout_constraintVertical_bias="0.067" />
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/textView4"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="300dp"
-            android:text="@string/rule5"
+            android:text="@string/info4"
             android:textColor="@color/white"
             android:textSize="17sp"
             app:layout_constraintBottom_toTopOf="@+id/textView5"
@@ -123,14 +110,14 @@
             app:layout_constraintHorizontal_bias="0.495"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title"
-            app:layout_constraintVertical_bias="0.152" />
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/textView5"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="370dp"
-            android:text="@string/rule6"
+            android:layout_marginTop="360dp"
+            android:text="@string/info5"
             android:textColor="@color/white"
             android:textSize="17sp"
             app:layout_constraintBottom_toTopOf="@+id/textView6"
@@ -144,8 +131,8 @@
             android:id="@+id/textView6"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="435dp"
-            android:text="@string/rule7"
+            android:layout_marginTop="440dp"
+            android:text="@string/info6"
             android:textColor="@color/white"
             android:textSize="17sp"
             app:layout_constraintBottom_toTopOf="@+id/textView7"
@@ -159,77 +146,15 @@
             android:id="@+id/textView7"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="495dp"
-            android:text="@string/rule8"
+            android:layout_marginTop="500dp"
+            android:text="@string/info7"
             android:textColor="@color/white"
             android:textSize="17sp"
-            app:layout_constraintBottom_toTopOf="@+id/textView8"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.495"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title"
             app:layout_constraintVertical_bias="0.0" />
-
-        <TextView
-            android:id="@+id/textView8"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="510dp"
-            android:text="@string/rule9"
-            android:textColor="@color/white"
-            android:textSize="17sp"
-            app:layout_constraintBottom_toTopOf="@+id/textView9"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.495"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title"
-            app:layout_constraintVertical_bias="0.661" />
-
-        <TextView
-            android:id="@+id/textView9"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="650dp"
-            android:text="@string/rule10"
-            android:textColor="@color/white"
-            android:textSize="17sp"
-            app:layout_constraintBottom_toTopOf="@+id/textView10"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.495"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <TextView
-            android:id="@+id/textView10"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="720dp"
-            android:text="@string/rule11"
-            android:textColor="@color/white"
-            android:textSize="17sp"
-            app:layout_constraintBottom_toTopOf="@+id/textView11"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.495"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <TextView
-            android:id="@+id/textView11"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="790dp"
-            android:text="@string/rule12"
-            android:textColor="@color/white"
-            android:textSize="17sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.495"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title"
-            app:layout_constraintVertical_bias="0.0" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>
