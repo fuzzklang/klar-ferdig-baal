@@ -1,26 +1,46 @@
 <resources>
     <string name="app_name">KlarFerdigBål</string>
     <string name="rules">
-        • Respekter det nasjonale bålforbudet fra 15. april &#160;&#160;&#160;til 15.september.
-         Ikke tenn bål i skog og utmark i &#160;&#160;&#160;denne perioden.\n\n<br/><br/>
-        •Følg med på skogbrannvarselet og følg rådene fra &#160;&#160;&#160;ditt lokale brannvesen\n\n<br/><br/>
-        •Bruk godkjente bålplasser hvis du skal tenne bål.\n\n<br/><br/>
-        •Ta hensyn til skogbrannfare og vindforhold.\n\n<br/><br/>
+        • Respekter det nasjonale bålforbudet fra 15. april til 15.september.
+         Ikke tenn bål i skog og utmark i denne perioden.<br/><br/>
+        • Følg med på skogbrannvarselet og følg rådene fra ditt lokale brannvesen\n\n<br/><br/>
+        • Bruk godkjente bålplasser hvis du skal tenne bål.\n\n<br/><br/>
+        • Ta hensyn til skogbrannfare og vindforhold.\n\n<br/><br/>
         • Det er alltid den som brenner bål som har ansvaret
-        &#160;&#160;&#160;for brannsikkerheten.\n\n<br/><br/>
+       for brannsikkerheten.\n\n<br/><br/>
         • Det bør være en voksen, edru person som er
-         &#160;&#160;&#160;ansvarlig for bålet.\n\n<br/><br/>
+       ansvarlig for bålet.\n\n<br/><br/>
         • Bålet må være i god avstand fra bebyggelse og
-         &#160;&#160;&#160;vegetasjon.\n\n<br/><br/>
+        vegetasjon.\n\n<br/><br/>
         • Det er ikke lov å brenne bål på svaberg.\n\n<br/><br/>
         • Bålet må ikke være større enn at du har kontroll på
-         &#160;&#160;&#160;det og kan slokke ved behov.\n\n<br/><br/>
+       det og kan slokke ved behov.\n\n<br/><br/>
         • Ha egnede slokkemidler lett tilgjengelig.\n\n<br/><br/>
         • Det er forbudt å brenne plast, bygningsmaterialer
-         &#160;&#160;&#160;og annen søppel.\n\n<br/><br/>
+        og annen søppel.\n\n<br/><br/>
         • Når du forlater bålplassen skal bålet være helt
-         &#160;&#160;&#160;slokket.\n\n<br/><br/>
+        slokket.\n\n<br/><br/>
     </string>
+
+    <string name="rule1">• Respekter det nasjonale bålforbudet fra 15. april til 15.september.
+         Ikke tenn bål i skog og utmark i denne perioden.</string>
+    <string name="rule2">• Følg med på skogbrannvarselet og følg rådene fra ditt lokale brannvesen.</string>
+    <string name="rule3">• Bruk godkjente bålplasser hvis du skal tenne bål.</string>
+    <string name="rule4">• Ta hensyn til skogbrannfare og vindforhold.</string>
+    <string name="rule5">• Det er alltid den som brenner bål som har ansvaret
+       for brannsikkerheten.</string>
+    <string name="rule6">• Det bør være en voksen, edru person som er
+       ansvarlig for bålet.</string>
+    <string name="rule7">• Bålet må være i god avstand fra bebyggelse og
+        vegetasjon.</string>
+    <string name="rule8">• Det er ikke lov å brenne bål på svaberg.</string>
+    <string name="rule9">• Bålet må ikke være større enn at du har kontroll på
+       det og kan slokke ved behov.</string>
+    <string name="rule10">• Ha egnede slokkemidler lett tilgjengelig.</string>
+    <string name="rule11">• Det er forbudt å brenne plast, bygningsmaterialer
+        og annen søppel.</string>
+    <string name="rule12">• Når du forlater bålplassen skal bålet være helt
+        slokket.</string>
 
     <string name="title">Regler</string>
     <string name="imgClose">Avslutt</string>
@@ -55,5 +75,6 @@
     <string name="moderat_skogbrannfare">Moderat skogbrannfare</string>
     <string name="moderat_skogbrannfare_ikon">Moderat skogbrannfare ikon</string>
     <string name="betydelig_skogbrannfare">Betydelig skogbrannfare</string>
+    <string name="api_key">AIzaSyAyK0NkgPMxOOTnWR5EFKdy2DzfDXGh-HI</string>
     <string name="logo">Logo</string>
 </resources>
