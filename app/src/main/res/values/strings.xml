@@ -68,4 +68,7 @@
     <string name="betydelig_skogbrannfare">Betydelig skogbrannfare</string>
     <string name="api_key">AIzaSyAyK0NkgPMxOOTnWR5EFKdy2DzfDXGh-HI</string>
     <string name="logo">Logo</string>
+    <string name="ingen_varsel">Ingen varsel funnet</string>
+    <string name="ingen_varsel_området">Ingen varsel i dette område</string>
+
 </resources>

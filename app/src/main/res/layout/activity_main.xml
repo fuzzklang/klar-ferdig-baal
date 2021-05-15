@@ -252,7 +252,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="1.0" />
 
-            <Switch
+            <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/switchOverlay"
                 android:layout_width="106dp"
                 android:layout_height="25dp"
@@ -265,7 +265,7 @@
                 app:layout_constraintTop_toTopOf="@+id/view2"
                 app:layout_constraintVertical_bias="0.0" />
 
-            <Switch
+            <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/switchCampfire"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
