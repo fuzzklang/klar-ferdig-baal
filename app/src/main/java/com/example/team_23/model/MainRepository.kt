@@ -45,12 +45,11 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
     private val key = "AIzaSyAyK0NkgPMxOOTnWR5EFKdy2DzfDXGh-HI"
     private var placeName: String? = null
 
-    suspend fun getPlaceNameFromLatLng(latlng: LatLng): String? {
+    suspend fun getPlaceNameFromLocation(latlng: LatLng): String? {
         Log.d(tag, "Soker etter sted fra Geocode API")
-
         val geocodePath = "${placesURL}latlng=${latlng.latitude},${latlng.longitude}&key=${key}"
         Log.d(tag, "url: $geocodePath")
-        try{
+        try {
             val httpResponse = apiService.fetchData(geocodePath)
             if (httpResponse != null)  Log.d(tag, "Fikk respons fra Geocode API")
             val response = gson.fromJson(httpResponse, Address_components2::class.java)
@@ -62,26 +61,24 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
         return placeName
     }
 
-    suspend fun searchLocation(place: String): List<Candidates>?{
+    suspend fun getLocationFromPlacename(place: String): List<Candidates>?{
         Log.d(tag, "Soker etter sted fra Google!")
         val placesPath = "${placesUrlStart}${place}${placesUrlEnd}"
-        try{
-        val httpResponse = apiService.fetchData(placesPath)
-        if (httpResponse != null)  Log.d(tag, "Fikk respons fra Places API")
-        val response = gson.fromJson(httpResponse, MainBase::class.java)
-        places = response.candidates
+        try {
+            val httpResponse = apiService.fetchData(placesPath)
+            if (httpResponse != null)
+                Log.d(tag, "Fikk respons fra Places API")
+            val response = gson.fromJson(httpResponse, MainBase::class.java)
+            places = response.candidates
             Log.d("places", places.toString())
-
-    } catch (exception: IOException) {
-        Log.w(tag, "Feil under henting av latlng til sted: ${exception.message}")
-    }
-    return places
-
+        } catch (exception: IOException) {
+            Log.w(tag, "Feil under henting av latlng til sted: ${exception.message}")
+        }
+        return places
     }
 
     // Henter Json fra Direction API (Google) og parser ved hjelp av Gson til dataklasser.
     suspend fun getRoutes(origin_lat : Double?, origin_lon : Double?, destination_lat : Double?, destination_lon : Double?): List<Routes>? {
-
         Log.d(tag, "Henter ruter fra Google!")
         val directionPath = "${directionsUrlOrigin}${origin_lat},${origin_lon}${directionsUrlDestination}${destination_lat},${destination_lon}${mode}${directionsUrlKey}"
         try {
@@ -89,7 +86,6 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
             if (httpResponse != null)  Log.d(tag, "Fikk respons fra Directions API")
             val response = gson.fromJson(httpResponse, Base::class.java)
             routes = response.routes
-
         } catch (exception: IOException) {
             Log.w(tag, "Feil under henting av rute: ${exception.message}")
         }

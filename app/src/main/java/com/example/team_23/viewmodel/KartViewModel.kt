@@ -93,7 +93,7 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
     fun getPlaceName(latlng: LatLng){
         //Kaller på Geocode API (via Repository) og oppdaterer xx-Livedata
         CoroutineScope(Dispatchers.Default).launch {
-            val latlangFromAPI = repo.getPlaceNameFromLatLng(latlng)
+            val latlangFromAPI = repo.getPlaceNameFromLocation(latlng)
             Log.d("Kartviewmodel.getPlace", latlangFromAPI.toString())
             if (latlangFromAPI != null){
                 _placeName.postValue(latlangFromAPI)
@@ -105,7 +105,7 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
     fun findPlace(place: String) {
         //Kaller på Places API fra Google (via Repository) og oppdaterer places-Livedata
         CoroutineScope(Dispatchers.Default).launch {
-            val placesFromApi = repo.searchLocation(place)
+            val placesFromApi = repo.getLocationFromPlacename(place)
             Log.d("Kartviewmodel.findplace", placesFromApi.toString())
             if (placesFromApi != null) {
                 _candidates = placesFromApi as MutableList<Candidates>
