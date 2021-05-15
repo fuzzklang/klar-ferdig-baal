@@ -380,9 +380,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(oslo, 6f))  // TODO: Flyttes nå til Oslo. Velge annet sted?
 
 
-        mMap.setOnMarkerClickListener {
+       /* mMap.setOnMarkerClickListener {
             callMarker(it)
-        }
+        }*/
 
     }
 
@@ -397,7 +397,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         val markerScreenPosition: Point = projection.toScreenLocation(markerLatLng)
         val pointHalfScreenAbove = Point(
             markerScreenPosition.x,
-            markerScreenPosition.y - containerHeight + 3500
+            markerScreenPosition.y - containerHeight / 5000
         )
 
         val aboveMarkerLatLng = projection
@@ -429,7 +429,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         marker = mMap.addMarker(MarkerOptions().position(latlng))
         kartViewModel.getAlert(latlng.latitude, latlng.longitude)
 
-        callMarker(marker!!)
+        //callMarker(marker!!)
 
     }
 
@@ -565,21 +565,23 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                         .zoom(6f)
                         .build()
 
-                val containerHeight = findViewById<RelativeLayout>(R.id.root).height
+               /* val containerHeight = findViewById<RelativeLayout>(R.id.root).height
+
                 val projection = mMap.projection
 
                 val locationLatLng = LatLng(location.latitude, location.longitude)
                 val markerScreenPosition: Point = projection.toScreenLocation(locationLatLng)
+
                 val pointHalfScreenAbove = Point(
                     markerScreenPosition.x,
-                    markerScreenPosition.y - containerHeight + 3500
+                    markerScreenPosition.y - containerHeight / 2
                 )
 
                 val aboveMarkerLatLng = projection
-                    .fromScreenLocation(pointHalfScreenAbove)
+                   .fromScreenLocation(pointHalfScreenAbove)
 
                 val center = CameraUpdateFactory.newLatLng(aboveMarkerLatLng)
-                mMap.animateCamera(center)
+               mMap.animateCamera(center)*/
 
             } else {
                 Toast.makeText(this, "Ingen lokasjon tilgjengelig", Toast.LENGTH_SHORT).show()
