@@ -153,7 +153,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <View
+            <ImageButton
                 android:id="@+id/menuShape"
                 android:layout_width="249dp"
                 android:layout_height="match_parent"
