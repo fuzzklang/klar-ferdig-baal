@@ -16,10 +16,10 @@ class CapParser {
     @Throws(XmlPullParserException::class, IOException::class)
     fun parse(inputStream: InputStream): Alert {
         //val tag = "CapParser.parse"
-        inputStream.use { inputStream ->
+        inputStream.use {
             val parser: XmlPullParser = Xml.newPullParser()
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
-            parser.setInput(inputStream, null)
+            parser.setInput(it, null)
             parser.nextTag()
             //Log.d(tag, "Current XML-tag: ${parser.name}")
             return readCap(parser)
