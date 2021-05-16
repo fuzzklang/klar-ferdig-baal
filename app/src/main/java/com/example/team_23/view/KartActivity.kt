@@ -142,6 +142,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             if(menuVisible){
                 menu.visibility = View.GONE
                 menuButton.background = resources.getDrawable(R.drawable.menubutton,theme)
+                mMap.uiSettings.isScrollGesturesEnabled = true
                 menuVisible = !menuVisible
             }
         }
@@ -159,16 +160,15 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             if(menuVisible){
                 menu.visibility = View.GONE
                 menuButton.background = resources.getDrawable(R.drawable.menubutton,theme)
+                mMap.uiSettings.isScrollGesturesEnabled = true
                 menuVisible = !menuVisible
             }
         }
-
 
         // ===== OBSERVERS =====
         if (!Places.isInitialized()) {
             Places.initialize(applicationContext, getString(R.string.api_key))
         }
-
 
         // Initialize the AutocompleteSupportFragment.
         val autocompleteFragment =
@@ -196,7 +196,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         })
     }
-
 
     // ===== GOOGLE MAP READY =====
     /**
@@ -226,7 +225,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         overlayVisible = true
         overlayPolygonList = mutableListOf()
         switchOverlayButton = findViewById(R.id.switchOverlay)
-
         switchCampfireButton.isChecked = true
         switchOverlayButton.isChecked = true
 
@@ -234,7 +232,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // Sjekk at tilgang til lokasjon (skal også sette mMap.isMyLocationEnabled og oppdaterer lokasjon dersom tilgang)
         getLocationAccess()
         Log.d("KartActivity.onMapReady", "mMap.isMyLocationEnabled: ${mMap.isMyLocationEnabled}")
-
 
         // ===== OBSERVERE =====
         // Observer varsel-liste fra KartViewModel
@@ -325,7 +322,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             warningLevelColor.background = colorLevel
             togglePopup()
         })
-
 
         // ===== ON CLICK LISTENERS =====
         menuButton.setOnClickListener { toggleMenu() }
@@ -451,11 +447,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         marker?.remove()
         marker = mMap.addMarker(MarkerOptions().position(latlng))
         kartViewModel.getAlert(latlng.latitude, latlng.longitude)
-
         //callMarker(marker!!)  // Sentrering fungerer for øyeblikket ikke
-
     }
-
 
     /* Metode kalles når svar ang. lokasjonstilgang kommer tilbake. Sjekker om tillatelse er innvilget */
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -497,28 +490,33 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun togglePopup() {
-        if (popupVisible ) {
+        if (popupVisible) {
             popup.visibility = View.GONE
             mMap.uiSettings.isScrollGesturesEnabled = true
+            if(!alertLevelsDescVisible){
+                alertLevelsDescPopup.visibility = View.GONE
+                alertLevelsDescVisible = !alertLevelsDescVisible
+            }
+            popupVisible = !popupVisible
         } else {
-            popup.visibility = View.VISIBLE
-            mMap.uiSettings.isScrollGesturesEnabled = false
             if (menuVisible) {
                 popup.visibility = View.GONE
                 menu.visibility = View.GONE
+                mMap.uiSettings.isScrollGesturesEnabled = true
                 menuButton.background =
                     ResourcesCompat.getDrawable(resources, R.drawable.menubutton, theme)
                 menuVisible = !menuVisible
-                popupVisible = !popupVisible
-            }
-            if(!alertLevelsDescVisible){
-                popup.visibility = View.GONE
-                alertLevelsDescPopup.visibility = View.GONE
-                alertLevelsDescVisible = !alertLevelsDescVisible
+            } else {
+                popup.visibility = View.VISIBLE
+                mMap.uiSettings.isScrollGesturesEnabled = false
+                if (!alertLevelsDescVisible) {
+                    alertLevelsDescPopup.visibility = View.GONE
+                    popup.visibility = View.GONE
+                    alertLevelsDescVisible = !alertLevelsDescVisible
+                }
                 popupVisible = !popupVisible
             }
         }
-        popupVisible = !popupVisible
     }
 
     private fun toggleMenu() {
@@ -530,12 +528,12 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             menu.visibility = View.VISIBLE
             mMap.uiSettings.isScrollGesturesEnabled = false
             menuButton.background = ResourcesCompat.getDrawable(resources, R.drawable.menubuttonclose,theme)
-            if(infoSynlig) {
+           /*if(infoSynlig) {
                 toggleInfo()
             }
             if(popupVisible) {
                 togglePopup()
-            }
+            }*/
         }
         menuVisible = !menuVisible
     }
@@ -543,12 +541,10 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun toggleLevelsPopup() {
         if (alertLevelsDescVisible){
             alertLevelsDescPopup.visibility = View.VISIBLE
-            popup.visibility = View.GONE
-            mMap.uiSettings.isScrollGesturesEnabled = true
+            mMap.uiSettings.isScrollGesturesEnabled = false
         } else {
             alertLevelsDescPopup.visibility = View.GONE
-            popup.visibility = View.VISIBLE
-            mMap.uiSettings.isScrollGesturesEnabled = false
+            mMap.uiSettings.isScrollGesturesEnabled = true
         }
         alertLevelsDescVisible = !alertLevelsDescVisible
     }
