@@ -10,6 +10,7 @@ import android.graphics.Point
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -291,7 +292,13 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // ----- Kart -----
         mMap = googleMap
         // Setter padding på toppen til kartet slik at kartet ikke havner bak den øverste fanen i appen.
-        mMap.setPadding(0, 2000, 0, 0)
+        val displayMetrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
+        val height = displayMetrics.heightPixels
+        val width = displayMetrics.widthPixels
+        val paddingTop = height - height / 5
+        val paddingRight = width / 30
+        mMap.setPadding(0, paddingTop, paddingRight, 0)
 
         // -- Bålplasser --
         campfireMarkers = mutableListOf()  // Liste som holder på markørene
