@@ -291,7 +291,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // ----- Kart -----
         mMap = googleMap
         // Setter padding på toppen til kartet slik at kartet ikke havner bak den øverste fanen i appen.
-        mMap.setPadding(0, 2000, 0, 0)
+        mMap.setPadding(0, 1600, 50, 0)
 
         // -- Bålplasser --
         campfireMarkers = mutableListOf()  // Liste som holder på markørene
