@@ -545,20 +545,25 @@
                 app:layout_constraintTop_toTopOf="@+id/popupAlertInfoBackground"
                 app:layout_constraintVertical_bias="0.094" />
 
-            <TextView
-                android:id="@+id/popupAlertInfoContent"
-                android:layout_width="193dp"
+            <ScrollView
+                android:layout_marginTop="5dp"
+                android:layout_width="190dp"
                 android:layout_height="110dp"
-                android:gravity="center"
-                android:text="@string/loading"
-                android:textColor="@color/white"
-                android:textSize="13sp"
                 app:layout_constraintBottom_toBottomOf="@+id/popupAlertInfoBackground"
                 app:layout_constraintEnd_toEndOf="@+id/popupAlertInfoBackground"
                 app:layout_constraintHorizontal_bias="0.6"
                 app:layout_constraintStart_toStartOf="@+id/popupAlertInfoBackground"
                 app:layout_constraintTop_toTopOf="@+id/popupAlertInfoBackground"
-                app:layout_constraintVertical_bias="0.762" />
+                app:layout_constraintVertical_bias="0.762">
+                <TextView
+                    android:id="@+id/popupAlertInfoContent"
+                    android:layout_width="190dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/loading"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+            </ScrollView>
 
 
             <ImageButton
