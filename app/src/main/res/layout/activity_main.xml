@@ -95,7 +95,7 @@
 
         </androidx.cardview.widget.CardView>
 
-        <View
+        <ImageButton
             android:id="@+id/topBar"
             android:layout_width="match_parent"
             android:layout_height="100dp"
@@ -152,9 +152,8 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
-
-
-            <View
+          
+            <ImageButton
                 android:id="@+id/menuShape"
                 android:layout_width="249dp"
                 android:layout_height="match_parent"
@@ -246,7 +245,7 @@
                 android:layout_width="139dp"
                 android:layout_height="48dp"
                 android:layout_marginTop="20dp"
-                android:layout_marginBottom="12dp"
+                android:layout_marginBottom="14dp"
                 android:background="@drawable/shapebutton"
                 app:layout_constraintBottom_toTopOf="@+id/view3"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -391,29 +390,30 @@
                 android:backgroundTint="@color/mainColor"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.422"
+                app:layout_constraintVertical_bias="0.0"
                 tools:ignore="ContentDescription" />
 
             <ImageView
                 android:id="@+id/popupAlertLevelBackground"
                 android:layout_width="212dp"
-                android:layout_height="64dp"
+                android:layout_height="90dp"
                 android:background="@drawable/shape"
                 android:backgroundTint="@color/secondaryColor"
                 app:layout_constraintBottom_toTopOf="@+id/popupAlertInfoBackground"
                 app:layout_constraintEnd_toEndOf="@+id/popupShape"
-                app:layout_constraintHorizontal_bias="0.477"
+                app:layout_constraintHorizontal_bias="0.492"
                 app:layout_constraintStart_toStartOf="@+id/popupShape"
                 app:layout_constraintTop_toTopOf="@+id/popupShape"
-                app:layout_constraintVertical_bias="0.803"
+                app:layout_constraintVertical_bias="0.838"
                 tools:ignore="ContentDescription" />
 
             <ImageView
                 android:id="@+id/popupAlertInfoBackground"
                 android:layout_width="226dp"
-                android:layout_height="150dp"
+                android:layout_height="160dp"
                 android:background="@drawable/shape"
                 android:backgroundTint="@color/secondaryColor"
                 app:layout_constraintBottom_toBottomOf="@+id/popupShape"
@@ -485,7 +485,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/loading"
                 android:textColor="@color/white"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="@+id/popupAlertLevelBackground"
                 app:layout_constraintEnd_toEndOf="@+id/popupAlertLevelBackground"
                 app:layout_constraintHorizontal_bias="0.395"
@@ -496,13 +496,13 @@
             <Button
                 android:id="@+id/popupAlertDescButton"
                 style="?android:attr/borderlessButtonStyle"
-                android:layout_width="70dp"
-                android:layout_height="25dp"
+                android:layout_width="80dp"
+                android:layout_height="40dp"
                 android:padding="0dp"
                 android:text="@string/nivaer"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="12sp"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toTopOf="@+id/popupAlertInfoBackground"
                 app:layout_constraintEnd_toEndOf="@+id/popupShape"
                 app:layout_constraintHorizontal_bias="0.495"
@@ -527,11 +527,11 @@
             <TextView
                 android:id="@+id/popupAlertInfoContent"
                 android:layout_width="193dp"
-                android:layout_height="103dp"
+                android:layout_height="110dp"
                 android:gravity="center"
                 android:text="@string/loading"
                 android:textColor="@color/white"
-                android:textSize="12sp"
+                android:textSize="13sp"
                 app:layout_constraintBottom_toBottomOf="@+id/popupAlertInfoBackground"
                 app:layout_constraintEnd_toEndOf="@+id/popupAlertInfoBackground"
                 app:layout_constraintHorizontal_bias="0.6"
@@ -572,7 +572,7 @@
             <TextView
                 android:id="@+id/popupDraHitButtonText"
                 android:layout_width="92dp"
-                android:layout_height="34dp"
+                android:layout_height="48dp"
                 android:gravity="center"
                 android:text="@string/dra_hit"
                 android:textColor="@color/black"
@@ -586,15 +586,15 @@
 
             <ImageView
                 android:id="@+id/popupAlertDescButtonIcon"
-                android:layout_width="15dp"
-                android:layout_height="17dp"
+                android:layout_width="17dp"
+                android:layout_height="40dp"
                 android:layout_marginTop="7dp"
                 app:layout_constraintBottom_toTopOf="@+id/popupAlertInfoBackground"
                 app:layout_constraintEnd_toEndOf="@+id/popupAlertDescButton"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/popupAlertDescButton"
                 app:layout_constraintTop_toTopOf="@+id/popupAlertDescButton"
-                app:layout_constraintVertical_bias="0.0"
+                app:layout_constraintVertical_bias="0.538"
                 app:srcCompat="@drawable/questionmark"
                 tools:ignore="ContentDescription" />
 
@@ -711,7 +711,7 @@
                 android:gravity="center"
                 android:text="@string/moderate_description"
                 android:textColor="@color/white"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="@id/levelsDescBackground"
                 app:layout_constraintEnd_toEndOf="@id/levelsDescBackground"
                 app:layout_constraintStart_toStartOf="@id/levelsDescBackground"
@@ -749,7 +749,7 @@
                 android:gravity="center"
                 android:text="@string/severe_description"
                 android:textColor="@color/white"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="@id/levelsDescBackground"
                 app:layout_constraintStart_toStartOf="@id/levelsDescBackground"
                 app:layout_constraintTop_toBottomOf="@id/levelsDescSevereIcon" />

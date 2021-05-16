@@ -18,7 +18,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import java.lang.Exception
 
 class KartViewModel(private val repo: MainRepository): ViewModel() {
     /* MutableLiveDataen er privat slik at ikke andre klasser utilsiktet kan endre innholdet */
@@ -63,10 +62,12 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
     /* Grensesnitt til View.
      * Henter varsler for sted angitt ved latitude og longitude.
      */
-    fun getAlert(lat: Double, lon: Double) {
+    fun getAlert(lat: Double, lng: Double) {
         CoroutineScope(Dispatchers.Default).launch {
             var alert: Alert? = null
-            val rssItemList = repo.getRssFeed(lat, lon)
+            // Oppdaterer stedsnavn for der varsel hentes slik at stedsnavn kan vises der det ikke er varsler.
+            // Viewsene i KartActivity observerer placeName.
+            val rssItemList = repo.getRssFeed(lat, lng)
             if (rssItemList != null && rssItemList.isNotEmpty()) {
                 Log.d(
                     "KartViewModel.getAlert",
@@ -75,6 +76,7 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
                 alert = repo.getCapAlert(rssItemList[0].link!!)
             } else {
                 Log.d("KartActivity.getAlert", "Ingen varsel ble funnet")
+                updatePlaceNameForNoAlert(lat, lng)
             }
             _alertAtPosition.postValue(alert)  // Oppdater varsel-livedata med ny verdi
         }
@@ -91,22 +93,26 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
         return _location
     }
 
-    /*fun getPlace(latlng: LatLng){
-        //Kaller på Geocode API (via Repository) og oppdaterer xx-Livedata
+    private fun updatePlaceNameForNoAlert(lat: Double, lng: Double) {
+        // Kaller på Geocode API (via Repository) og oppdaterer PlaceName-Livedata
+        _placeName.postValue("")
         CoroutineScope(Dispatchers.Default).launch {
-            val latlangFromAPI = repo.getPlaceFromLatLng(latlng)
-            Log.d("Kartviewmodel.getPlace", latlangFromAPI.toString())
-            if (latlangFromAPI != null){
-                _placeName.postValue(latlangFromAPI)
+            val latlng = LatLng(lat, lng)
+            Log.d("Kartviewmodel.getPlace", "Henter stedsnavn for: lat $lat, lng: $lng")
+            val name = repo.getPlaceNameFromLocation(latlng)
+            if (name != null) {
+                _placeName.postValue(name)
                 Log.d("Kartviewmodel.getPlace", "placeName oppdatert")
+            } else {
+                Log.d("Kartviewmodel.getPlace", "repo returnerte null for placename")
             }
         }
-    }*/
+    }
 
     fun findPlace(place: String) {
         //Kaller på Places API fra Google (via Repository) og oppdaterer places-Livedata
         CoroutineScope(Dispatchers.Default).launch {
-            val placesFromApi = repo.searchLocation(place)
+            val placesFromApi = repo.getLocationFromPlacename(place)
             Log.d("Kartviewmodel.findplace", placesFromApi.toString())
             if (placesFromApi != null) {
                 _candidates = placesFromApi as MutableList<Candidates>
@@ -215,18 +221,5 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
 
         return latlng
     }
-
-    fun getPlaceName(): String {
-        var placeName: String = " "
-        try {
-            placeName = _candidates[0].formatted_address!!
-        }
-        catch (e: Exception){
-            Log.d("kartViewModel.getPlace", e.toString())
-        }
-        return placeName
-    }
-
-
 }
 

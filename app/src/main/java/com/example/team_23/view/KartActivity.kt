@@ -10,6 +10,7 @@ import android.graphics.Point
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -85,12 +86,10 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     //
 
 
-
     @SuppressLint("UseCompatLoadingForDrawables", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
 
         // Setter KartViewModel og Kart tidlig.
         kartViewModel = ViewModelProvider.getKartViewModel(LocationServices.getFusedLocationProviderClient(applicationContext))
@@ -98,7 +97,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
-
 
         // TODO: beskriv variablene/hvor de brukes/hva de brukes til
         // ===== SETT VIEWS =====
@@ -232,16 +230,18 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 // Ingen varsel (alert er null)
                 warningText = getString(R.string.ingen_varsel)
                 background = resources.getDrawable(R.drawable.shape,theme)
-                warningArea.text = kartViewModel.getPlaceName()
+              
+                // Usikker på hvor stabil observeringen er. Oppstår mulige race conditions?
+                kartViewModel.placeName.observe(this, {placeName -> warningArea.text = placeName})
                 warningInfo.text = getString(R.string.ingen_varsel_området)
                 colorLevel = resources.getDrawable(R.color.green, theme)
-
             }
             warningLevel.text = warningText
             warningLevelImg.background = background
             warningLevelColor.background = colorLevel
-            togglePopup()  // TODO: endre toggling til 'showPopup'.
+            togglePopup()
         })
+
 
         if (!Places.isInitialized()) {
             Places.initialize(applicationContext, getString(R.string.api_key))
@@ -259,7 +259,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // Setter opp en PlaceSelectionListener for å håndtere responsen
         autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
             override fun onPlaceSelected(place: Place) {
-                Log.d("LATLNG", place.latLng.toString())
+                Log.d(tag, "latlng onPlaceSelected: ${place.latLng}")
                 // TODO: Get info about the selected place.
                 kartViewModel.findPlace(place.name!!)
                 warningArea.text = place.name
@@ -293,7 +293,13 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // ----- Kart -----
         mMap = googleMap
         // Setter padding på toppen til kartet slik at kartet ikke havner bak den øverste fanen i appen.
-        mMap.setPadding(0, 2000, 0, 0)
+        val displayMetrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
+        val height = displayMetrics.heightPixels
+        val width = displayMetrics.widthPixels
+        val paddingTop = height - height / 5
+        val paddingRight = width / 30
+        mMap.setPadding(0, paddingTop, paddingRight, 0)
 
         // -- Bålplasser --
         campfireMarkers = mutableListOf()  // Liste som holder på markørene
@@ -343,7 +349,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             travelPolylineList.forEach{ polyline -> polyline.remove() }   // Fjern tidligere tidligere tegnet rute fra kart.
             travelPolylineList.clear()
 
-            if (!popupVisible){
+            if (!popupVisible || !alertLevelsDescVisible){
                 marker = mMap.addMarker(MarkerOptions().position(it))
                 val markerLatLng = LatLng(marker!!.position.latitude, marker!!.position.longitude)
                 Log.d("Sara", markerLatLng.toString())
@@ -352,7 +358,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 //Log.d("Tobias", place.toString())
                // kartViewModel.findPlace()
             }
-
             kartViewModel.getAlert(it.latitude, it.longitude)
         }
 
