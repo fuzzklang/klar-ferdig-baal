@@ -39,7 +39,7 @@
     <string name="info">Info</string>
     <string name="regler">Regler</string>
     <string name="infoContent">Trykk på kartet for å sjekke skogbrannfaren for området</string>
-    <string name="overlay">Overlay</string>
+    <string name="overlay">Varselsoner</string>
     <string name="infoButtonText">Info</string>
     <string name="app_title">Klar Ferdig Bål</string>
 
@@ -61,7 +61,7 @@
     <string name="balplasser">Bålplasser</string>
     <string name="popup">popup</string>
     <string name="menu_button">Menu button</string>
-    <string name="varsler_her">Varsler her</string>
+    <string name="varsler_her">Varsel for min posisjon</string>
     <string name="kartfunksjoner">Kartfunksjoner</string>
     <string name="moderat_skogbrannfare">Moderat skogbrannfare</string>
     <string name="moderat_skogbrannfare_ikon">Moderat skogbrannfare ikon</string>
