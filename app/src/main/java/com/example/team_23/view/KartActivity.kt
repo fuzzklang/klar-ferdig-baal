@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Point
@@ -293,10 +294,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // ----- Kart -----
         mMap = googleMap
         // Setter padding på toppen til kartet slik at kartet ikke havner bak den øverste fanen i appen.
-        val displayMetrics = DisplayMetrics()
-        windowManager.defaultDisplay.getMetrics(displayMetrics)
-        val height = displayMetrics.heightPixels
-        val width = displayMetrics.widthPixels
+        val height = Resources.getSystem().displayMetrics.heightPixels
+        val width = Resources.getSystem().displayMetrics.widthPixels
         val paddingTop = height - height / 5
         val paddingRight = width / 30
         mMap.setPadding(0, paddingTop, paddingRight, 0)
