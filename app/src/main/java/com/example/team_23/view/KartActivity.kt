@@ -710,12 +710,12 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
     // Tømmer innholdet i alert-popuen.
     private fun resetContentOfAlertPopup() {
-        /*warningArea.text = getString(R.id.loading_alert)
+        warningArea.text = getString(R.string.henter_varsel)
         warningInfo.text = "..."
         val colorLevel = ResourcesCompat.getDrawable(resources, R.color.black, theme)
         val background = ResourcesCompat.getDrawable(resources, R.drawable.questionmark, theme)
         warningLevel.text = ""
         warningLevelImg.background = background
-        warningLevelColor.background = colorLevel*/
+        warningLevelColor.background = colorLevel
     }
 }
