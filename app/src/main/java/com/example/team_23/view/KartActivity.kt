@@ -221,7 +221,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // -- Bålplasser --
         campfireMarkers = mutableListOf()  // Liste som holder på markørene
-      
+
         // -- Overlay --
         overlayVisible = true
         overlayPolygonList = mutableListOf()
@@ -239,7 +239,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // ===== OBSERVERE =====
         // Observer varsel-liste fra KartViewModel
         // NB: Denne skal brukes kun til varsel-overlay, og ikke til popup-boks
-        kartViewModel.allAlerts.observe(this, {alertList ->
+        kartViewModel.allAlerts.observe(this, { alertList ->
             Log.d(tag, "Endring observert i allAlerts-liste!")
             allAlertsObserver(alertList)
         })
@@ -261,7 +261,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             Log.d(tag, "Oppdatering observert i alertAtPosition. Alert: $it")
             val warningText: String
             val background: Drawable
-            val colorLevel : Drawable
+            val colorLevel: Drawable
             if (alert != null) {
                 val info = alert.infoNo
                 warningArea.text = info.area.areaDesc
@@ -271,29 +271,52 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 when (alertColorLevel) {
                     AlertColors.YELLOW -> {
                         warningText = getString(R.string.moderat_skogbrannfare)
-                        background = ResourcesCompat.getDrawable(resources, R.drawable.yellowwarning, theme)!!
-                        colorLevel = ResourcesCompat.getDrawable(resources, R.color.alertYellow, theme)!! }
+                        background = ResourcesCompat.getDrawable(
+                            resources,
+                            R.drawable.yellowwarning,
+                            theme
+                        )!!
+                        colorLevel =
+                            ResourcesCompat.getDrawable(resources, R.color.alertYellow, theme)!!
+                    }
                     AlertColors.ORANGE -> {
                         warningText = getString(R.string.betydelig_skogbrannfare)
-                        background = ResourcesCompat.getDrawable(resources, R.drawable.orangewarning, theme)!!
-                        colorLevel = ResourcesCompat.getDrawable(resources, R.color.alertOrange, theme)!! }
-                    AlertColors.RED    -> {
+                        background = ResourcesCompat.getDrawable(
+                            resources,
+                            R.drawable.orangewarning,
+                            theme
+                        )!!
+                        colorLevel =
+                            ResourcesCompat.getDrawable(resources, R.color.alertOrange, theme)!!
+                    }
+                    AlertColors.RED -> {
                         warningText = getString(R.string.moderat_skogbrannfare)
-                        background = ResourcesCompat.getDrawable(resources, R.drawable.orangewarning, theme)!!  // TODO: hent rød varsel fra Githuben til YR!
-                        colorLevel = ResourcesCompat.getDrawable(resources, R.color.alertRed, theme)!!
-                        Log.w(tag, "Returnert alertColor er RED. Ikke forventet. Fortsetter kjøring.") }
+                        background = ResourcesCompat.getDrawable(
+                            resources,
+                            R.drawable.orangewarning,
+                            theme
+                        )!!  // TODO: hent rød varsel fra Githuben til YR!
+                        colorLevel =
+                            ResourcesCompat.getDrawable(resources, R.color.alertRed, theme)!!
+                        Log.w(
+                            tag,
+                            "Returnert alertColor er RED. Ikke forventet. Fortsetter kjøring."
+                        )
+                    }
                     AlertColors.UNKNOWN -> {
                         Log.w(tag, "Returnert alertColor er Unkown.")
                         warningText = "?"
                         colorLevel = ResourcesCompat.getDrawable(resources, R.color.black, theme)!!
-                        background = ResourcesCompat.getDrawable(resources, R.drawable.questionmark, theme)!! }
+                        background =
+                            ResourcesCompat.getDrawable(resources, R.drawable.questionmark, theme)!!
+                    }
                 }
             } else {
                 // Ingen varsel (alert er null)
                 warningText = getString(R.string.ingen_varsel)
                 background = ResourcesCompat.getDrawable(resources, R.drawable.shape, theme)!!
                 // Usikker på hvor stabil observeringen er. Oppstår mulige race conditions?
-                kartViewModel.placeName.observe(this, {placeName -> warningArea.text = placeName})
+                kartViewModel.placeName.observe(this, { placeName -> warningArea.text = placeName })
                 warningInfo.text = getString(R.string.ingen_varsel_området)
                 colorLevel = ResourcesCompat.getDrawable(resources, R.color.green, theme)!!
             }
@@ -305,17 +328,17 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
         // ===== ON CLICK LISTENERS =====
-        menuButton.setOnClickListener{toggleMenu()}
+        menuButton.setOnClickListener { toggleMenu() }
 
         alertLevelsDescButton.setOnClickListener { toggleLevelsPopup() }
 
         alertLevelsDescCloseButton.setOnClickListener { toggleLevelsPopup() }
 
-        alertLevelDescCloseButtonShape.setOnClickListener{ toggleLevelsPopup() }
+        alertLevelDescCloseButtonShape.setOnClickListener { toggleLevelsPopup() }
 
-        popupCloseButton.setOnClickListener{ togglePopup() }
+        popupCloseButton.setOnClickListener { togglePopup() }
 
-        varslerHer.setOnClickListener{
+        varslerHer.setOnClickListener {
             getLocationAccess()  // Sjekk at vi har tilgang til lokasjon fra system.
             // 'location'-variabelen i KartViewModel får en ny instans av LiveData *hver gang*
             // lokasjon oppdateres. Må derfor lage en observer for den *siste og nyeste instansen* av location.
@@ -329,7 +352,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             })
         }
 
-        switchCampfireButton.setOnCheckedChangeListener {_, isChecked -> toggleCampfires(isChecked) }
+        switchCampfireButton.setOnCheckedChangeListener { _, isChecked -> toggleCampfires(isChecked) }
         switchOverlayButton.setOnCheckedChangeListener { _, isChecked -> toggleOverlay(isChecked) }
 
         mMap.setOnCameraIdleListener { toogleCampfireZoomVisibility() }
@@ -337,18 +360,22 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // Når bruker trykker på kartet lages det en marker
         mMap.setOnMapClickListener {
             marker?.remove()
-            travelPolylineList.forEach{ polyline -> polyline.remove() }   // Fjern tidligere tidligere tegnet rute fra kart.
+            travelPolylineList.forEach { polyline -> polyline.remove() }   // Fjern tidligere tidligere tegnet rute fra kart.
             travelPolylineList.clear()
 
-            if (!popupVisible || !alertLevelsDescVisible){
+            if (!popupVisible){
+                if(alertLevelsDescVisible) {
+                    if(!menuVisible){
                 marker = mMap.addMarker(MarkerOptions().position(it))
                 val markerLatLng = LatLng(marker!!.position.latitude, marker!!.position.longitude)
                 Log.d("Sara", markerLatLng.toString())
 
                 /*val place = kartViewModel.getPlace(markerLatLng)*/
                 //Log.d("Tobias", place.toString())
-               // kartViewModel.findPlace()
+                // kartViewModel.findPlace()
             }
+        }
+    }
             kartViewModel.getAlert(it.latitude, it.longitude)
         }
 
@@ -469,17 +496,26 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         infoSynlig = !infoSynlig
     }
 
-    private fun togglePopup(){
-        if (popupVisible) {
+    private fun togglePopup() {
+        if (popupVisible ) {
             popup.visibility = View.GONE
             mMap.uiSettings.isScrollGesturesEnabled = true
         } else {
             popup.visibility = View.VISIBLE
             mMap.uiSettings.isScrollGesturesEnabled = false
-            if(menuVisible) {
+            if (menuVisible) {
+                popup.visibility = View.GONE
                 menu.visibility = View.GONE
-                menuButton.background = ResourcesCompat.getDrawable(resources, R.drawable.menubutton,theme)
+                menuButton.background =
+                    ResourcesCompat.getDrawable(resources, R.drawable.menubutton, theme)
                 menuVisible = !menuVisible
+                popupVisible = !popupVisible
+            }
+            if(!alertLevelsDescVisible){
+                popup.visibility = View.GONE
+                alertLevelsDescPopup.visibility = View.GONE
+                alertLevelsDescVisible = !alertLevelsDescVisible
+                popupVisible = !popupVisible
             }
         }
         popupVisible = !popupVisible
