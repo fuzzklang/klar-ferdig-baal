@@ -153,6 +153,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+
             <View
                 android:id="@+id/menuShape"
                 android:layout_width="249dp"
@@ -160,9 +161,10 @@
                 android:background="@color/mainColor"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0" />
 
             <TextView
                 android:id="@+id/menuInfoSectionTitle"
@@ -181,7 +183,7 @@
             <Button
                 android:id="@+id/menuInfoButton"
                 android:layout_width="140dp"
-                android:layout_height="40dp"
+                android:layout_height="48dp"
                 android:layout_marginTop="100dp"
                 android:backgroundTint="@color/white"
                 android:contentDescription="@string/info_button"
@@ -200,7 +202,7 @@
             <Button
                 android:id="@+id/menuRulesButton"
                 android:layout_width="140dp"
-                android:layout_height="40dp"
+                android:layout_height="48dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
                 android:backgroundTint="@color/white"
@@ -231,7 +233,7 @@
             <View
                 android:id="@+id/view3"
                 android:layout_width="140dp"
-                android:layout_height="27dp"
+                android:layout_height="48dp"
                 android:layout_marginBottom="250dp"
                 android:background="@drawable/shapebutton"
                 app:layout_constraintBottom_toBottomOf="@+id/menuShape"
@@ -241,8 +243,8 @@
 
             <View
                 android:id="@+id/view2"
-                android:layout_width="140dp"
-                android:layout_height="27dp"
+                android:layout_width="139dp"
+                android:layout_height="48dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="12dp"
                 android:background="@drawable/shapebutton"
@@ -254,8 +256,8 @@
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/switchOverlay"
-                android:layout_width="106dp"
-                android:layout_height="25dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="1dp"
                 android:text="@string/overlay"
                 app:layout_constraintBottom_toBottomOf="@+id/view2"
@@ -374,7 +376,7 @@
             android:id="@+id/popup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:visibility=""
             app:layout_constraintBottom_toBottomOf="@+id/varslerHerButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
