@@ -587,7 +587,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         locationLiveData.observe(this, {
             val location = locationLiveData.value
             if (location!= null) {
-                Toast.makeText(this, "Current pos: ${location.latitude}, ${location.longitude}", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this, "Current pos: ${location.latitude}, ${location.longitude}", Toast.LENGTH_SHORT).show()
                 val cameraPosition = CameraPosition.Builder()
                         .target(LatLng(location.latitude, location.longitude))
                         .zoom(6f)
