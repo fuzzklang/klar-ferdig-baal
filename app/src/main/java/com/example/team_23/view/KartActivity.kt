@@ -11,7 +11,6 @@ import android.graphics.Point
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -302,7 +301,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 background = ResourcesCompat.getDrawable(resources, R.drawable.shape, theme)!!
                 // Usikker på hvor stabil observeringen er. Oppstår mulige race conditions?
                 kartViewModel.placeName.observe(this, {placeName -> warningArea.text = placeName})
-                warningInfo.text = getString(R.string.ingen_varsel_område)
+                warningInfo.text = getString(R.string.ingen_varsel_området)
                 colorLevel = ResourcesCompat.getDrawable(resources, R.color.green, theme)!!
             }
             warningLevel.text = warningText
