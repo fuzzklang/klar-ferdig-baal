@@ -323,7 +323,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             warningLevel.text = warningText
             warningLevelImg.background = background
             warningLevelColor.background = colorLevel
-            togglePopup()
         })
 
 
@@ -345,6 +344,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             // Da hentes varselet først når LiveDataen har blitt fylt med informasjon om lokasjon.
             // Ellers vil den ikke ha tilgang på lokasjons-informasjonen.
             // NB: Ikke ideellt hvis flere 'observere' trenger å observere samme instans av 'location'.
+            resetContentOfAlertPopup()  // Tøm innhold i varselvisning (popup)
+            togglePopup()               // Vis popup
             val latestKnownLocation = kartViewModel.getLocation()  // type: LiveData<Location>
             latestKnownLocation.observe(this, {
                 kartViewModel.getAlertCurrentLocation()  // Hent varsler når vi har lokasjon
@@ -366,16 +367,17 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             if (!popupVisible){
                 if(alertLevelsDescVisible) {
                     if(!menuVisible){
-                marker = mMap.addMarker(MarkerOptions().position(it))
-                val markerLatLng = LatLng(marker!!.position.latitude, marker!!.position.longitude)
-                Log.d("Sara", markerLatLng.toString())
-
-                /*val place = kartViewModel.getPlace(markerLatLng)*/
-                //Log.d("Tobias", place.toString())
-                // kartViewModel.findPlace()
+                        marker = mMap.addMarker(MarkerOptions().position(it))
+                        val markerLatLng = LatLng(marker!!.position.latitude, marker!!.position.longitude)
+                        Log.d("Sara", markerLatLng.toString())
+                        resetContentOfAlertPopup()  // Tøm innhold i varsel-popoup
+                        togglePopup()               // Vis popup
+                        /*val place = kartViewModel.getPlace(markerLatLng)*/
+                        //Log.d("Tobias", place.toString())
+                        // kartViewModel.findPlace()
+                    }
+                }
             }
-        }
-    }
             kartViewModel.getAlert(it.latitude, it.longitude)
         }
 
