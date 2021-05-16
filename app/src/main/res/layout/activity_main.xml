@@ -48,7 +48,7 @@
         <Button
             android:id="@+id/varslerHerButton"
             android:layout_width="140dp"
-            android:layout_height="50dp"
+            android:layout_height="60dp"
             android:layout_marginBottom="2dp"
             android:backgroundTint="@color/mainColor"
             android:text="@string/varsler_her"
