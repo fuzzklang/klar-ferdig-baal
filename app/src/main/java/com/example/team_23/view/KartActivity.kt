@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Point
@@ -35,6 +36,7 @@ import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 
 class KartActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -73,12 +75,12 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     // ----- Campfire -----
     private var menuCampfireButtonIsChecked = true  // Erstatt med direkte aksess til Switch
     private val ZOOM_LEVEL_SHOW_CAMPFIRES = 8.5
-    private lateinit var switchCampfireButton: Switch
+    private lateinit var switchCampfireButton: SwitchMaterial
 
     private lateinit var campfireSpots: List<Campfire>
     private lateinit var campfireMarkers: MutableList<Marker>
     // ----- Overlay (Alerts) -----
-    private lateinit var switchOverlayButton: Switch
+    private lateinit var switchOverlayButton: SwitchMaterial
     private var overlayVisible = true
     private lateinit var overlayPolygonList: MutableList<Polygon>  // Listen med polygoner
 
@@ -103,29 +105,29 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         val varslerHer = findViewById<Button>(R.id.varslerHerButton)
 
         // ----- Meny -----
-        menu = findViewById<View>(R.id.menu)
-        menuButton = findViewById<ImageButton>(R.id.menuButton)
+        menu = findViewById(R.id.menu)
+        menuButton = findViewById(R.id.menuButton)
         val rulesActivityBtn = findViewById<Button>(R.id.menuRulesButton)  // Knapp som sender bruker til reglene
-        switchCampfireButton = findViewById<Switch>(R.id.switchCampfire)
+        switchCampfireButton = findViewById(R.id.switchCampfire)
         // ----- Info-boks -----
-        infoButton = findViewById<Button>(R.id.menuInfoButton)
-        info = findViewById<View>(R.id.infoBox)
+        infoButton = findViewById(R.id.menuInfoButton)
+        info = findViewById(R.id.infoBox)
 
         // ----- Alert Popup-boks -----
-        popup = findViewById<View>(R.id.popup)
-        popupCloseButton = findViewById<ImageButton>(R.id.popupAlertCloseButton)
+        popup = findViewById(R.id.popup)
+        popupCloseButton = findViewById(R.id.popupAlertCloseButton)
         val warningArea = findViewById<TextView>(R.id.popupAlertArea)
         val warningInfo = findViewById<TextView>(R.id.popupAlertInfoContent)
         val warningLevel = findViewById<TextView>(R.id.popupAlertLevelContent)
         val warningLevelImg = findViewById<ImageView>(R.id.warningLevelImg)
         val warningLevelColor = findViewById<View>(R.id.popupAlertLevelColor)
-        travelHereButton = findViewById<ImageButton>(R.id.popupDraHitButton)
+        travelHereButton = findViewById(R.id.popupDraHitButton)
 
         // ----- Levels -----
-        alertLevelsDescButton = findViewById<Button>(R.id.popupAlertDescButton)
-        alertLevelsDescPopup = findViewById<View>(R.id.levelsDesc)
-        alertLevelsDescCloseButton = findViewById<ImageButton>(R.id.levelsDescCloseButton)
-        alertLevelDescCloseButtonShape = findViewById<ImageButton>(R.id.levelsDescShape)
+        alertLevelsDescButton = findViewById(R.id.popupAlertDescButton)
+        alertLevelsDescPopup = findViewById(R.id.levelsDesc)
+        alertLevelsDescCloseButton = findViewById(R.id.levelsDescCloseButton)
+        alertLevelDescCloseButtonShape = findViewById(R.id.levelsDescShape)
 
         // ------- Travel here -------
         travelPolylineList = mutableListOf()
@@ -197,20 +199,19 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 val info = alert.infoNo
                 warningArea.text = info.area.areaDesc
                 warningInfo.text = info.instruction
-                val alertColorLevel = alert.getAlertColor()
 
                 // TODO: tekst burde hentes fra resources
-                when (alertColorLevel) {
+                when (alert.getAlertColor()) {
                     AlertColors.YELLOW -> {
-                        warningText = "Moderat skogbrannfare"
+                        warningText = getString(R.string.moderat_skogbrannfare)
                         background = resources.getDrawable(R.drawable.yellowwarning,theme)
                         colorLevel = resources.getDrawable(R.color.alertYellow, theme)}
                     AlertColors.ORANGE -> {
-                        warningText = "Betydelig skogbrannfare"
+                        warningText = getString(R.string.betydelig_skogbrannfare)
                         background = resources.getDrawable(R.drawable.orangewarning,theme)
                         colorLevel = resources.getDrawable(R.color.alertOrange, theme)}
                     AlertColors.RED    -> {
-                        warningText = "Moderat skogbrannfare"
+                        warningText = getString(R.string.moderat_skogbrannfare)
                         background = resources.getDrawable(R.drawable.orangewarning,theme)  // TODO: hent rød varsel fra Githuben til YR!
                         colorLevel = resources.getDrawable(R.color.alertRed, theme)
                         Log.w(tag, "Returnert alertColor er RED. Ikke forventet. Fortsetter kjøring.")
@@ -224,11 +225,12 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
             } else {
                 // Ingen varsel (alert er null)
-                warningText = "Ingen varsel funnet"
+                warningText = getString(R.string.ingen_varsel)
                 background = resources.getDrawable(R.drawable.shape,theme)
+              
                 // Usikker på hvor stabil observeringen er. Oppstår mulige race conditions?
                 kartViewModel.placeName.observe(this, {placeName -> warningArea.text = placeName})
-                warningInfo.text = "Ingen varsel i dette området"
+                warningInfo.text = getString(R.string.ingen_varsel_området)
                 colorLevel = resources.getDrawable(R.color.green, theme)
             }
             warningLevel.text = warningText
@@ -288,10 +290,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // ----- Kart -----
         mMap = googleMap
         // Setter padding på toppen til kartet slik at kartet ikke havner bak den øverste fanen i appen.
-        val displayMetrics = DisplayMetrics()
-        windowManager.defaultDisplay.getMetrics(displayMetrics)
-        val height = displayMetrics.heightPixels
-        val width = displayMetrics.widthPixels
+        val height = Resources.getSystem().displayMetrics.heightPixels
+        val width = Resources.getSystem().displayMetrics.widthPixels
         val paddingTop = height - height / 5
         val paddingRight = width / 30
         mMap.setPadding(0, paddingTop, paddingRight, 0)
@@ -302,7 +302,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // -- Overlay --
         overlayVisible = true
         overlayPolygonList = mutableListOf()
-        switchOverlayButton = findViewById<Switch>(R.id.switchOverlay)
+        switchOverlayButton = findViewById(R.id.switchOverlay)
 
         switchCampfireButton.isChecked = true
         switchOverlayButton.isChecked = true
@@ -326,7 +326,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
         //Observerer places-livedata (i fra KartViewModel), plasserer marker på søkt sted ved oppdatering
         kartViewModel.places.observe(this, { places ->
-            Log.d(tag, "Places: ${places}")
+            Log.d(tag, "Places: $places")
 
             placeMarker(places)
         })
@@ -341,7 +341,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // Når bruker trykker på kartet lages det en marker
         mMap.setOnMapClickListener {
             marker?.remove()
-            travelPolylineList.forEach{ it.remove() }   // Fjern tidligere tidligere tegnet rute fra kart.
+            travelPolylineList.forEach{ polyline -> polyline.remove() }   // Fjern tidligere tidligere tegnet rute fra kart.
             travelPolylineList.clear()
 
             if (!popupVisible || !alertLevelsDescVisible){
@@ -380,9 +380,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(oslo, 6f))  // TODO: Flyttes nå til Oslo. Velge annet sted?
 
 
-        mMap.setOnMarkerClickListener {
+       /* mMap.setOnMarkerClickListener {
             callMarker(it)
-        }
+        }*/
 
     }
 
@@ -390,14 +390,14 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     // ===== HJELPEMETODER =====
     // =========================
 
-    fun callMarker(marker: Marker) : Boolean{
-        val container_height = findViewById<RelativeLayout>(R.id.root).height
+    private fun callMarker(marker: Marker) : Boolean{
+        val containerHeight = findViewById<RelativeLayout>(R.id.root).height
         val projection = mMap.projection
         val markerLatLng = LatLng(marker.position.latitude, marker.position.longitude)
         val markerScreenPosition: Point = projection.toScreenLocation(markerLatLng)
         val pointHalfScreenAbove = Point(
             markerScreenPosition.x,
-            markerScreenPosition.y - container_height + 3500
+            markerScreenPosition.y - containerHeight / 5000
         )
 
         val aboveMarkerLatLng = projection
@@ -406,7 +406,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         marker.showInfoWindow()
         val center = CameraUpdateFactory.newLatLng(aboveMarkerLatLng)
         mMap.animateCamera(center)
-        //mMap.animateCamera(zoom)
 
         return true
     }
@@ -430,7 +429,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         marker = mMap.addMarker(MarkerOptions().position(latlng))
         kartViewModel.getAlert(latlng.latitude, latlng.longitude)
 
-        callMarker(marker!!)
+        //callMarker(marker!!)
 
     }
 
@@ -533,20 +532,15 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun toggleCampfires(isChecked: Boolean) {
         menuCampfireButtonIsChecked = isChecked
-        //overlayPolygonList.forEach {it.isVisible = overlayVisible}
-       // if (isChecked){
-            campfireMarkers.forEach {it.isVisible = isChecked}
-            toogleCampfireZoomVisibility()
-      //  }
+        campfireMarkers.forEach {it.isVisible = isChecked}
+        toogleCampfireZoomVisibility()
+
         Log.d("checked","campfire")
     }
 
     private fun toggleOverlay(isChecked: Boolean) {
         overlayVisible = isChecked
-        //overlayPolygonList.forEach {it.isVisible = overlayVisible}
-       // if (isChecked){
-            overlayPolygonList.forEach {it.isVisible = isChecked}
-        //}
+        overlayPolygonList.forEach {it.isVisible = isChecked}
         Log.d("checked","overlay")
     }
 
@@ -570,24 +564,24 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                         .target(LatLng(location.latitude, location.longitude))
                         .zoom(6f)
                         .build()
-                //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), 10f))
-                //mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
 
-                val container_height = findViewById<RelativeLayout>(R.id.root).height
+               /* val containerHeight = findViewById<RelativeLayout>(R.id.root).height
+
                 val projection = mMap.projection
 
                 val locationLatLng = LatLng(location.latitude, location.longitude)
                 val markerScreenPosition: Point = projection.toScreenLocation(locationLatLng)
+
                 val pointHalfScreenAbove = Point(
                     markerScreenPosition.x,
-                    markerScreenPosition.y - container_height + 3500
+                    markerScreenPosition.y - containerHeight / 2
                 )
 
                 val aboveMarkerLatLng = projection
-                    .fromScreenLocation(pointHalfScreenAbove)
+                   .fromScreenLocation(pointHalfScreenAbove)
 
                 val center = CameraUpdateFactory.newLatLng(aboveMarkerLatLng)
-                mMap.animateCamera(center)
+               mMap.animateCamera(center)*/
 
             } else {
                 Toast.makeText(this, "Ingen lokasjon tilgjengelig", Toast.LENGTH_SHORT).show()
@@ -649,8 +643,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         getLocationAccess()
 
         if (hasLocationAccess) {
-            val current_location = kartViewModel.getLocation()
-            current_location.observe(this, {
+            val currentLocation = kartViewModel.getLocation()
+            currentLocation.observe(this, {
                 Log.d(tag, "getAndShowDirections: endring observert i lokasjon")
                 val originLat = it?.latitude
                 val originLon = it?.longitude
