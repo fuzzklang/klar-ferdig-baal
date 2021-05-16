@@ -375,7 +375,7 @@
             android:id="@+id/popup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility=""
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="@+id/varslerHerButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -418,10 +418,10 @@
                 android:backgroundTint="@color/secondaryColor"
                 app:layout_constraintBottom_toBottomOf="@+id/popupShape"
                 app:layout_constraintEnd_toEndOf="@+id/popupShape"
-                app:layout_constraintHorizontal_bias="0.471"
+                app:layout_constraintHorizontal_bias="0.49"
                 app:layout_constraintStart_toStartOf="@+id/popupShape"
                 app:layout_constraintTop_toTopOf="@+id/popupShape"
-                app:layout_constraintVertical_bias="0.75"
+                app:layout_constraintVertical_bias="0.808"
                 tools:ignore="ContentDescription" />
 
             <ScrollView
@@ -435,15 +435,14 @@
                 app:layout_constraintTop_toTopOf="@+id/popupShape"
                 app:layout_constraintVertical_bias="0.106">
 
-            <TextView
-                android:id="@+id/popupAlertArea"
-                android:layout_width="180dp"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/loading"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-              />
+                <TextView
+                    android:id="@+id/popupAlertArea"
+                    android:layout_width="180dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/loading"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
 
             </ScrollView>
 
@@ -451,12 +450,13 @@
                 android:id="@+id/popupAlertLevelColor"
                 android:layout_width="110dp"
                 android:layout_height="6dp"
+                android:layout_marginTop="37dp"
                 android:background="@color/black"
                 app:layout_constraintBottom_toTopOf="@+id/popupAlertLevelBackground"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.497"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/popupAlertAreaScroll"
+                app:layout_constraintTop_toTopOf="@+id/popupAlertAreaScroll"
                 app:layout_constraintVertical_bias="0.406" />
 
             <ImageButton
@@ -513,10 +513,23 @@
                 android:textSize="16sp"
                 app:layout_constraintBottom_toTopOf="@+id/popupAlertInfoBackground"
                 app:layout_constraintEnd_toEndOf="@+id/popupShape"
-                app:layout_constraintHorizontal_bias="0.495"
+                app:layout_constraintHorizontal_bias="0.497"
                 app:layout_constraintStart_toStartOf="@+id/popupShape"
-                app:layout_constraintTop_toBottomOf="@+id/popupAlertLevelBackground"
-                app:layout_constraintVertical_bias="0.583" />
+                app:layout_constraintTop_toBottomOf="@+id/popupAlertLevelBackground" />
+
+            <ImageView
+                android:id="@+id/popupAlertDescButtonIcon"
+                android:layout_width="17dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="7dp"
+                app:layout_constraintBottom_toTopOf="@+id/popupAlertInfoBackground"
+                app:layout_constraintEnd_toEndOf="@+id/popupAlertDescButton"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/popupAlertDescButton"
+                app:layout_constraintTop_toTopOf="@+id/popupAlertDescButton"
+                app:layout_constraintVertical_bias="0.444"
+                app:srcCompat="@drawable/questionmark"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:id="@+id/popupAlertInfoTitle"
@@ -591,20 +604,6 @@
                 app:layout_constraintStart_toStartOf="@+id/popupDraHitButton"
                 app:layout_constraintTop_toBottomOf="@+id/popupDraHitButton"
                 app:layout_constraintVertical_bias="0.514" />
-
-            <ImageView
-                android:id="@+id/popupAlertDescButtonIcon"
-                android:layout_width="17dp"
-                android:layout_height="40dp"
-                android:layout_marginTop="7dp"
-                app:layout_constraintBottom_toTopOf="@+id/popupAlertInfoBackground"
-                app:layout_constraintEnd_toEndOf="@+id/popupAlertDescButton"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/popupAlertDescButton"
-                app:layout_constraintTop_toTopOf="@+id/popupAlertDescButton"
-                app:layout_constraintVertical_bias="0.538"
-                app:srcCompat="@drawable/questionmark"
-                tools:ignore="ContentDescription" />
 
             <ImageView
                 android:id="@+id/warningLevelImg"
