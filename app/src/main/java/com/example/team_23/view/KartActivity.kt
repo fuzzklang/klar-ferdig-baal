@@ -258,7 +258,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
             override fun onPlaceSelected(place: Place) {
                 Log.d(tag, "latlng onPlaceSelected: ${place.latLng}")
-                // TODO: Get info about the selected place.
                 kartViewModel.findPlace(place.name!!)
                 warningArea.text = place.name
 
@@ -269,7 +268,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
             //Ved feil
             override fun onError(p0: Status) {
-                // TODO: Handle the error.
                 Log.i("OnError", "An error occurred: $p0")
             }
         })
@@ -377,8 +375,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         drawCampfires()
 
         // --- FLYTT KAMERA ---
-        val oslo = LatLng(59.911491, 10.757933) //TODO: flytt dette til en konfigurasjonsfil
-        this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(oslo, 6f))  // TODO: Flyttes nå til Oslo. Velge annet sted?
+        val oslo = LatLng(59.911491, 10.757933)
+        this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(oslo, 6f))
 
 
        /* mMap.setOnMarkerClickListener {
@@ -614,7 +612,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun drawCampfires() {
-        // TODO: burde noe av dette flyttes til layout-filene?
         val campfireIconHeight = 50   // endrer stoerrelse paa campfire ikonet
         val campfireIconWidth = 50    // -- " ---
         val campfireIcon = ContextCompat.getDrawable(this, R.drawable.campfire) as BitmapDrawable
@@ -667,7 +664,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun drawDirectionsPath(paths: MutableList<List<LatLng>>) {
         Log.d(tag, "drawDirectionsPath: Tegner rute")
         if (paths.size == 0) {
-            Toast.makeText(this, "Fant ingen rute", Toast.LENGTH_SHORT).show()  // TODO: flytt streng resources
+            Toast.makeText(this, "Fant ingen rute", Toast.LENGTH_SHORT).show()
         }
         //går gjennom punktene i polyline for å skrive det ut til kartet.
         for (i in 0 until paths.size) {
