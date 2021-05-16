@@ -67,7 +67,6 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
             var alert: Alert? = null
             // Oppdaterer stedsnavn for der varsel hentes slik at stedsnavn kan vises der det ikke er varsler.
             // Viewsene i KartActivity observerer placeName.
-            updatePlaceNameForNoAlert(lat, lng)
             val rssItemList = repo.getRssFeed(lat, lng)
             if (rssItemList != null && rssItemList.isNotEmpty()) {
                 Log.d(
@@ -77,6 +76,7 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
                 alert = repo.getCapAlert(rssItemList[0].link!!)
             } else {
                 Log.d("KartActivity.getAlert", "Ingen varsel ble funnet")
+                updatePlaceNameForNoAlert(lat, lng)
             }
             _alertAtPosition.postValue(alert)  // Oppdater varsel-livedata med ny verdi
         }
