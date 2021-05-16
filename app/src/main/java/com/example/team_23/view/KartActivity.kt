@@ -410,7 +410,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         marker.showInfoWindow()
         val center = CameraUpdateFactory.newLatLng(aboveMarkerLatLng)
         mMap.animateCamera(center)
-        //mMap.animateCamera(zoom)
 
         return true
     }
