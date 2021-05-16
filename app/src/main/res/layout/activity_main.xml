@@ -64,7 +64,7 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView"
-            android:layout_width="411dp"
+            android:layout_width="0dp"
             android:layout_height="107dp"
             android:elevation="4dp"
             app:cardBackgroundColor="@color/mainColor"
@@ -97,7 +97,7 @@
 
         <ImageButton
             android:id="@+id/topBar"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="100dp"
             android:background="@color/mainColor"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -144,7 +144,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/menu"
             android:layout_width="250dp"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:elevation="2dp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -156,7 +156,7 @@
             <ImageButton
                 android:id="@+id/menuShape"
                 android:layout_width="249dp"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
                 android:background="@color/mainColor"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
