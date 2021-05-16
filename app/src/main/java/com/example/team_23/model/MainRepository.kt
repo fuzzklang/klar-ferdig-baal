@@ -33,12 +33,10 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
     private val mode = "&mode=walking"
     private val directionsUrlKey = "&key=AIzaSyAyK0NkgPMxOOTnWR5EFKdy2DzfDXGh-HI"
     private val gson = Gson()
-    private var routes: List<Routes>? = null
 
     //Places API
     private val placesUrlStart = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input="
     private val placesUrlEnd = "&inputtype=textquery&fields=formatted_address,name,geometry&key=AIzaSyAyK0NkgPMxOOTnWR5EFKdy2DzfDXGh-HI"
-    private var places: List<Candidates>? = null
 
     //Geocode API
     private val placesURL = "https://maps.googleapis.com/maps/api/geocode/json?"
@@ -67,6 +65,7 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
 
     suspend fun getLocationFromPlacename(place: String): List<Candidates>?{
         Log.d(tag, "Soker etter sted fra Google!")
+        var places: List<Candidates>? = null
         val placesPath = "${placesUrlStart}${place}${placesUrlEnd}"
         try {
             val httpResponse = apiService.fetchData(placesPath) ?: throw IOException()
@@ -83,6 +82,7 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
     // Henter Json fra Direction API (Google) og parser ved hjelp av Gson til dataklasser.
     suspend fun getRoutes(origin_lat : Double?, origin_lon : Double?, destination_lat : Double?, destination_lon : Double?): List<Routes>? {
         Log.d(tag, "Henter ruter fra Google!")
+        var routes: List<Routes>? = null
         val directionPath = "${directionsUrlOrigin}${origin_lat},${origin_lon}${directionsUrlDestination}${destination_lat},${destination_lon}${mode}${directionsUrlKey}"
         try {
             val httpResponse = apiService.fetchData(directionPath) ?: throw IOException()
