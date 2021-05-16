@@ -11,7 +11,6 @@ import android.graphics.Point
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -63,6 +62,11 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var popup: View
     private lateinit var popupCloseButton: ImageButton
     private var popupVisible = false
+    private lateinit var warningArea: TextView
+    private lateinit var warningInfo: TextView
+    private lateinit var warningLevel: TextView
+    private lateinit var warningLevelImg: ImageView
+    private lateinit var warningLevelColor: View
     // ----- Travel here -------
     private lateinit var travelHereButton: ImageButton
     private lateinit var travelPolylineList: MutableList<Polyline>
@@ -83,8 +87,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var switchOverlayButton: SwitchMaterial
     private var overlayVisible = true
     private lateinit var overlayPolygonList: MutableList<Polygon>  // Listen med polygoner
-
-    //
+    private lateinit var varslerHer: Button
 
 
     @SuppressLint("UseCompatLoadingForDrawables", "SetTextI18n")
@@ -99,10 +102,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-        // TODO: beskriv variablene/hvor de brukes/hva de brukes til
         // ===== SETT VIEWS =====
         // ----- Varsler Her-knapp -----
-        val varslerHer = findViewById<Button>(R.id.varslerHerButton)
+        varslerHer = findViewById<Button>(R.id.varslerHerButton)
 
         // ----- Meny -----
         menu = findViewById(R.id.menu)
@@ -116,11 +118,11 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // ----- Alert Popup-boks -----
         popup = findViewById(R.id.popup)
         popupCloseButton = findViewById(R.id.popupAlertCloseButton)
-        val warningArea = findViewById<TextView>(R.id.popupAlertArea)
-        val warningInfo = findViewById<TextView>(R.id.popupAlertInfoContent)
-        val warningLevel = findViewById<TextView>(R.id.popupAlertLevelContent)
-        val warningLevelImg = findViewById<ImageView>(R.id.warningLevelImg)
-        val warningLevelColor = findViewById<View>(R.id.popupAlertLevelColor)
+        warningArea = findViewById(R.id.popupAlertArea)
+        warningInfo = findViewById(R.id.popupAlertInfoContent)
+        warningLevel = findViewById(R.id.popupAlertLevelContent)
+        warningLevelImg = findViewById(R.id.warningLevelImg)
+        warningLevelColor = findViewById(R.id.popupAlertLevelColor)
         travelHereButton = findViewById(R.id.popupDraHitButton)
 
         // ----- Levels -----
@@ -161,85 +163,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
 
-        menuButton.setOnClickListener{toggleMenu()}
-
-        alertLevelsDescButton.setOnClickListener { toggleLevelsPopup() }
-
-        alertLevelsDescCloseButton.setOnClickListener { toggleLevelsPopup() }
-
-        alertLevelDescCloseButtonShape.setOnClickListener{ toggleLevelsPopup() }
-
-        popupCloseButton.setOnClickListener{ togglePopup() }
-
-        varslerHer.setOnClickListener{
-            getLocationAccess()  // Sjekk at vi har tilgang til lokasjon fra system.
-            // 'location'-variabelen i KartViewModel får en ny instans av LiveData *hver gang*
-            // lokasjon oppdateres. Må derfor lage en observer for den *siste og nyeste instansen* av location.
-            // Da hentes varselet først når LiveDataen har blitt fylt med informasjon om lokasjon.
-            // Ellers vil den ikke ha tilgang på lokasjons-informasjonen.
-            // NB: Ikke ideellt hvis flere 'observere' trenger å observere samme instans av 'location'.
-            val latestKnownLocation = kartViewModel.getLocation()  // type: LiveData<Location>
-            latestKnownLocation.observe(this, {
-                kartViewModel.getAlertCurrentLocation()  // Hent varsler når vi har lokasjon
-                //kartViewModel.getAlert(it.latitude, it.longitude) // Alternativt. Disse er ekvivalente. Sikrere?
-            })
-        }
-
 
         // ===== OBSERVERS =====
-        // TODO: skriv hjelpefunksjon og flytt ut av onCreate
-        kartViewModel.alertAtPosition.observe(this, {
-            // Observerer endringer i alertAtPosition (type LiveData<Alert>)
-            val alert: Alert? = kartViewModel.alertAtPosition.value
-            Log.d(tag, "Oppdatering observert i alertAtPosition. Alert: $it")
-            val warningText: String
-            val background: Drawable
-            val colorLevel : Drawable
-            if (alert != null) {
-                val info = alert.infoNo
-                warningArea.text = info.area.areaDesc
-                warningInfo.text = info.instruction
-
-                // TODO: tekst burde hentes fra resources
-                when (alert.getAlertColor()) {
-                    AlertColors.YELLOW -> {
-                        warningText = getString(R.string.moderat_skogbrannfare)
-                        background = resources.getDrawable(R.drawable.yellowwarning,theme)
-                        colorLevel = resources.getDrawable(R.color.alertYellow, theme)}
-                    AlertColors.ORANGE -> {
-                        warningText = getString(R.string.betydelig_skogbrannfare)
-                        background = resources.getDrawable(R.drawable.orangewarning,theme)
-                        colorLevel = resources.getDrawable(R.color.alertOrange, theme)}
-                    AlertColors.RED    -> {
-                        warningText = getString(R.string.moderat_skogbrannfare)
-                        background = resources.getDrawable(R.drawable.orangewarning,theme)  // TODO: hent rød varsel fra Githuben til YR!
-                        colorLevel = resources.getDrawable(R.color.alertRed, theme)
-                        Log.w(tag, "Returnert alertColor er RED. Ikke forventet. Fortsetter kjøring.")
-                    }
-                    AlertColors.UNKNOWN -> {
-                        Log.w(tag, "Returnert alertColor er Unkown.")
-                        warningText = "?"
-                        colorLevel = resources.getDrawable(R.color.black, theme)
-                        background = resources.getDrawable(R.drawable.questionmark,theme)
-                    }
-                }
-            } else {
-                // Ingen varsel (alert er null)
-                warningText = getString(R.string.ingen_varsel)
-                background = resources.getDrawable(R.drawable.shape,theme)
-              
-                // Usikker på hvor stabil observeringen er. Oppstår mulige race conditions?
-                kartViewModel.placeName.observe(this, {placeName -> warningArea.text = placeName})
-                warningInfo.text = getString(R.string.ingen_varsel_området)
-                colorLevel = resources.getDrawable(R.color.green, theme)
-            }
-            warningLevel.text = warningText
-            warningLevelImg.background = background
-            warningLevelColor.background = colorLevel
-            togglePopup()
-        })
-
-
         if (!Places.isInitialized()) {
             Places.initialize(applicationContext, getString(R.string.api_key))
         }
@@ -331,8 +256,82 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             placeMarker(places)
         })
 
+        // TODO: skriv hjelpefunksjon og flytt ut av onCreate
+        kartViewModel.alertAtPosition.observe(this, {
+            // Observerer endringer i alertAtPosition (type LiveData<Alert>)
+            //val alert: Alert? = kartViewModel.alertAtPosition.value
+            val alert = it
+            Log.d(tag, "Oppdatering observert i alertAtPosition. Alert: $it")
+            val warningText: String
+            val background: Drawable
+            val colorLevel : Drawable
+            if (alert != null) {
+                val info = alert.infoNo
+                warningArea.text = info.area.areaDesc
+                warningInfo.text = info.instruction
+                val alertColorLevel = alert.getAlertColor()
+
+                when (alertColorLevel) {
+                    AlertColors.YELLOW -> {
+                        warningText = getString(R.string.moderat_skogbrannfare)
+                        background = ResourcesCompat.getDrawable(resources, R.drawable.yellowwarning, theme)!!
+                        colorLevel = ResourcesCompat.getDrawable(resources, R.color.alertYellow, theme)!! }
+                    AlertColors.ORANGE -> {
+                        warningText = getString(R.string.betydelig_skogbrannfare)
+                        background = ResourcesCompat.getDrawable(resources, R.drawable.orangewarning, theme)!!
+                        colorLevel = ResourcesCompat.getDrawable(resources, R.color.alertOrange, theme)!! }
+                    AlertColors.RED    -> {
+                        warningText = getString(R.string.moderat_skogbrannfare)
+                        background = ResourcesCompat.getDrawable(resources, R.drawable.orangewarning, theme)!!  // TODO: hent rød varsel fra Githuben til YR!
+                        colorLevel = ResourcesCompat.getDrawable(resources, R.color.alertRed, theme)!!
+                        Log.w(tag, "Returnert alertColor er RED. Ikke forventet. Fortsetter kjøring.") }
+                    AlertColors.UNKNOWN -> {
+                        Log.w(tag, "Returnert alertColor er Unkown.")
+                        warningText = "?"
+                        colorLevel = ResourcesCompat.getDrawable(resources, R.color.black, theme)!!
+                        background = ResourcesCompat.getDrawable(resources, R.drawable.questionmark, theme)!! }
+                }
+            } else {
+                // Ingen varsel (alert er null)
+                warningText = getString(R.string.ingen_varsel)
+                background = ResourcesCompat.getDrawable(resources, R.drawable.shape, theme)!!
+                // Usikker på hvor stabil observeringen er. Oppstår mulige race conditions?
+                kartViewModel.placeName.observe(this, {placeName -> warningArea.text = placeName})
+                warningInfo.text = getString(R.string.ingen_varsel_området)
+                colorLevel = ResourcesCompat.getDrawable(resources, R.color.green, theme)!!
+            }
+            warningLevel.text = warningText
+            warningLevelImg.background = background
+            warningLevelColor.background = colorLevel
+            togglePopup()
+        })
+
 
         // ===== ON CLICK LISTENERS =====
+        menuButton.setOnClickListener{toggleMenu()}
+
+        alertLevelsDescButton.setOnClickListener { toggleLevelsPopup() }
+
+        alertLevelsDescCloseButton.setOnClickListener { toggleLevelsPopup() }
+
+        alertLevelDescCloseButtonShape.setOnClickListener{ toggleLevelsPopup() }
+
+        popupCloseButton.setOnClickListener{ togglePopup() }
+
+        varslerHer.setOnClickListener{
+            getLocationAccess()  // Sjekk at vi har tilgang til lokasjon fra system.
+            // 'location'-variabelen i KartViewModel får en ny instans av LiveData *hver gang*
+            // lokasjon oppdateres. Må derfor lage en observer for den *siste og nyeste instansen* av location.
+            // Da hentes varselet først når LiveDataen har blitt fylt med informasjon om lokasjon.
+            // Ellers vil den ikke ha tilgang på lokasjons-informasjonen.
+            // NB: Ikke ideellt hvis flere 'observere' trenger å observere samme instans av 'location'.
+            val latestKnownLocation = kartViewModel.getLocation()  // type: LiveData<Location>
+            latestKnownLocation.observe(this, {
+                kartViewModel.getAlertCurrentLocation()  // Hent varsler når vi har lokasjon
+                //kartViewModel.getAlert(it.latitude, it.longitude) // Alternativt. Disse er ekvivalente. Sikrere?
+            })
+        }
+
         switchCampfireButton.setOnCheckedChangeListener {_, isChecked -> toggleCampfires(isChecked) }
         switchOverlayButton.setOnCheckedChangeListener { _, isChecked -> toggleOverlay(isChecked) }
 
@@ -380,7 +379,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(oslo, 6f))  // TODO: Flyttes nå til Oslo. Velge annet sted?
 
 
-       /* mMap.setOnMarkerClickListener {
+       /* mMap.setOnMarkerClickListener { // Sentrering på markør fungerer for øyeblikket ikke
             callMarker(it)
         }*/
 
@@ -429,7 +428,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         marker = mMap.addMarker(MarkerOptions().position(latlng))
         kartViewModel.getAlert(latlng.latitude, latlng.longitude)
 
-        //callMarker(marker!!)
+        //callMarker(marker!!)  // Sentrering fungerer for øyeblikket ikke
 
     }
 
