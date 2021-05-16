@@ -11,7 +11,6 @@ import android.graphics.Point
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -99,7 +98,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-        // TODO: beskriv variablene/hvor de brukes/hva de brukes til
         // ===== SETT VIEWS =====
         // ----- Varsler Her-knapp -----
         val varslerHer = findViewById<Button>(R.id.varslerHerButton)
@@ -191,7 +189,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
         // ===== OBSERVERS =====
-        // TODO: skriv hjelpefunksjon og flytt ut av onCreate
+        // TODO: skriv hjelpefunksjon og flytt ut av onMapReady
         kartViewModel.alertAtPosition.observe(this, {
             // Observerer endringer i alertAtPosition (type LiveData<Alert>)
             val alert: Alert? = kartViewModel.alertAtPosition.value
@@ -204,7 +202,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 warningArea.text = info.area.areaDesc
                 warningInfo.text = info.instruction
 
-                // TODO: tekst burde hentes fra resources
                 when (alert.getAlertColor()) {
                     AlertColors.YELLOW -> {
                         warningText = getString(R.string.moderat_skogbrannfare)
@@ -214,9 +211,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                         warningText = getString(R.string.betydelig_skogbrannfare)
                         background = resources.getDrawable(R.drawable.orangewarning,theme)
                         colorLevel = resources.getDrawable(R.color.alertOrange, theme)}
-                    AlertColors.RED    -> {
+                    AlertColors.RED    -> {  // Kommer i utgangspunktet aldri hit siden skogbrannvarsler aldri blir røde
                         warningText = getString(R.string.moderat_skogbrannfare)
-                        background = resources.getDrawable(R.drawable.orangewarning,theme)  // TODO: hent rød varsel fra Githuben til YR!
+                        background = resources.getDrawable(R.drawable.orangewarning,theme)  // Mangler ikon for dette. Fins rødt varsel på Githuben til YR
                         colorLevel = resources.getDrawable(R.color.alertRed, theme)
                         Log.w(tag, "Returnert alertColor er RED. Ikke forventet. Fortsetter kjøring.")
                     }
