@@ -131,10 +131,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         travelPolylineList = mutableListOf()
 
         // ===== (ONCLICK) LISTENERS =====
-        rulesActivityBtn.setOnClickListener{
-            val intent = Intent(this,RegelView::class.java)
-            startActivity(intent)
-        }
 
         rulesActivityBtn.setOnClickListener{
             val intent = Intent(this,RegelView::class.java)
