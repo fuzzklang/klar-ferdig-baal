@@ -489,6 +489,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         infoSynlig = !infoSynlig
     }
 
+    //toggler popup og fungerer slik at man ikke åpner en ny popup ved å trykke utenfor popup/nivå/menu-vinduet
+    // og at man ikke kan bevege kartet når de er åpne
     private fun togglePopup() {
         if (popupVisible) {
             popup.visibility = View.GONE
@@ -525,6 +527,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             mMap.uiSettings.isScrollGesturesEnabled = true
             menuButton.background = ResourcesCompat.getDrawable(resources, R.drawable.menubutton,theme)
         } else {
+            popup.visibility = View.GONE
             menu.visibility = View.VISIBLE
             mMap.uiSettings.isScrollGesturesEnabled = false
             menuButton.background = ResourcesCompat.getDrawable(resources, R.drawable.menubuttonclose,theme)
