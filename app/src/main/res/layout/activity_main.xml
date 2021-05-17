@@ -152,7 +152,7 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
-          
+
             <ImageButton
                 android:id="@+id/menuShape"
                 android:layout_width="249dp"
@@ -163,12 +163,13 @@
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="1.0" />
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/menuInfoSectionTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="500dp"
                 android:layout_marginBottom="10dp"
                 android:text="@string/informasjon"
                 android:textColor="@color/white"
@@ -233,11 +234,11 @@
                 android:id="@+id/view3"
                 android:layout_width="140dp"
                 android:layout_height="48dp"
-                android:layout_marginBottom="250dp"
+                android:layout_marginBottom="200dp"
                 android:background="@drawable/shapebutton"
                 app:layout_constraintBottom_toBottomOf="@+id/menuShape"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.49"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <View
@@ -284,6 +285,19 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 app:layout_constraintGuide_begin="20dp" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/barrier2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="left"
+                app:constraint_referenced_ids="view3" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="view3" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ImageButton
