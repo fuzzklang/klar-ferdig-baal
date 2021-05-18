@@ -26,9 +26,9 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
     private val _path = MutableLiveData<MutableList<List<LatLng>>>()  // Liste som inneholder polyline-punktene fra routes (sørg for at hele tiden samsvarer med 'routes')
     private var _location = MutableLiveData<Location?>()              // Enhetens lokasjon (GPS)
     private var _alertAtPosition = MutableLiveData<Alert?>()          // Varsel for angitt sted.
-    private var _candidates = mutableListOf<Candidates>()
-    private val _place = MutableLiveData<LatLng>()
-    private val _placeName = MutableLiveData<String>()
+    private var _candidates = mutableListOf<Candidates>()             //Liste med responsen fra api-kall til Places API
+    private val _place = MutableLiveData<LatLng>()                    //Breddegrad og lengdegard for et sted bruker trykker/soker paa
+    private val _placeName = MutableLiveData<String>()                //Navn på stedet bruker soker på
 
     /* Immutable versjoner av LiveDataene over som er tilgjengelig for Viewene */
     val allAlerts: LiveData<MutableList<Alert>> = _allAlerts
@@ -90,6 +90,10 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
         return _location
     }
 
+    /*
+    *Oppdaterer navn til sted uten varsel
+    */
+
     private fun updatePlaceNameForNoAlert(lat: Double, lng: Double) {
         // Kaller på Geocode API (via Repository) og oppdaterer PlaceName-Livedata
         _placeName.postValue("")
@@ -106,6 +110,10 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
         }
     }
 
+    /* Grensesnitt til View
+    *Finner stedet en bruker soker paa
+    */
+
     fun findPlace(place: String) {
         //Kaller på Places API fra Google (via Repository) og oppdaterer places-Livedata
         CoroutineScope(Dispatchers.Default).launch {
@@ -119,6 +127,10 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
             }
         }
     }
+
+    /*Grensesnitt til View
+    *Henter en rute fra naavaerende posisjon til et sted bruker har valgt
+    */
 
     fun findRoute(
         origin_lat: Double?,
@@ -207,6 +219,11 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
         }
         return tmpPathList
     }
+
+    /* Hjelpemetode for findPlace()
+     * Må gå gjennom dataklasse for dataklasse (MainBase, Candidates, Geometry og PlaceLocation)
+     * for å få tak i informasjonen programmet trenger (latitude og longitude i PlaceLocation) for å finne stedet bruker soker på
+     */
 
     private fun getPlacesLatLng(places: List<Candidates>?): LatLng? {
         val location = places?.get(0)?.geometry?.location
