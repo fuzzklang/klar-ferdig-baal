@@ -67,6 +67,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var warningLevel: TextView
     private lateinit var warningLevelImg: ImageView
     private lateinit var warningLevelColor: View
+    private lateinit var travelHereButtonIcon: ImageView
+    private lateinit var travelHereButtonText: TextView
     // ----- Travel here -------
     private lateinit var travelHereButton: ImageButton
     private lateinit var travelPolylineList: MutableList<Polyline>
@@ -124,7 +126,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         warningLevelImg = findViewById(R.id.warningLevelImg)
         warningLevelColor = findViewById(R.id.popupAlertLevelColor)
         travelHereButton = findViewById(R.id.popupDraHitButton)
-
+        travelHereButtonIcon = findViewById(R.id.popupDraHitButtonIcon)
+        travelHereButtonText = findViewById(R.id.popupDraHitButtonText)
         // ----- Levels -----
         alertLevelsDescButton = findViewById(R.id.popupAlertDescButton)
         alertLevelsDescPopup = findViewById(R.id.levelsDesc)
@@ -343,6 +346,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             // NB: Ikke ideellt hvis flere 'observere' trenger å observere samme instans av 'location'.
             resetContentOfAlertPopup()  // Tøm innhold i varselvisning (popup)
             togglePopup()               // Vis popup
+            travelHereButton.visibility = View.GONE
+            travelHereButtonIcon.visibility = View.GONE
+            travelHereButtonText.visibility = View.GONE
             val latestKnownLocation = kartViewModel.getLocation()  // type: LiveData<Location>
             latestKnownLocation.observe(this, {
                 kartViewModel.getAlertCurrentLocation()  // Hent varsler når vi har lokasjon
@@ -475,26 +481,13 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    // Funksjon som endrer synligheten til info view
-    private fun toggleInfo() {
-        if (infoSynlig) {
-            info.visibility = View.GONE
-            mMap.uiSettings.isScrollGesturesEnabled = true
-        } else {
-            info.visibility = View.VISIBLE
-            mMap.uiSettings.isScrollGesturesEnabled = false
-            if(menuVisible){
-                menu.visibility = View.GONE
-                menuButton.background = ResourcesCompat.getDrawable(resources, R.drawable.menubutton,theme)
-                menuVisible = !menuVisible
-            }
-        }
-        infoSynlig = !infoSynlig
-    }
 
     //toggler popup og fungerer slik at man ikke åpner en ny popup ved å trykke utenfor popup/nivå/menu-vinduet
     // og at man ikke kan bevege kartet når de er åpne
     private fun togglePopup() {
+        travelHereButton.visibility = View.VISIBLE
+        travelHereButtonIcon.visibility = View.VISIBLE
+        travelHereButtonText.visibility = View.VISIBLE
         if (popupVisible) {
             popup.visibility = View.GONE
             mMap.uiSettings.isScrollGesturesEnabled = true
@@ -534,12 +527,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             menu.visibility = View.VISIBLE
             mMap.uiSettings.isScrollGesturesEnabled = false
             menuButton.background = ResourcesCompat.getDrawable(resources, R.drawable.menubuttonclose,theme)
-           /*if(infoSynlig) {
-                toggleInfo()
-            }
-            if(popupVisible) {
-                togglePopup()
-            }*/
         }
         menuVisible = !menuVisible
     }
