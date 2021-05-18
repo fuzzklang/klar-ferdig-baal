@@ -85,7 +85,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private var menuCampfireButtonIsChecked = true  // Erstatt med direkte aksess til Switch
     private val ZOOM_LEVEL_SHOW_CAMPFIRES = 8.5
     private lateinit var switchCampfireButton: SwitchMaterial
-
     private lateinit var campfireSpots: List<Campfire>
     private lateinit var campfireMarkers: MutableList<Marker>
     // ----- Overlay (Alerts) -----
@@ -142,7 +141,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         travelPolylineList = mutableListOf()
 
         // ===== (ONCLICK) LISTENERS =====
-
+        //Regler-knappen som viser regler til bruker
         rulesActivityBtn.setOnClickListener{
             val intent = Intent(this,RegelView::class.java)
             startActivity(intent)
@@ -155,12 +154,13 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         // ===== (ONCLICK) LISTENERS FOR INFO =====
-
+        //Info-knappen som viser informasjon til bruker
         infoButton.setOnClickListener {
             val intent = Intent(this,InfoView::class.java)
             startActivity(intent)
-        }      //Info knapp som endrer info sin synlighet
+        }
 
+        //Info knapp som endrer info sin synlighet
         infoButton.setOnClickListener{
             val intent = Intent(this,InfoView::class.java)
             startActivity(intent)
@@ -256,15 +256,15 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         kartViewModel.path.observe(this, { paths -> drawDirectionsPath(paths) })
 
         //Observerer places-livedata (i fra KartViewModel), plasserer marker på søkt sted ved oppdatering
-        kartViewModel.places.observe(this, { places ->
+        kartViewModel.place.observe(this, { places ->
             Log.d(tag, "Places: $places")
 
             placeMarker(places)
         })
 
+        //Observerer alertAtPosition-livedata (i fra kartViewModel), oppdaterer informasjonsvinduet ut ifra varselet
         kartViewModel.alertAtPosition.observe(this, {
             // Observerer endringer i alertAtPosition (type LiveData<Alert>)
-            //val alert: Alert? = kartViewModel.alertAtPosition.value
             val alert = it
             Log.d(tag, "Oppdatering observert i alertAtPosition. Alert: $it")
             val warningText: String
@@ -368,7 +368,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
         mMap.setOnCameraIdleListener { toogleCampfireZoomVisibility() }
 
-        // Når bruker trykker på kartet lages det en marker
+        // Når bruker trykker på kartet lages det en markør, kan kun lages en markør og en rute av gangen
         mMap.setOnMapClickListener {
             marker?.remove()
             travelPolylineList.forEach { polyline -> polyline.remove() }   // Fjern tidligere tidligere tegnet rute fra kart.
@@ -391,7 +391,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             kartViewModel.getAlert(it.latitude, it.longitude)
         }
 
-        // Ved klikk på "Vis Min Lokasjon"-knappen (oppe i høyre hjørne):
+        // Ved klikk på "Vis Min Lokasjon"-knappen (nede i høyre hjørne):
         // Hent en LiveData-instans med lokasjon (fra ViewModel) som deretter blir observert
         // [Denne løsningen kan potensielt føre til en viss delay fra knappen blir klikket til kameraet flytter seg]
         mMap.setOnMyLocationButtonClickListener {
@@ -418,6 +418,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
        mMap.setOnMarkerClickListener { // Sentrering på markør fungerer for øyeblikket ikke
             centreMarker(it)
         }
+
 
     }
 
@@ -459,6 +460,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    //Hjelpemetode som plasserer og får varselinformasjon for en markør på kartet
     private fun placeMarker(latlng: LatLng){
         marker?.remove()
         marker = mMap.addMarker(MarkerOptions().position(latlng))
@@ -634,6 +636,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     //hjelpemetode som henter bålplasser og tegner de opp med bålikon i angitt størrelse på kartet
+
     private fun drawCampfires() {
         val campfireIconHeight = 50   // endrer stoerrelse paa campfire ikonet
         val campfireIconWidth = 50    // -- " ---
@@ -655,7 +658,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
 
-
+    //Hjelpemetode som henter latitude og longitude for nåværende posisjon og et sted på kartet,
+    //og finner en rute mellom de
     private fun getAndShowDirections() {
         travelPolylineList.forEach{ it.remove() }   // Fjern tidligere tidligere tegnet rute fra kart.
         travelPolylineList.clear()                  // Nullstill liste
@@ -684,6 +688,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    //Hjelpemetode som tegner en rute mellom to steder på kartet
     private fun drawDirectionsPath(paths: MutableList<List<LatLng>>) {
         Log.d(tag, "drawDirectionsPath: Tegner rute")
         if (paths.size == 0) {
@@ -700,8 +705,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
     // Tømmer innholdet i alert-popuen.
     private fun resetContentOfAlertPopup() {
-        warningArea.text = getString(R.string.henter_varsel)
-        warningInfo.text = "..."
+        warningArea.text = ""
+        warningInfo.text = ""
         val colorLevel = ResourcesCompat.getDrawable(resources, R.color.black, theme)
         val background = ResourcesCompat.getDrawable(resources, R.drawable.questionmark, theme)
         warningLevel.text = ""
