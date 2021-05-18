@@ -13,11 +13,14 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.marginBottom
+import androidx.core.view.setMargins
 import com.example.team_23.R
 import com.example.team_23.model.dataclasses.Campfire
 import com.example.team_23.model.dataclasses.metalerts_dataclasses.Alert
@@ -53,11 +56,11 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     // ----- Info-boks -----
     private lateinit var info: View
     private lateinit var infoButton: Button
-    private var infoSynlig = false   // Variabel som holder styr paa synligheten til info view
     // ----- Meny -----
     private lateinit var menu: View
     private lateinit var menuButton: ImageButton
     private var menuVisible = false
+    private lateinit var menuCampfireButtonShape: View
     // ----- Alert Popup-box -----
     private lateinit var popup: View
     private lateinit var popupCloseButton: ImageButton
@@ -67,6 +70,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var warningLevel: TextView
     private lateinit var warningLevelImg: ImageView
     private lateinit var warningLevelColor: View
+    private lateinit var travelHereButtonIcon: ImageView
+    private lateinit var travelHereButtonText: TextView
     // ----- Travel here -------
     private lateinit var travelHereButton: ImageButton
     private lateinit var travelPolylineList: MutableList<Polyline>
@@ -103,13 +108,14 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // ===== SETT VIEWS =====
         // ----- Varsler Her-knapp -----
-        varslerHer = findViewById<Button>(R.id.varslerHerButton)
+        varslerHer = findViewById(R.id.varslerHerButton)
 
         // ----- Meny -----
         menu = findViewById(R.id.menu)
         menuButton = findViewById(R.id.menuButton)
         val rulesActivityBtn = findViewById<Button>(R.id.menuRulesButton)  // Knapp som sender bruker til reglene
         switchCampfireButton = findViewById(R.id.switchCampfire)
+        menuCampfireButtonShape = findViewById(R.id.menuCampfireButtonShape) //Brukes for å justere margin
         // ----- Info-boks -----
         infoButton = findViewById(R.id.menuInfoButton)
         info = findViewById(R.id.infoBox)
@@ -123,7 +129,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         warningLevelImg = findViewById(R.id.warningLevelImg)
         warningLevelColor = findViewById(R.id.popupAlertLevelColor)
         travelHereButton = findViewById(R.id.popupDraHitButton)
-
+        travelHereButtonIcon = findViewById(R.id.popupDraHitButtonIcon)
+        travelHereButtonText = findViewById(R.id.popupDraHitButtonText)
         // ----- Levels -----
         alertLevelsDescButton = findViewById(R.id.popupAlertDescButton)
         alertLevelsDescPopup = findViewById(R.id.levelsDesc)
@@ -188,6 +195,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 travelPolylineList.forEach{ it.remove() }   // Fjern tidligere tidligere tegnet rute fra kart.
                 travelPolylineList.clear()
                 Log.i("OnPlaceSelected", "Place: ${place.name}, ${place.latLng}")
+                togglePopup()
             }
 
             //Ved feil
@@ -195,6 +203,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 Log.i("OnError", "An error occurred: $p0")
             }
         })
+        val params = (menuCampfireButtonShape.layoutParams as ViewGroup.MarginLayoutParams)
+        params.setMargins(Resources.getSystem().displayMetrics.heightPixels / 7)
+        Log.d("PADDING", menuCampfireButtonShape.paddingBottom.toString())
     }
 
     // ===== GOOGLE MAP READY =====
@@ -342,6 +353,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             // NB: Ikke ideellt hvis flere 'observere' trenger å observere samme instans av 'location'.
             resetContentOfAlertPopup()  // Tøm innhold i varselvisning (popup)
             togglePopup()               // Vis popup
+            travelHereButton.visibility = View.GONE
+            travelHereButtonIcon.visibility = View.GONE
+            travelHereButtonText.visibility = View.GONE
             val latestKnownLocation = kartViewModel.getLocation()  // type: LiveData<Location>
             latestKnownLocation.observe(this, {
                 kartViewModel.getAlertCurrentLocation()  // Hent varsler når vi har lokasjon
@@ -373,7 +387,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                         // kartViewModel.findPlace()
                     }
                 }
-            }
+            } else{togglePopup()}
             kartViewModel.getAlert(it.latitude, it.longitude)
         }
 
@@ -401,9 +415,10 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(oslo, 6f))
 
 
-       /*mMap.setOnMarkerClickListener { // Sentrering på markør fungerer for øyeblikket ikke
-            callMarker(it)
-        }*/
+       mMap.setOnMarkerClickListener { // Sentrering på markør fungerer for øyeblikket ikke
+            centreMarker(it)
+        }
+
 
     }
 
@@ -411,8 +426,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     // ===== HJELPEMETODER =====
     // =========================
 
-    //Hjelpemetode for å sentrere en markør/bålplass når den blir trykker på
-    private fun callMarker(marker: Marker) : Boolean{
+    //hjelpemetode for å sentrere kart ved klikk på markører(bålikoner)
+    private fun centreMarker(marker: Marker) : Boolean{
         val containerHeight = findViewById<RelativeLayout>(R.id.root).height
         val projection = mMap.projection
         val markerLatLng = LatLng(marker.position.latitude, marker.position.longitude)
@@ -450,7 +465,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         marker?.remove()
         marker = mMap.addMarker(MarkerOptions().position(latlng))
         kartViewModel.getAlert(latlng.latitude, latlng.longitude)
-        callMarker(marker!!)  // Sentrering fungerer for øyeblikket ikke
+        centreMarker(marker!!)  // Sentrering fungerer for øyeblikket ikke
     }
 
     /* Metode kalles når svar ang. lokasjonstilgang kommer tilbake. Sjekker om tillatelse er innvilget */
@@ -475,26 +490,13 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    // Funksjon som endrer synligheten til info view
-    private fun toggleInfo() {
-        if (infoSynlig) {
-            info.visibility = View.GONE
-            mMap.uiSettings.isScrollGesturesEnabled = true
-        } else {
-            info.visibility = View.VISIBLE
-            mMap.uiSettings.isScrollGesturesEnabled = false
-            if(menuVisible){
-                menu.visibility = View.GONE
-                menuButton.background = ResourcesCompat.getDrawable(resources, R.drawable.menubutton,theme)
-                menuVisible = !menuVisible
-            }
-        }
-        infoSynlig = !infoSynlig
-    }
 
     //toggler popup og fungerer slik at man ikke åpner en ny popup ved å trykke utenfor popup/nivå/menu-vinduet
     // og at man ikke kan bevege kartet når de er åpne
     private fun togglePopup() {
+        travelHereButton.visibility = View.VISIBLE
+        travelHereButtonIcon.visibility = View.VISIBLE
+        travelHereButtonText.visibility = View.VISIBLE
         if (popupVisible) {
             popup.visibility = View.GONE
             mMap.uiSettings.isScrollGesturesEnabled = true
@@ -524,6 +526,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    //Hjelpemetode for å toggle meny-vinduet og stoppe at man kan bevege kartet mens menyen er åpen
     private fun toggleMenu() {
         if(menuVisible) {
             menu.visibility = View.GONE
@@ -534,16 +537,11 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             menu.visibility = View.VISIBLE
             mMap.uiSettings.isScrollGesturesEnabled = false
             menuButton.background = ResourcesCompat.getDrawable(resources, R.drawable.menubuttonclose,theme)
-           /*if(infoSynlig) {
-                toggleInfo()
-            }
-            if(popupVisible) {
-                togglePopup()
-            }*/
         }
         menuVisible = !menuVisible
     }
 
+    //Hjelpemetode for å toggle nivå-vinduet og stoppe at man kan bevege kartet mens nivå-vinduet er åpent
     private fun toggleLevelsPopup() {
         if (alertLevelsDescVisible){
             alertLevelsDescPopup.visibility = View.VISIBLE
@@ -564,6 +562,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             campfireMarkers.forEach { it.isVisible = false }
     }
 
+    //hjelpemetode for å toggle bålikoner
     private fun toggleCampfires(isChecked: Boolean) {
         menuCampfireButtonIsChecked = isChecked
         campfireMarkers.forEach {it.isVisible = isChecked}
@@ -572,6 +571,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         Log.d("checked","campfire")
     }
 
+    //hjelpemetode for å toggle farge-filterer for områder med skogbrannfare-varsler(overlayet)
     private fun toggleOverlay(isChecked: Boolean) {
         overlayVisible = isChecked
         overlayPolygonList.forEach {it.isVisible = isChecked}
@@ -586,23 +586,15 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         TODO("Implementer senere dersom vi får på plass lagring av tilstand")
     }*/
 
-    /* Hjelpemetode som kalles når "MyLocation"-knapp (i kart) trykkes på */
+    /* Hjelpemetode som kalles når "MyLocation"-knapp (i kart) trykkes på og som sentrerer kartet på min lokasjon når knappen trykkes på */
     private fun myLocationButtonOnClickMethod() {
         val locationLiveData = kartViewModel.getLocation()
         // Når LiveDataen får koordinater flyttes kamera til oppdatert posisjon
         locationLiveData.observe(this, {
             val location = locationLiveData.value
             if (location!= null) {
-                //Toast.makeText(this, "Current pos: ${location.latitude}, ${location.longitude}", Toast.LENGTH_SHORT).show()
-                val cameraPosition = CameraPosition.Builder()
-                        .target(LatLng(location.latitude, location.longitude))
-                        .zoom(6f)
-                        .build()
-
                 val containerHeight = findViewById<RelativeLayout>(R.id.root).height
-
                 val projection = mMap.projection
-
                 val locationLatLng = LatLng(location.latitude, location.longitude)
                 val markerScreenPosition: Point = projection.toScreenLocation(locationLatLng)
 
@@ -610,13 +602,10 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                     markerScreenPosition.x,
                     markerScreenPosition.y + (containerHeight / 3)
                 )
-
                 val aboveMarkerLatLng = projection
                    .fromScreenLocation(pointHalfScreenAbove)
-
                 val center = CameraUpdateFactory.newLatLng(aboveMarkerLatLng)
                 mMap.animateCamera(center)
-
             } else {
                 Toast.makeText(this, "Ingen lokasjon tilgjengelig", Toast.LENGTH_SHORT).show()
             }
@@ -646,7 +635,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    //Hjelpemetode som tegner bålplasser på kartet
+    //hjelpemetode som henter bålplasser og tegner de opp med bålikon i angitt størrelse på kartet
+
     private fun drawCampfires() {
         val campfireIconHeight = 50   // endrer stoerrelse paa campfire ikonet
         val campfireIconWidth = 50    // -- " ---
