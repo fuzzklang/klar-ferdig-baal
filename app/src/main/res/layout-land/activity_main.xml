@@ -154,6 +154,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+
             <ImageButton
                 android:id="@+id/menuShape"
                 android:layout_width="249dp"
@@ -166,28 +167,12 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0" />
 
-            <TextView
-                android:id="@+id/menuInfoSectionTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="200dp"
-                android:layout_marginEnd="25dp"
-                android:layout_marginBottom="10dp"
-                android:text="@string/informasjon"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                app:layout_constraintBottom_toTopOf="@+id/menuInfoButton"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/menuShape"
-                app:layout_constraintVertical_bias="1.0" />
-
             <Button
                 android:id="@+id/menuInfoButton"
                 android:layout_width="140dp"
                 android:layout_height="48dp"
-                android:layout_marginEnd="25dp"
                 android:layout_marginTop="100dp"
+                android:layout_marginEnd="25dp"
                 android:backgroundTint="@color/white"
                 android:contentDescription="@string/info_button"
                 android:scaleType="fitCenter"
@@ -196,18 +181,74 @@
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toTopOf="@+id/menuRulesButton"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.495"
+                app:layout_constraintHorizontal_bias="0.494"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="1.0" />
 
+            <TextView
+                android:id="@+id/menuInfoSectionTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="60dp"
+                android:rotation="90"
+                android:text="@string/informasjon"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.895"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/menuShape"
+                app:layout_constraintVertical_bias="0.413" />
+
+            <View
+                android:id="@+id/view2"
+                android:layout_width="139dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="25dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/shapebutton"
+                app:layout_constraintBottom_toTopOf="@+id/view3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.488"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <View
+                android:id="@+id/view3"
+                android:layout_width="140dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="25dp"
+                android:layout_marginBottom="60dp"
+                android:background="@drawable/shapebutton"
+                app:layout_constraintBottom_toBottomOf="@+id/menuShape"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.494"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/menuMapFunctionsSectionTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:rotation="90"
+                android:text="@string/kartfunksjoner"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/menuAlignment"
+                app:layout_constraintVertical_bias="0.724" />
 
             <Button
                 android:id="@+id/menuRulesButton"
                 android:layout_width="140dp"
                 android:layout_height="48dp"
-                android:layout_marginEnd="25dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginEnd="25dp"
                 android:layout_marginBottom="20dp"
                 android:backgroundTint="@color/white"
                 android:contentDescription="@string/regler"
@@ -216,50 +257,10 @@
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toTopOf="@+id/menuMapFunctionsSectionTitle"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.494"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="1.0" />
-
-            <TextView
-                android:id="@+id/menuMapFunctionsSectionTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="25dp"
-                android:layout_marginBottom="10dp"
-                android:text="@string/kartfunksjoner"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                app:layout_constraintBottom_toTopOf="@+id/switchOverlay"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/menuAlignment"
-                app:layout_constraintVertical_bias="0.984" />
-
-            <View
-                android:id="@+id/view3"
-                android:layout_width="140dp"
-                android:layout_height="48dp"
-                android:layout_marginEnd="25dp"
-                android:layout_marginBottom="50dp"
-                android:background="@drawable/shapebutton"
-                app:layout_constraintBottom_toBottomOf="@+id/menuShape"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <View
-                android:id="@+id/view2"
-                android:layout_width="139dp"
-                android:layout_height="48dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="25dp"
-                android:layout_marginBottom="14dp"
-                android:background="@drawable/shapebutton"
-                app:layout_constraintBottom_toTopOf="@+id/view3"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="1.0" />
+                app:layout_constraintVertical_bias="0.767" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/switchOverlay"
