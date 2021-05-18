@@ -403,7 +403,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
        mMap.setOnMarkerClickListener { // Sentrering på markør fungerer for øyeblikket ikke
-            callMarker(it)
+            centreMarker(it)
         }
 
     }
@@ -412,7 +412,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     // ===== HJELPEMETODER =====
     // =========================
 
-    private fun callMarker(marker: Marker) : Boolean{
+    //hjelpemetode for å sentrere kart ved klikk på markører(bålikoner)
+    private fun centreMarker(marker: Marker) : Boolean{
         val containerHeight = findViewById<RelativeLayout>(R.id.root).height
         val projection = mMap.projection
         val markerLatLng = LatLng(marker.position.latitude, marker.position.longitude)
@@ -424,7 +425,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val aboveMarkerLatLng = projection
             .fromScreenLocation(pointHalfScreenAbove)
-        //val zoom = CameraUpdateFactory.zoomTo(15F)
         marker.showInfoWindow()
         val center = CameraUpdateFactory.newLatLng(aboveMarkerLatLng)
         mMap.animateCamera(center)
@@ -450,7 +450,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         marker?.remove()
         marker = mMap.addMarker(MarkerOptions().position(latlng))
         kartViewModel.getAlert(latlng.latitude, latlng.longitude)
-        callMarker(marker!!)  // Sentrering fungerer for øyeblikket ikke
+        centreMarker(marker!!)  // Sentrering fungerer for øyeblikket ikke
     }
 
     /* Metode kalles når svar ang. lokasjonstilgang kommer tilbake. Sjekker om tillatelse er innvilget */
@@ -524,6 +524,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    //Hjelpemetode for å toggle meny-vinduet og stoppe at man kan bevege kartet mens menyen er åpen
     private fun toggleMenu() {
         if(menuVisible) {
             menu.visibility = View.GONE
@@ -534,16 +535,11 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             menu.visibility = View.VISIBLE
             mMap.uiSettings.isScrollGesturesEnabled = false
             menuButton.background = ResourcesCompat.getDrawable(resources, R.drawable.menubuttonclose,theme)
-           /*if(infoSynlig) {
-                toggleInfo()
-            }
-            if(popupVisible) {
-                togglePopup()
-            }*/
         }
         menuVisible = !menuVisible
     }
 
+    //Hjelpemetode for å toggle nivå-vinduet og stoppe at man kan bevege kartet mens nivå-vinduet er åpent
     private fun toggleLevelsPopup() {
         if (alertLevelsDescVisible){
             alertLevelsDescPopup.visibility = View.VISIBLE
@@ -564,6 +560,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             campfireMarkers.forEach { it.isVisible = false }
     }
 
+    //hjelpemetode for å toggle bålikoner
     private fun toggleCampfires(isChecked: Boolean) {
         menuCampfireButtonIsChecked = isChecked
         campfireMarkers.forEach {it.isVisible = isChecked}
@@ -572,6 +569,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         Log.d("checked","campfire")
     }
 
+    //hjelpemetode for å toggle farge-filterer for områder med skogbrannfare-varsler(overlayet)
     private fun toggleOverlay(isChecked: Boolean) {
         overlayVisible = isChecked
         overlayPolygonList.forEach {it.isVisible = isChecked}
@@ -586,23 +584,15 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         TODO("Implementer senere dersom vi får på plass lagring av tilstand")
     }*/
 
-    /* Hjelpemetode som kalles når "MyLocation"-knapp (i kart) trykkes på */
+    /* Hjelpemetode som kalles når "MyLocation"-knapp (i kart) trykkes på og som sentrerer kartet på min lokasjon når knappen trykkes på */
     private fun myLocationButtonOnClickMethod() {
         val locationLiveData = kartViewModel.getLocation()
         // Når LiveDataen får koordinater flyttes kamera til oppdatert posisjon
         locationLiveData.observe(this, {
             val location = locationLiveData.value
             if (location!= null) {
-                //Toast.makeText(this, "Current pos: ${location.latitude}, ${location.longitude}", Toast.LENGTH_SHORT).show()
-                val cameraPosition = CameraPosition.Builder()
-                        .target(LatLng(location.latitude, location.longitude))
-                        .zoom(6f)
-                        .build()
-
                 val containerHeight = findViewById<RelativeLayout>(R.id.root).height
-
                 val projection = mMap.projection
-
                 val locationLatLng = LatLng(location.latitude, location.longitude)
                 val markerScreenPosition: Point = projection.toScreenLocation(locationLatLng)
 
@@ -610,13 +600,10 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                     markerScreenPosition.x,
                     markerScreenPosition.y + (containerHeight / 3)
                 )
-
                 val aboveMarkerLatLng = projection
                    .fromScreenLocation(pointHalfScreenAbove)
-
                 val center = CameraUpdateFactory.newLatLng(aboveMarkerLatLng)
                 mMap.animateCamera(center)
-
             } else {
                 Toast.makeText(this, "Ingen lokasjon tilgjengelig", Toast.LENGTH_SHORT).show()
             }
@@ -646,6 +633,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    //hjelpemetode som henter bålplasser og tegner de opp med bålikon i angitt størrelse på kartet
     private fun drawCampfires() {
         val campfireIconHeight = 50   // endrer stoerrelse paa campfire ikonet
         val campfireIconWidth = 50    // -- " ---
