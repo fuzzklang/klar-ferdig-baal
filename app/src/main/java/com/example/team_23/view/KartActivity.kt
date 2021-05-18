@@ -53,7 +53,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     // ----- Info-boks -----
     private lateinit var info: View
     private lateinit var infoButton: Button
-    private var infoSynlig = false   // Variabel som holder styr paa synligheten til info view
     // ----- Meny -----
     private lateinit var menu: View
     private lateinit var menuButton: ImageButton
@@ -106,7 +105,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // ===== SETT VIEWS =====
         // ----- Varsler Her-knapp -----
-        varslerHer = findViewById<Button>(R.id.varslerHerButton)
+        varslerHer = findViewById(R.id.varslerHerButton)
 
         // ----- Meny -----
         menu = findViewById(R.id.menu)
