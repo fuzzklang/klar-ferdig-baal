@@ -188,6 +188,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 travelPolylineList.forEach{ it.remove() }   // Fjern tidligere tidligere tegnet rute fra kart.
                 travelPolylineList.clear()
                 Log.i("OnPlaceSelected", "Place: ${place.name}, ${place.latLng}")
+                togglePopup()
             }
 
             //Ved feil
@@ -373,7 +374,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                         // kartViewModel.findPlace()
                     }
                 }
-            }
+            } else{togglePopup()}
             kartViewModel.getAlert(it.latitude, it.longitude)
         }
 
