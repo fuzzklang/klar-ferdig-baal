@@ -203,9 +203,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 Log.i("OnError", "An error occurred: $p0")
             }
         })
-       // val params = (menuCampfireButtonShape.layoutParams as ViewGroup.MarginLayoutParams)
-        //params.setMargins(Resources.getSystem().displayMetrics.heightPixels / 7)
-       // Log.d("PADDING", menuCampfireButtonShape.paddingBottom.toString())
     }
 
     // ===== GOOGLE MAP READY =====
