@@ -57,6 +57,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var menu: View
     private lateinit var menuButton: ImageButton
     private var menuVisible = false
+    private lateinit var menuCampfireButtonShape: View
     // ----- Alert Popup-box -----
     private lateinit var popup: View
     private lateinit var popupCloseButton: ImageButton
@@ -112,6 +113,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         menuButton = findViewById(R.id.menuButton)
         val rulesActivityBtn = findViewById<Button>(R.id.menuRulesButton)  // Knapp som sender bruker til reglene
         switchCampfireButton = findViewById(R.id.switchCampfire)
+        menuCampfireButtonShape = findViewById(R.id.menuCampfireButtonShape) //Brukes for å justere margin
         // ----- Info-boks -----
         infoButton = findViewById(R.id.menuInfoButton)
         info = findViewById(R.id.infoBox)
@@ -198,6 +200,11 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 Log.i("OnError", "An error occurred: $p0")
             }
         })
+        val scale = resources.displayMetrics.density
+        val wantedDp = Resources.getSystem().displayMetrics.heightPixels / 3
+        val dpAsPixels = ( wantedDp * scale + 0.5F)
+        menuCampfireButtonShape.setPadding(0, 100, 0, dpAsPixels.toInt())
+        Log.d("PADDING", menuCampfireButtonShape.paddingBottom.toString())
     }
 
     // ===== GOOGLE MAP READY =====
