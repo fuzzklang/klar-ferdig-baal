@@ -70,6 +70,5 @@
     <string name="logo">Logo</string>
     <string name="ingen_varsel">Ingen varsel funnet</string>
     <string name="ingen_varsel_området">Ingen varsel i dette område</string>
-    <string name="henter_varsel">Henter varsel…</string>
 
 </resources>
