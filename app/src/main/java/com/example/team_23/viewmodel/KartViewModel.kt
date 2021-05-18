@@ -27,14 +27,14 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
     private var _location = MutableLiveData<Location?>()              // Enhetens lokasjon (GPS)
     private var _alertAtPosition = MutableLiveData<Alert?>()          // Varsel for angitt sted.
     private var _candidates = mutableListOf<Candidates>()
-    private val _places = MutableLiveData<LatLng>()
+    private val _place = MutableLiveData<LatLng>()
     private val _placeName = MutableLiveData<String>()
 
     /* Immutable versjoner av LiveDataene over som er tilgjengelig for Viewene */
     val allAlerts: LiveData<MutableList<Alert>> = _allAlerts
     val alertAtPosition: LiveData<Alert?> = _alertAtPosition
     var path: LiveData<MutableList<List<LatLng>>> = _path
-    var places: LiveData<LatLng> = _places
+    var place: LiveData<LatLng> = _place
     var placeName: LiveData<String> = _placeName
 
     /* Grensesnitt til View.
@@ -114,7 +114,7 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
             if (placesFromApi != null) {
                 _candidates = placesFromApi as MutableList<Candidates>
 
-                _places.postValue(getPlacesLatLng(_candidates))
+                _place.postValue(getPlacesLatLng(_candidates))
                 Log.d("KartViewModel.findPlace", "Places oppdatert")
             }
         }

@@ -245,7 +245,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         kartViewModel.path.observe(this, { paths -> drawDirectionsPath(paths) })
 
         //Observerer places-livedata (i fra KartViewModel), plasserer marker på søkt sted ved oppdatering
-        kartViewModel.places.observe(this, { places ->
+        kartViewModel.place.observe(this, { places ->
             Log.d(tag, "Places: $places")
 
             placeMarker(places)
