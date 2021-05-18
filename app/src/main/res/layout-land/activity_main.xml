@@ -109,7 +109,8 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.0"
+            android:contentDescription="@string/top_bar" />
 
 
         <TextView
@@ -150,7 +151,7 @@
             android:layout_width="250dp"
             android:layout_height="0dp"
             android:elevation="2dp"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
@@ -160,21 +161,53 @@
 
             <ImageButton
                 android:id="@+id/menuShape"
-                android:layout_width="249dp"
+                android:layout_width="250dp"
                 android:layout_height="0dp"
                 android:background="@color/mainColor"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                android:contentDescription="@string/menu_background" />
+
+            <View
+                android:id="@+id/menuCampfireButtonShape"
+                android:layout_width="140dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="20dp"
+                android:background="@drawable/shapebutton"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.477"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/menuShape"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <Button
+                android:id="@+id/menuRulesButton"
+                android:layout_width="140dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="5dp"
+                android:backgroundTint="@color/white"
+                android:contentDescription="@string/regler"
+                android:text="@string/regler"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toTopOf="@+id/menuOverlayButtonShape"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.688"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0" />
 
             <Button
                 android:id="@+id/menuInfoButton"
                 android:layout_width="140dp"
                 android:layout_height="48dp"
-                android:layout_marginTop="100dp"
-                android:layout_marginEnd="25dp"
+                android:layout_marginStart="20dp"
                 android:backgroundTint="@color/white"
                 android:contentDescription="@string/info_button"
                 android:scaleType="fitCenter"
@@ -183,84 +216,21 @@
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toTopOf="@+id/menuRulesButton"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.494"
+                app:layout_constraintHorizontal_bias="0.466"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="1.0" />
-
-            <TextView
-                android:id="@+id/menuInfoSectionTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="80dp"
-                android:layout_marginBottom="100dp"
-                android:rotation="90"
-                android:text="@string/informasjon"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                app:layout_constraintBottom_toTopOf="@+id/menuMapFunctionsSectionTitle"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.907"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/menuShape"
-                app:layout_constraintVertical_bias="0.922" />
 
             <View
                 android:id="@+id/menuOverlayButtonShape"
                 android:layout_width="139dp"
                 android:layout_height="48dp"
-                android:layout_marginEnd="25dp"
+                android:layout_marginEnd="20dp"
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/shapebutton"
                 app:layout_constraintBottom_toTopOf="@+id/menuCampfireButtonShape"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.488"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="1.0" />
-
-            <View
-                android:id="@+id/menuCampfireButtonShape"
-                android:layout_width="140dp"
-                android:layout_height="48dp"
-                android:layout_marginEnd="25dp"
-                android:layout_marginBottom="40dp"
-                android:background="@drawable/shapebutton"
-                app:layout_constraintBottom_toBottomOf="@+id/menuShape"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.494"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <TextView
-                android:id="@+id/menuMapFunctionsSectionTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:rotation="90"
-                android:text="@string/kartfunksjoner"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/menuAlignment"
-                app:layout_constraintVertical_bias="0.724" />
-
-            <Button
-                android:id="@+id/menuRulesButton"
-                android:layout_width="140dp"
-                android:layout_height="48dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="25dp"
-                android:layout_marginBottom="25dp"
-                android:backgroundTint="@color/white"
-                android:contentDescription="@string/regler"
-                android:text="@string/regler"
-                android:textAllCaps="false"
-                android:textColor="@color/black"
-                app:layout_constraintBottom_toTopOf="@+id/menuOverlayButtonShape"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.494"
+                app:layout_constraintHorizontal_bias="0.692"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="1.0" />
@@ -302,7 +272,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:barrierDirection="left"
-                app:constraint_referenced_ids="menuCampfireButtonShape" />
+                app:constraint_referenced_ids="menuCampfireButtonShape"
+                tools:layout_editor_absoluteX="182dp" />
 
             <androidx.constraintlayout.widget.Group
                 android:id="@+id/group"

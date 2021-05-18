@@ -71,5 +71,7 @@
     <string name="ingen_varsel">Ingen varsel funnet</string>
     <string name="ingen_varsel_området">Ingen varsel i dette område</string>
     <string name="henter_varsel">Henter varsel…</string>
+    <string name="top_bar">Top bar</string>
+    <string name="menu_background">Menu Background</string>
 
 </resources>

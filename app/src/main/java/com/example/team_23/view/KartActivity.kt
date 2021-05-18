@@ -13,11 +13,14 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.marginBottom
+import androidx.core.view.setMargins
 import com.example.team_23.R
 import com.example.team_23.model.dataclasses.Campfire
 import com.example.team_23.model.dataclasses.metalerts_dataclasses.Alert
@@ -200,10 +203,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 Log.i("OnError", "An error occurred: $p0")
             }
         })
-        val scale = resources.displayMetrics.density
-        val wantedDp = Resources.getSystem().displayMetrics.heightPixels / 3
-        val dpAsPixels = ( wantedDp * scale + 0.5F)
-        menuCampfireButtonShape.setPadding(0, 100, 0, dpAsPixels.toInt())
+        val params = (menuCampfireButtonShape.layoutParams as ViewGroup.MarginLayoutParams)
+        params.setMargins(Resources.getSystem().displayMetrics.heightPixels / 7)
         Log.d("PADDING", menuCampfireButtonShape.paddingBottom.toString())
     }
 
