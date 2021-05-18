@@ -147,7 +147,7 @@
             android:layout_width="250dp"
             android:layout_height="0dp"
             android:elevation="2dp"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
@@ -190,17 +190,18 @@
                 android:id="@+id/menuInfoSectionTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="60dp"
+                android:layout_marginStart="80dp"
+                android:layout_marginBottom="100dp"
                 android:rotation="90"
                 android:text="@string/informasjon"
                 android:textColor="@color/white"
                 android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/menuMapFunctionsSectionTitle"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.895"
+                app:layout_constraintHorizontal_bias="0.875"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/menuShape"
-                app:layout_constraintVertical_bias="0.413" />
+                app:layout_constraintVertical_bias="1.0" />
 
             <View
                 android:id="@+id/view2"
@@ -249,18 +250,18 @@
                 android:layout_height="48dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="25dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="25dp"
                 android:backgroundTint="@color/white"
                 android:contentDescription="@string/regler"
                 android:text="@string/regler"
                 android:textAllCaps="false"
                 android:textColor="@color/black"
-                app:layout_constraintBottom_toTopOf="@+id/menuMapFunctionsSectionTitle"
+                app:layout_constraintBottom_toTopOf="@+id/view2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.494"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.767" />
+                app:layout_constraintVertical_bias="1.0" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/switchOverlay"
