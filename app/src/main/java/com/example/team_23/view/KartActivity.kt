@@ -364,9 +364,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // Når bruker trykker på kartet lages det en markør, kan kun lages en markør og en rute av gangen
         mMap.setOnMapClickListener {
-            Log.d("POPUP_VISIBLE", popupVisible.toString())
-            Log.d("ALERTLEVELDESC_VISIBLE", alertLevelsDescVisible.toString())
-            Log.d("MENU_VISIBLE", menuVisible.toString())
             marker?.remove()
             travelPolylineList.forEach { polyline -> polyline.remove() }   // Fjern tidligere tidligere tegnet rute fra kart.
             travelPolylineList.clear()
@@ -386,6 +383,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
             } else{togglePopup()}
             kartViewModel.getAlert(it.latitude, it.longitude)
+            if(menuVisible){
+                toggleMenu()
+            }
         }
 
         // Ved klikk på "Vis Min Lokasjon"-knappen (nede i høyre hjørne):
