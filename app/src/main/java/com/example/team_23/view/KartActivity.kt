@@ -397,7 +397,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             true
         }
 
-
         // Ved klikk på "Dra hit"-knappen (i popup-menyen):
         travelHereButton.setOnClickListener{ getAndShowDirections() }
 
@@ -411,12 +410,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         val oslo = LatLng(59.911491, 10.757933)
         this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(oslo, 6f))
 
-
        mMap.setOnMarkerClickListener { // Sentrering på markør fungerer for øyeblikket ikke
             centreMarker(it)
         }
-
-
     }
 
     // =========================
@@ -487,7 +483,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-
     //toggler popup og fungerer slik at man ikke åpner en ny popup ved å trykke utenfor popup/nivå/menu-vinduet
     // og at man ikke kan bevege kartet når de er åpne
     private fun togglePopup() {
@@ -503,14 +498,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             }
             popupVisible = !popupVisible
         } else {
-            if (menuVisible) {
-                popup.visibility = View.GONE
-                menu.visibility = View.GONE
-                mMap.uiSettings.isScrollGesturesEnabled = true
-                menuButton.background =
-                    ResourcesCompat.getDrawable(resources, R.drawable.menubutton, theme)
-                menuVisible = !menuVisible
-            } else {
                 popup.visibility = View.VISIBLE
                 mMap.uiSettings.isScrollGesturesEnabled = false
                 if (!alertLevelsDescVisible) {
@@ -519,7 +506,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                     alertLevelsDescVisible = !alertLevelsDescVisible
                 }
                 popupVisible = !popupVisible
-            }
         }
     }
 
@@ -655,7 +641,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 campfireMarkers.add(marker)
         }
     }
-
 
     //Hjelpemetode som henter latitude og longitude for nåværende posisjon og et sted på kartet,
     //og finner en rute mellom de
