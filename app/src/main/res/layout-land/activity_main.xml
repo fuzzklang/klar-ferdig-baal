@@ -766,7 +766,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:gravity="center"
-                android:text="@string/betydelig_skogbrannfare"
+                android:text="@string/stor_skogbrannfare"
                 android:textColor="@color/white"
                 android:textSize="17sp"
                 app:layout_constraintBottom_toBottomOf="@id/levelsDescBackground"

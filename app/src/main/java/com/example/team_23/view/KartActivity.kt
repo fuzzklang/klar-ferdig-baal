@@ -13,14 +13,11 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.view.marginBottom
-import androidx.core.view.setMargins
 import com.example.team_23.R
 import com.example.team_23.model.dataclasses.Campfire
 import com.example.team_23.model.dataclasses.metalerts_dataclasses.Alert
@@ -285,7 +282,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                             ResourcesCompat.getDrawable(resources, R.color.alertYellow, theme)!!
                     }
                     AlertColors.ORANGE -> {
-                        warningText = getString(R.string.betydelig_skogbrannfare)
+                        warningText = getString(R.string.stor_skogbrannfare)
                         background = ResourcesCompat.getDrawable(
                             resources,
                             R.drawable.orangewarning,
