@@ -269,44 +269,25 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 when (alertColorLevel) {
                     AlertColors.YELLOW -> {
                         warningText = getString(R.string.moderat_skogbrannfare)
-                        background = ResourcesCompat.getDrawable(
-                            resources,
-                            R.drawable.yellowwarning,
-                            theme
-                        )!!
-                        colorLevel =
-                            ResourcesCompat.getDrawable(resources, R.color.alertYellow, theme)!!
+                        background = ResourcesCompat.getDrawable(resources, R.drawable.yellowwarning, theme)!!
+                        colorLevel = ResourcesCompat.getDrawable(resources, R.color.alertYellow, theme)!!
                     }
                     AlertColors.ORANGE -> {
                         warningText = getString(R.string.stor_skogbrannfare)
-                        background = ResourcesCompat.getDrawable(
-                            resources,
-                            R.drawable.orangewarning,
-                            theme
-                        )!!
-                        colorLevel =
-                            ResourcesCompat.getDrawable(resources, R.color.alertOrange, theme)!!
+                        background = ResourcesCompat.getDrawable(resources, R.drawable.orangewarning, theme)!!
+                        colorLevel = ResourcesCompat.getDrawable(resources, R.color.alertOrange, theme)!!
                     }
                     AlertColors.RED -> {
                         warningText = getString(R.string.moderat_skogbrannfare)
-                        background = ResourcesCompat.getDrawable(
-                            resources,
-                            R.drawable.orangewarning,
-                            theme
-                        )!!  // TODO: hent rød varsel fra Githuben til YR!
-                        colorLevel =
-                            ResourcesCompat.getDrawable(resources, R.color.alertRed, theme)!!
-                        Log.w(
-                            tag,
-                            "Returnert alertColor er RED. Ikke forventet. Fortsetter kjøring."
-                        )
+                        background = ResourcesCompat.getDrawable(resources, R.drawable.orangewarning, theme)!!  // TODO: hent rød varsel fra Githuben til YR!
+                        colorLevel = ResourcesCompat.getDrawable(resources, R.color.alertRed, theme)!!
+                        Log.w(tag, "Returnert alertColor er RED. Ikke forventet. Fortsetter kjøring.")
                     }
                     AlertColors.UNKNOWN -> {
                         Log.w(tag, "Returnert alertColor er Unkown.")
                         warningText = "?"
                         colorLevel = ResourcesCompat.getDrawable(resources, R.color.black, theme)!!
-                        background =
-                            ResourcesCompat.getDrawable(resources, R.drawable.questionmark, theme)!!
+                        background = ResourcesCompat.getDrawable(resources, R.drawable.questionmark, theme)!!
                     }
                 }
             } else {
@@ -421,10 +402,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         val projection = mMap.projection
         val markerLatLng = LatLng(marker.position.latitude, marker.position.longitude)
         val markerScreenPosition: Point = projection.toScreenLocation(markerLatLng)
-        val pointHalfScreenAbove = Point(
-            markerScreenPosition.x,
-            markerScreenPosition.y +(containerHeight / 3)
-        )
+        val pointHalfScreenAbove = Point(markerScreenPosition.x, markerScreenPosition.y + (containerHeight / 3))
 
         val aboveMarkerLatLng = projection
             .fromScreenLocation(pointHalfScreenAbove)
@@ -599,9 +577,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             val latLngList = alert.getPolygon()
             // Hent riktig farge basert på faregrad
             val color = when (alert.getAlertColor()) {
-                AlertColors.YELLOW -> getColor(R.color.alertYellowTransparent)
-                AlertColors.ORANGE -> getColor(R.color.alertOrangeTransparent)
-                AlertColors.RED    -> getColor(R.color.alertRedTransparent)
+                AlertColors.YELLOW  -> getColor(R.color.alertYellowTransparent)
+                AlertColors.ORANGE  -> getColor(R.color.alertOrangeTransparent)
+                AlertColors.RED     -> getColor(R.color.alertRedTransparent)
                 AlertColors.UNKNOWN -> {getColor(R.color.grey); Log.w(tag, "En feil har oppstått! Ukjent farge/nivå for varsel!")}
             }
             val polygonOptions = PolygonOptions()
