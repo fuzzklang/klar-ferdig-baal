@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">KlarFerdigBål</string>
+    <string name="appNavn">Klar Ferdig Bål</string>
 
     <string name="info1">• Trykk på kartet for å sjekke skogbrannfare for et angitt område.</string>
     <string name="info2">• Zoom inn på kartet for å se bålikoner ved godkjente bålplasser.
@@ -16,80 +16,77 @@
     <string name="info9">• Personopplysningene blir behandlet av Google (Places API og Geocoding API) og
         Meteorologisk institutt (MetAlerts API) for å tilby den tidligere nevnte funksjonaliteten.</string>
 
-    <string name="rule1">• Respekter det nasjonale bålforbudet fra 15. april til 15.september.
+    <string name="regel1">• Respekter det nasjonale bålforbudet fra 15. april til 15.september.
          Ikke tenn bål i skog og utmark i denne perioden.</string>
-    <string name="rule2">• Følg med på skogbrannvarselet og følg rådene fra ditt lokale brannvesen.</string>
-    <string name="rule3">• Bruk godkjente bålplasser hvis du skal tenne bål.</string>
-    <string name="rule4">• Ta hensyn til skogbrannfare og vindforhold.</string>
-    <string name="rule5">• Det er alltid den som brenner bål som har ansvaret
+    <string name="regel2">• Følg med på skogbrannvarselet og følg rådene fra ditt lokale brannvesen.</string>
+    <string name="regel3">• Bruk godkjente bålplasser hvis du skal tenne bål.</string>
+    <string name="regel4">• Ta hensyn til skogbrannfare og vindforhold.</string>
+    <string name="regel5">• Det er alltid den som brenner bål som har ansvaret
        for brannsikkerheten.</string>
-    <string name="rule6">• Det bør være en voksen, edru person som er
+    <string name="regel6">• Det bør være en voksen, edru person som er
        ansvarlig for bålet.</string>
-    <string name="rule7">• Bålet må være i god avstand fra bebyggelse og
+    <string name="regel7">• Bålet må være i god avstand fra bebyggelse og
         vegetasjon.</string>
-    <string name="rule8">• Det er ikke lov å brenne bål på svalberg.</string>
-    <string name="rule9">• Bålet må ikke være større enn at du har kontroll på
+    <string name="regel8">• Det er ikke lov å brenne bål på svalberg.</string>
+    <string name="regel9">• Bålet må ikke være større enn at du har kontroll på
        det og kan slokke ved behov.</string>
-    <string name="rule10">• Ha egnede slokkemidler lett tilgjengelig.</string>
-    <string name="rule11">• Det er forbudt å brenne plast, bygningsmaterialer
+    <string name="regel10">• Ha egnede slokkemidler lett tilgjengelig.</string>
+    <string name="regel11">• Det er forbudt å brenne plast, bygningsmaterialer
         og annen søppel.</string>
-    <string name="rule12">• Når du forlater bålplassen skal bålet være helt
+    <string name="regel12">• Når du forlater bålplassen skal bålet være helt
         slokket.</string>
 
-    <string name="title">Regler</string>
-    <string name="title2">Info</string>
-    <string name="imgClose">Avslutt</string>
-    <string name="imgFire">flammeikon</string>
+    <string name="tittel1">Regler</string>
+    <string name="tittel2">Info</string>
+    <string name="imgLukk">Avslutt</string>
     <string name="info">Info</string>
     <string name="regler">Regler</string>
-    <string name="infoContent">Trykk på kartet for å sjekke skogbrannfaren for området</string>
-    <string name="overlay">Varselsoner</string>
-    <string name="infoButtonText">Info</string>
-    <string name="app_title">Klar Ferdig Bål</string>
+    <string name="infoInnhold">Trykk på kartet for å sjekke skogbrannfaren for området</string>
+    <string name="varselsoner">Varselsoner</string>
+    <string name="infoKnappTekst">Info</string>
+    <string name="appTittel">Klar Ferdig Bål</string>
 
-    <string name="levels">Farenivåer</string>
-    <string name="moderate_description">Gult farenivå vises når det finnes en
+    <string name="fareNivaaer">Farenivåer</string>
+    <string name="gulBeskrivelse">Gult farenivå vises når det finnes en
     risiko for farlige situasjoner som kan forårsake lokale skader.</string>
-    <string name="severe_description">Oransje farenivå vises når det er vesentlig risiko
+    <string name="rodBeskrivelse">Oransje farenivå vises når det er vesentlig risiko
     for fare som kan ha omfattende konsekvenser for mange mennesker.</string>
 
-    <string name="loading">Loading…</string>
-    <string name="close_infobox_button">Close infobox button</string>
-    <string name="overlay_button">Overlay Button</string>
-    <string name="info_button">Info Button</string>
+    <string name="varselsonerKnapp">varselsoner knapp</string>
+    <string name="infoKnapp">Info knapp</string>
     <string name="sok">Søk…</string>
-    <string name="farevarselniva">Farevarselnivå</string>
+    <string name="farevarselNivaa">Farevarselnivå</string>
     <string name="nivaer">Nivåer</string>
     <string name="informasjon">Informasjon</string>
-    <string name="dra_hit">Dra hit</string>
+    <string name="draHit">Dra hit</string>
     <string name="balplasser">Bålplasser</string>
-    <string name="popup">popup</string>
-    <string name="menu_button">Menu button</string>
-    <string name="varsler_her">Varsel for min posisjon</string>
+    <string name="varselvindu">varselvindu</string>
+    <string name="menyKnapp">Meny knapp</string>
+    <string name="varslerHer">Varsel for min posisjon</string>
     <string name="kartfunksjoner">Kartfunksjoner</string>
 
-    <string name="api_key">AIzaSyAyK0NkgPMxOOTnWR5EFKdy2DzfDXGh-HI</string>
+    <string name="apiNokkel">AIzaSyAyK0NkgPMxOOTnWR5EFKdy2DzfDXGh-HI</string>
 
     <!-->To nivåer: 'skogbrannfare' (gult) og 'Stor skogbrannfare' (oransje) </-->
     <!-->Se https://www.met.no/vaer-og-klima/ekstremvaervarsler-og-andre-farevarsler/vaerfenomener-som-kan-gi-farevarsel-fra-met/varsel-om-skogbrannfare</-->
-    <string name="moderat_skogbrannfare">Skogbrannfare</string>
-    <string name="moderat_skogbrannfare_ikon">Skogbrannfare ikon</string>
-    <string name="stor_skogbrannfare">Stor skogbrannfare</string>
+    <string name="gulSkogbrannfare"> Gul skogbrannfare</string>
+    <string name="gulSkogbrannfareIkon">Skogbrannfare ikon</string>
+    <string name="storSkogbrannfare">Stor skogbrannfare</string>
     <string name="logo">Logo</string>
-    <string name="ingen_varsel">Ingen varsel funnet</string>
-    <string name="ingen_varsel_området">Ingen varsel i dette området</string>
-    <string name="henter_varsel">Henter varsel…</string>
-    <string name="menu_background">Menu Background</string>
-    <string name="nivaaer_ikon">nivåer ikon</string>
-    <string name="dra_hit_knapp">Dra hit knapp</string>
-    <string name="dra_hit_knapp_ikon">Dra hit knapp ikon</string>
-    <string name="farevarsel_nivaa_bilde">Farevarsel nivå bilde</string>
-    <string name="farevarsel_stor_brannfare_ikon">Farevarsel stor brannfare ikon</string>
-    <string name="oransj_skogbrannfare_ikon">oransj skogbrannfare ikon</string>
-    <string name="gul_skogbrannfare_ikon">gul skogbrannfare ikon</string>
-    <string name="nivaaer_tilbake_knapp">Nivåer tilbake knapp</string>
+    <string name="ingenVarsel">Ingen varsel funnet</string>
+    <string name="ingenVarselOmrådet">Ingen varsel i dette området</string>
+    <string name="henterVarsel">Henter varsel…</string>
+    <string name="menyBakgrunn">Menu Background</string>
+    <string name="nivaaerIkon">nivåer ikon</string>
+    <string name="draHitKnapp">Dra hit knapp</string>
+    <string name="draHitKnappIkon">Dra hit knapp ikon</string>
+    <string name="farevarselNivaaBilde">Farevarsel nivå bilde</string>
+    <string name="farevarselStorBrannfareIkon">Farevarsel stor brannfare ikon</string>
+    <string name="oransjeSkogbrannfareIkon">oransj skogbrannfare ikon</string>
+    <string name="nivaaerTilbakeKnapp">Nivåer tilbake knapp</string>
     <string name="meny">meny</string>
-    <string name="tilbake_knapp">Tilbake knapp</string>
-    <string name="splash_screen_ikon">splash screen logo</string>
+    <string name="tilbakeKnapp">Tilbake knapp</string>
+    <string name="splashScreenIkon">splash screen logo</string>
+    <string name="laster">Laster…</string>
 
 </resources>

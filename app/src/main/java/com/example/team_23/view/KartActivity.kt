@@ -167,7 +167,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // ===== OBSERVERS =====
         if (!Places.isInitialized()) {
-            Places.initialize(applicationContext, getString(R.string.api_key))
+            Places.initialize(applicationContext, getString(R.string.apiNokkel))
         }
 
         // Initialize the AutocompleteSupportFragment.
@@ -268,17 +268,17 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
                 when (alertColorLevel) {
                     AlertColors.YELLOW -> {
-                        warningText = getString(R.string.moderat_skogbrannfare)
+                        warningText = getString(R.string.gulSkogbrannfare)
                         background = ResourcesCompat.getDrawable(resources, R.drawable.yellowwarning, theme)!!
                         colorLevel = ResourcesCompat.getDrawable(resources, R.color.alertYellow, theme)!!
                     }
                     AlertColors.ORANGE -> {
-                        warningText = getString(R.string.stor_skogbrannfare)
+                        warningText = getString(R.string.storSkogbrannfare)
                         background = ResourcesCompat.getDrawable(resources, R.drawable.orangewarning, theme)!!
                         colorLevel = ResourcesCompat.getDrawable(resources, R.color.alertOrange, theme)!!
                     }
                     AlertColors.RED -> {
-                        warningText = getString(R.string.moderat_skogbrannfare)
+                        warningText = getString(R.string.gulSkogbrannfare)
                         background = ResourcesCompat.getDrawable(resources, R.drawable.orangewarning, theme)!!  // TODO: hent rød varsel fra Githuben til YR!
                         colorLevel = ResourcesCompat.getDrawable(resources, R.color.alertRed, theme)!!
                         Log.w(tag, "Returnert alertColor er RED. Ikke forventet. Fortsetter kjøring.")
@@ -292,11 +292,11 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
             } else {
                 // Ingen varsel (alert er null)
-                warningText = getString(R.string.ingen_varsel)
+                warningText = getString(R.string.ingenVarsel)
                 background = ResourcesCompat.getDrawable(resources, R.drawable.shape, theme)!!
                 // Usikker på hvor stabil observeringen er. Oppstår mulige race conditions?
                 kartViewModel.placeName.observe(this, { placeName -> warningArea.text = placeName })
-                warningInfo.text = getString(R.string.ingen_varsel_området)
+                warningInfo.text = getString(R.string.ingenVarselOmrådet)
                 colorLevel = ResourcesCompat.getDrawable(resources, R.color.green, theme)!!
             }
             warningLevel.text = warningText
