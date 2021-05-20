@@ -21,6 +21,8 @@ import java.util.*
 class MainRepository(private val apiService: ApiServiceImpl, private val fusedLocationProviderClient: FusedLocationProviderClient) {
     private val tag = "MainRepository"
 
+    private val gson = Gson()
+
     // API-Dokumentasjon: https://in2000-apiproxy.ifi.uio.no/weatherapi/metalerts/1.1/documentation
     private val endpoint = "https://in2000-apiproxy.ifi.uio.no/weatherapi/metalerts/1.1/"
     // Opsjonene i permanentOptions-listen blir med i alle API-kall til MetAlerts.
@@ -32,7 +34,6 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
     private val directionsUrlDestination = "&destination="
     private val mode = "&mode=walking"
     private val directionsUrlKey = "&key=AIzaSyAyK0NkgPMxOOTnWR5EFKdy2DzfDXGh-HI"
-    private val gson = Gson()
 
     //Places API
     private val placesUrlStart = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input="
