@@ -43,6 +43,9 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
     private val placesURL = "https://maps.googleapis.com/maps/api/geocode/json?"
     private val key = "AIzaSyAyK0NkgPMxOOTnWR5EFKdy2DzfDXGh-HI"
 
+    /* Henter stedsnavn fra Geocode API basert på lokasjon (LatLng)
+    * API-responsens parses til dataklasser av Gson
+    */
     suspend fun getPlaceNameFromLocation(latlng: LatLng): String? {
         Log.d(tag, "Soker etter sted fra Geocode API")
         val geocodePath = "${placesURL}latlng=${latlng.latitude},${latlng.longitude}&key=${key}"
@@ -64,6 +67,9 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
         return placeName
     }
 
+    /* Returnerer lokasjon for angitt stedsnavn. Brukes blant annet til søkefunksjonen.
+    * API-responsens parses til dataklasser av Gson
+    */
     suspend fun getLocationFromPlacename(place: String): List<Candidates>?{
         Log.d(tag, "Soker etter sted fra Google!")
         var places: List<Candidates>? = null
