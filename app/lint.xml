@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
     <issue id="UnusedResources">
+        <!--> Ignorer Lint-feilmelding knyttet til campfire_spots.json. Oppstår siden ressursen ikke aksesseres direkte i Activity. <-->
+        <!--> Hentes derimot direkte i MainRepository. <-->
         <ignore path="src/main/res/raw/campfire_spots.json" />
     </issue>
 </lint>
