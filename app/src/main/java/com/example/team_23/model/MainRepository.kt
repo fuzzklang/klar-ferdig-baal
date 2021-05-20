@@ -52,11 +52,11 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
             Log.d(tag, "Fikk respons fra Geocode API. Respons-streng (delstreng): ${httpResponse.subSequence(0, 30)}")
             val parsedResponse: GeocodeBase = gson.fromJson(httpResponse, GeocodeBase::class.java)
             if (parsedResponse.results != null && parsedResponse.results.isNotEmpty()) {
-                val addressComponentList = parsedResponse.results.get(1).address_components
+                val addressComponentList = parsedResponse.results[1].address_components
                 if (addressComponentList != null && addressComponentList.size > 2)
-                    placeName = addressComponentList.get(1).long_name  // Mangler sjekk for antall returnerte resultater
+                    placeName = addressComponentList[1].long_name  // Mangler sjekk for antall returnerte resultater
             }
-            Log.d(tag, "Parsed JSON. Returned long name: ${placeName}")
+            Log.d(tag, "Parsed JSON. Returned long name: $placeName")
         } catch (exception: IOException) {
             Log.w(tag, "Feil under henting av types til sted: ${exception.message}")
         }

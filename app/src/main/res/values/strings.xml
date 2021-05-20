@@ -90,5 +90,6 @@
     <string name="nivaaer_tilbake_knapp">Nivåer tilbake knapp</string>
     <string name="meny">meny</string>
     <string name="tilbake_knapp">Tilbake knapp</string>
+    <string name="splash_screen_ikon">splash screen logo</string>
 
 </resources>
