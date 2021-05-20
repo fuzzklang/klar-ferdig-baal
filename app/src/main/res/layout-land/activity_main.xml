@@ -62,7 +62,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/infoBox"
             app:layout_constraintVertical_bias="1.0" />
 
 
@@ -111,7 +110,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0"
-            android:contentDescription="@string/top_bar" />
+            tools:ignore="ContentDescription" />
 
 
         <TextView
@@ -168,13 +167,13 @@
                 android:layout_width="250dp"
                 android:layout_height="0dp"
                 android:background="@color/mainColor"
-                android:contentDescription="@string/menu_background"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintVertical_bias="0.0"
+                tools:ignore="ContentDescription" />
 
             <View
                 android:id="@+id/menuCampfireButtonShape"
@@ -213,7 +212,7 @@
                 android:layout_height="48dp"
                 android:layout_marginStart="20dp"
                 android:backgroundTint="@color/white"
-                android:contentDescription="@string/info_button"
+                android:contentDescription="@string/info"
                 android:scaleType="fitCenter"
                 android:text="@string/info"
                 android:textAllCaps="false"
@@ -293,7 +292,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
             android:background="@drawable/menubutton"
-            android:contentDescription="@string/menu_button"
+            android:contentDescription="@string/meny"
             android:elevation="2dp"
             android:translationZ="2dp"
             android:scaleType="fitCenter"
@@ -462,7 +461,7 @@
                 app:layout_constraintTop_toTopOf="@+id/popupAlertDescButton"
                 app:layout_constraintVertical_bias="0.0"
                 app:srcCompat="@drawable/questionmark"
-                tools:ignore="ContentDescription" />
+                android:contentDescription="@string/nivaaer_ikon" />
 
             <TextView
                 android:id="@+id/popupAlertInfoTitle"
@@ -512,7 +511,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/popupShape"
                 app:layout_constraintVertical_bias="0.982"
-                tools:ignore="ContentDescription" />
+                android:contentDescription="@string/dra_hit_knapp" />
 
             <ImageView
                 android:id="@+id/popupDraHitButtonIcon"
@@ -529,7 +528,7 @@
                 app:layout_constraintTop_toTopOf="@+id/popupDraHitButton"
                 app:layout_constraintVertical_bias="0.333"
                 app:srcCompat="@drawable/walking"
-                tools:ignore="ContentDescription" />
+                android:contentDescription="@string/dra_hit_knapp_ikon"/>
 
             <TextView
                 android:id="@+id/popupDraHitButtonText"
@@ -558,7 +557,7 @@
                 app:layout_constraintStart_toEndOf="@+id/popupAlertLevelContent"
                 app:layout_constraintTop_toTopOf="@+id/popupAlertLevelBackground"
                 app:layout_constraintVertical_bias="0.729"
-                tools:ignore="ContentDescription" />
+                android:contentDescription="@string/farevarsel_nivaa_bilde" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/popupAlertVerticalAlignment"
@@ -610,20 +609,20 @@
 
 
             <ImageView
-                android:id="@+id/levelsDescSevereIcon"
+                android:id="@+id/levelsDescOrangeIcon"
                 android:layout_width="50dp"
                 android:layout_height="45dp"
-                app:layout_constraintBottom_toTopOf="@+id/levelsDescModerateTitle"
+                app:layout_constraintBottom_toTopOf="@+id/levelsDescYellowTitle"
                 app:layout_constraintEnd_toEndOf="@id/levelsDescBackground"
                 app:layout_constraintHorizontal_bias="0.223"
                 app:layout_constraintStart_toStartOf="@id/levelsDescBackground"
                 app:layout_constraintTop_toBottomOf="@+id/levelsDescTitle"
                 app:layout_constraintVertical_bias="1.0"
                 app:srcCompat="@drawable/orangewarning"
-                tools:ignore="ContentDescription" />
+                android:contentDescription="@string/oransj_skogbrannfare_ikon" />
 
             <TextView
-                android:id="@+id/levelsDescSevereContent"
+                android:id="@+id/levelsDescOrangeContent"
                 android:layout_width="185dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -634,7 +633,7 @@
                 app:layout_constraintEnd_toEndOf="@id/levelsDescBackground"
                 app:layout_constraintHorizontal_bias="0.065"
                 app:layout_constraintStart_toStartOf="@id/levelsDescBackground"
-                app:layout_constraintTop_toBottomOf="@+id/levelsDescModerateTitle"
+                app:layout_constraintTop_toBottomOf="@+id/levelsDescYellowTitle"
                 app:layout_constraintVertical_bias="0.55" />
 
             <TextView
@@ -654,7 +653,7 @@
                 app:layout_constraintVertical_bias="0.13" />
 
             <TextView
-                android:id="@+id/levelsDescModerateTitle"
+                android:id="@+id/levelsDescYellowTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -669,11 +668,11 @@
                 app:layout_constraintVertical_bias="0.424" />
 
             <ImageView
-                android:id="@+id/levelsDescModerateIcon"
+                android:id="@+id/levelsDescYellowIcon"
                 android:layout_width="50dp"
                 android:layout_height="45dp"
-                android:contentDescription="@string/moderat_skogbrannfare_ikon"
-                app:layout_constraintBottom_toTopOf="@+id/levelsDescSevereTitle"
+                android:contentDescription="@string/gul_skogbrannfare_ikon"
+                app:layout_constraintBottom_toTopOf="@+id/levelsDescOrangeTitle"
                 app:layout_constraintEnd_toEndOf="@id/levelsDescBackground"
                 app:layout_constraintHorizontal_bias="0.818"
                 app:layout_constraintStart_toStartOf="@id/levelsDescBackground"
@@ -682,7 +681,7 @@
                 app:srcCompat="@drawable/yellowwarning" />
 
             <TextView
-                android:id="@+id/levelsDescModerateContent"
+                android:id="@+id/levelsDescYellowContent"
                 android:layout_width="185dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
@@ -694,11 +693,11 @@
                 app:layout_constraintEnd_toEndOf="@id/levelsDescBackground"
                 app:layout_constraintHorizontal_bias="0.964"
                 app:layout_constraintStart_toStartOf="@id/levelsDescBackground"
-                app:layout_constraintTop_toBottomOf="@+id/levelsDescSevereTitle"
+                app:layout_constraintTop_toBottomOf="@+id/levelsDescOrangeTitle"
                 app:layout_constraintVertical_bias="0.636" />
 
             <TextView
-                android:id="@+id/levelsDescSevereTitle"
+                android:id="@+id/levelsDescOrangeTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -724,7 +723,7 @@
                 app:layout_constraintStart_toStartOf="@+id/levelsDescShape"
                 app:layout_constraintTop_toTopOf="@+id/levelsDescShape"
                 app:layout_constraintVertical_bias="0.03"
-                tools:ignore="ContentDescription" />
+                android:contentDescription="@string/nivaaer_tilbake_knapp"/>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -75,7 +75,16 @@
     <string name="ingen_varsel">Ingen varsel funnet</string>
     <string name="ingen_varsel_området">Ingen varsel i dette området</string>
     <string name="henter_varsel">Henter varsel…</string>
-    <string name="top_bar">Top bar</string>
     <string name="menu_background">Menu Background</string>
+    <string name="nivaaer_ikon">nivåer ikon</string>
+    <string name="dra_hit_knapp">Dra hit knapp</string>
+    <string name="dra_hit_knapp_ikon">Dra hit knapp ikon</string>
+    <string name="farevarsel_nivaa_bilde">Farevarsel nivå bilde</string>
+    <string name="farevarsel_stor_brannfare_ikon">Farevarsel stor brannfare ikon</string>
+    <string name="oransj_skogbrannfare_ikon">oransj skogbrannfare ikon</string>
+    <string name="gul_skogbrannfare_ikon">gul skogbrannfare ikon</string>
+    <string name="nivaaer_tilbake_knapp">Nivåer tilbake knapp</string>
+    <string name="meny">meny</string>
+    <string name="tilbake_knapp">Tilbake knapp</string>
 
 </resources>
