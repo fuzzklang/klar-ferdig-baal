@@ -132,7 +132,6 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
         }
     }
 
-
     // Oppdaterer nåværende posisjon ved kall til repository.
     // Antar at appen har tilgang til lokasjon.
     fun updateLocation() {
@@ -204,7 +203,6 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
      * Må gå gjennom dataklasse for dataklasse (MainBase, Candidates, Geometry og PlaceLocation)
      * for å få tak i informasjonen programmet trenger (latitude og longitude i PlaceLocation) for å finne stedet bruker soker på
      */
-
     private fun getPlacesLatLng(places: List<Candidates>?): LatLng? {
         val location = places?.get(0)?.geometry?.location
         var latlng: LatLng? = null
