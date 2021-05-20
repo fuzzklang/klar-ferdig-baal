@@ -51,7 +51,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
     // ===== VARIABLER brukt av Activity =====
     // ----- Info-boks -----
-    private lateinit var info: View
     private lateinit var infoButton: Button
     // ----- Meny -----
     private lateinit var menu: View
@@ -115,7 +114,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         menuCampfireButtonShape = findViewById(R.id.menuCampfireButtonShape) //Brukes for å justere margin
         // ----- Info-boks -----
         infoButton = findViewById(R.id.menuInfoButton)
-        info = findViewById(R.id.infoBox)
 
         // ----- Alert Popup-boks -----
         popup = findViewById(R.id.popup)

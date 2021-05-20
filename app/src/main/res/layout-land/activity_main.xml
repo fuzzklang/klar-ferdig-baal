@@ -305,74 +305,6 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/infoBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.557">
-
-            <ImageView
-                android:id="@+id/infoboxShape"
-                android:layout_width="236dp"
-                android:layout_height="186dp"
-                android:background="@drawable/shape"
-                android:backgroundTint="@color/mainColor"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="1.0"
-                tools:ignore="ContentDescription" />
-
-            <ImageButton
-                android:id="@+id/infoboxCloseButton"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@drawable/closepopupbutton"
-                android:contentDescription="@string/close_infobox_button"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.965"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.105" />
-
-            <TextView
-                android:id="@+id/infoboxTitle"
-                android:layout_width="66dp"
-                android:layout_height="34dp"
-                android:gravity="center"
-                android:text="@string/info"
-                android:textColor="@color/white"
-                android:textSize="30sp"
-                app:layout_constraintBottom_toBottomOf="@+id/infoboxShape"
-                app:layout_constraintEnd_toEndOf="@+id/infoboxShape"
-                app:layout_constraintStart_toStartOf="@+id/infoboxShape"
-                app:layout_constraintTop_toTopOf="@+id/infoboxShape"
-                app:layout_constraintVertical_bias="0.129" />
-
-            <TextView
-                android:id="@+id/infoboxContent"
-                android:layout_width="153dp"
-                android:layout_height="93dp"
-                android:gravity="center"
-                android:text="@string/infoContent"
-                android:textColor="@color/white"
-                app:layout_constraintBottom_toBottomOf="@+id/infoboxShape"
-                app:layout_constraintEnd_toEndOf="@+id/infoboxShape"
-                app:layout_constraintHorizontal_bias="0.506"
-                app:layout_constraintStart_toStartOf="@+id/infoboxShape"
-                app:layout_constraintTop_toBottomOf="@+id/infoboxTitle"
-                app:layout_constraintVertical_bias="0.375" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/popup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -785,7 +717,7 @@
                 android:id="@+id/levelsDescCloseButton"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="@drawable/closepopupbutton"
+                android:background="@drawable/backbutton"
                 app:layout_constraintBottom_toBottomOf="@+id/levelsDescShape"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.99"
