@@ -97,6 +97,7 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
 
     /* Henter XML-data (RSS-feed) fra MetAlerts-proxyen (IN2000) og parser responsen.
      * @return liste med RssItem eller null
+     * Suppresser varsel fra Kotlin kallet til parseren tolkes som blokkerende (IO) selv om det ikke er det.
      */
     @Suppress("BlockingMethodInNonBlockingContext")
     suspend fun getRssFeed(lat: Double?, lon: Double?) : List<RssItem>? {
@@ -125,6 +126,7 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
 
     /* Henter XML-data (CAP Alert) fra MetAlerts-proxyen (IN2000) og parser responsen.
      * @return instans av Alert eller null.
+     * Suppresser varsel fra Kotlin kallet til parseren tolkes som blokkerende (IO) selv om det ikke er det.
      */
     @Suppress("BlockingMethodInNonBlockingContext")
     suspend fun getCapAlert(url : String) : Alert? {
