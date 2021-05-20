@@ -14,7 +14,8 @@ class ApiServiceImpl: ApiService {
     private val client = OkHttpClient()
 
     /* Metode gjør http-request, returnerer en streng.
-     * @param endpoint : String, options : liste av strenger som blir inkludert i request-url
+     * @param endpoint : String, options : liste av strenger som blir inkludert i request-url.
+     * Suppresser advarsel fra Kotlin som tolker IO-kallet som blokkerende selv om det gjøres på IO-dispatcheren.
      * @return String
      */
     @Suppress("BlockingMethodInNonBlockingContext")
@@ -27,6 +28,7 @@ class ApiServiceImpl: ApiService {
 
     /* Metode lager en request-URL ved hjelp av OkHttp-klient og gjør nettverkskall.
      * Returnerer streng eller null.
+     * Suppresser advarsel fra Kotlin som tolker IO-kallet som blokkerende selv om det gjøres på IO-dispatcheren.
      */
     @Suppress("BlockingMethodInNonBlockingContext")
     override suspend fun fetchData(url: String): String? {
