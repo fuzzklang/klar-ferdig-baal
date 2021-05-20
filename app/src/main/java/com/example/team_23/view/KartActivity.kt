@@ -51,7 +51,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
     // ===== VARIABLER brukt av Activity =====
     // ----- Info-boks -----
-    private lateinit var info: View
     private lateinit var infoButton: Button
     // ----- Meny -----
     private lateinit var menu: View
@@ -115,7 +114,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         menuCampfireButtonShape = findViewById(R.id.menuCampfireButtonShape) //Brukes for å justere margin
         // ----- Info-boks -----
         infoButton = findViewById(R.id.menuInfoButton)
-        info = findViewById(R.id.infoBox)
 
         // ----- Alert Popup-boks -----
         popup = findViewById(R.id.popup)
@@ -281,7 +279,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                             ResourcesCompat.getDrawable(resources, R.color.alertYellow, theme)!!
                     }
                     AlertColors.ORANGE -> {
-                        warningText = getString(R.string.betydelig_skogbrannfare)
+                        warningText = getString(R.string.stor_skogbrannfare)
                         background = ResourcesCompat.getDrawable(
                             resources,
                             R.drawable.orangewarning,
@@ -382,6 +380,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
             } else{togglePopup()}
             kartViewModel.getAlert(it.latitude, it.longitude)
+            if(menuVisible){
+                toggleMenu()
+            }
         }
 
         // Ved klikk på "Vis Min Lokasjon"-knappen (nede i høyre hjørne):
@@ -392,7 +393,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             myLocationButtonOnClickMethod()
             true
         }
-
 
         // Ved klikk på "Dra hit"-knappen (i popup-menyen):
         travelHereButton.setOnClickListener{ getAndShowDirections() }
@@ -407,12 +407,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         val oslo = LatLng(59.911491, 10.757933)
         this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(oslo, 6f))
 
-
        mMap.setOnMarkerClickListener { // Sentrering på markør fungerer for øyeblikket ikke
             centreMarker(it)
         }
-
-
     }
 
     // =========================
@@ -483,7 +480,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-
     //toggler popup og fungerer slik at man ikke åpner en ny popup ved å trykke utenfor popup/nivå/menu-vinduet
     // og at man ikke kan bevege kartet når de er åpne
     private fun togglePopup() {
@@ -499,14 +495,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             }
             popupVisible = !popupVisible
         } else {
-            if (menuVisible) {
-                popup.visibility = View.GONE
-                menu.visibility = View.GONE
-                mMap.uiSettings.isScrollGesturesEnabled = true
-                menuButton.background =
-                    ResourcesCompat.getDrawable(resources, R.drawable.menubutton, theme)
-                menuVisible = !menuVisible
-            } else {
                 popup.visibility = View.VISIBLE
                 mMap.uiSettings.isScrollGesturesEnabled = false
                 if (!alertLevelsDescVisible) {
@@ -515,7 +503,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                     alertLevelsDescVisible = !alertLevelsDescVisible
                 }
                 popupVisible = !popupVisible
-            }
         }
     }
 
@@ -526,7 +513,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             mMap.uiSettings.isScrollGesturesEnabled = true
             menuButton.background = ResourcesCompat.getDrawable(resources, R.drawable.menubutton,theme)
         } else {
-            popup.visibility = View.GONE
+            if(popupVisible){
+                togglePopup()
+            }
             menu.visibility = View.VISIBLE
             mMap.uiSettings.isScrollGesturesEnabled = false
             menuButton.background = ResourcesCompat.getDrawable(resources, R.drawable.menubuttonclose,theme)
@@ -649,7 +638,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                 campfireMarkers.add(marker)
         }
     }
-
 
     //Hjelpemetode som henter latitude og longitude for nåværende posisjon og et sted på kartet,
     //og finner en rute mellom de
