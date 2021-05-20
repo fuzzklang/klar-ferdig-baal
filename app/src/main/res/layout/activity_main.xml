@@ -37,6 +37,7 @@
             android:layout_marginTop="60dp"
             android:background="@drawable/shape"
             android:elevation="3dp"
+            android:translationZ="3dp"
             android:gravity="center"
             android:text="@string/sok"
             android:textColor="@color/black"
@@ -58,7 +59,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/infoBox"
             app:layout_constraintVertical_bias="1.0" />
 
 
@@ -83,6 +83,7 @@
                 android:layout_marginStart="110dp"
                 android:autofillHints="Search"
                 android:elevation="3dp"
+                android:translationZ="3dp"
                 android:gravity="center"
                 android:hint="@string/sok"
                 android:inputType="text"
@@ -105,7 +106,8 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.0"
+            tools:ignore="ContentDescription" />
 
 
         <TextView
@@ -114,6 +116,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="36dp"
             android:elevation="3dp"
+            android:translationZ="3dp"
             android:text="@string/app_title"
             android:textColor="@color/white"
             android:textSize="25sp"
@@ -132,6 +135,7 @@
             android:layout_marginEnd="10dp"
             android:contentDescription="@string/logo"
             android:elevation="2dp"
+            android:translationZ="2dp"
             android:src="@drawable/klar_ferdig_bal"
             app:layout_constraintBottom_toBottomOf="@+id/topBar"
             app:layout_constraintEnd_toEndOf="parent"
@@ -146,6 +150,7 @@
             android:layout_width="250dp"
             android:layout_height="0dp"
             android:elevation="2dp"
+            android:translationZ="2dp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -163,7 +168,8 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintVertical_bias="0.0"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:id="@+id/menuInfoSectionTitle"
@@ -306,8 +312,9 @@
             android:layout_marginTop="80dp"
             android:layout_marginEnd="20dp"
             android:background="@drawable/menubutton"
-            android:contentDescription="@string/menu_button"
+            android:contentDescription="@string/meny"
             android:elevation="2dp"
+            android:translationZ="2dp"
             android:scaleType="fitCenter"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -315,74 +322,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/infoBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.557">
-
-            <ImageView
-                android:id="@+id/infoboxShape"
-                android:layout_width="236dp"
-                android:layout_height="186dp"
-                android:background="@drawable/shape"
-                android:backgroundTint="@color/mainColor"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="1.0"
-                tools:ignore="ContentDescription" />
-
-            <ImageButton
-                android:id="@+id/infoboxCloseButton"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@drawable/closepopupbutton"
-                android:contentDescription="@string/close_infobox_button"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.965"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.105" />
-
-            <TextView
-                android:id="@+id/infoboxTitle"
-                android:layout_width="66dp"
-                android:layout_height="34dp"
-                android:gravity="center"
-                android:text="@string/info"
-                android:textColor="@color/white"
-                android:textSize="30sp"
-                app:layout_constraintBottom_toBottomOf="@+id/infoboxShape"
-                app:layout_constraintEnd_toEndOf="@+id/infoboxShape"
-                app:layout_constraintStart_toStartOf="@+id/infoboxShape"
-                app:layout_constraintTop_toTopOf="@+id/infoboxShape"
-                app:layout_constraintVertical_bias="0.129" />
-
-            <TextView
-                android:id="@+id/infoboxContent"
-                android:layout_width="153dp"
-                android:layout_height="93dp"
-                android:gravity="center"
-                android:text="@string/infoContent"
-                android:textColor="@color/white"
-                app:layout_constraintBottom_toBottomOf="@+id/infoboxShape"
-                app:layout_constraintEnd_toEndOf="@+id/infoboxShape"
-                app:layout_constraintHorizontal_bias="0.506"
-                app:layout_constraintStart_toStartOf="@+id/infoboxShape"
-                app:layout_constraintTop_toBottomOf="@+id/infoboxTitle"
-                app:layout_constraintVertical_bias="0.375" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/popup"
@@ -542,7 +481,7 @@
                 app:layout_constraintTop_toTopOf="@+id/popupAlertDescButton"
                 app:layout_constraintVertical_bias="0.444"
                 app:srcCompat="@drawable/questionmark"
-                tools:ignore="ContentDescription" />
+                android:contentDescription="@string/nivaaer_ikon" />
 
             <TextView
                 android:id="@+id/popupAlertInfoTitle"
@@ -589,7 +528,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/popupAlertInfoBackground"
                 app:layout_constraintVertical_bias="0.333"
-                tools:ignore="ContentDescription" />
+                android:contentDescription="@string/dra_hit_knapp" />
 
             <ImageView
                 android:id="@+id/popupDraHitButtonIcon"
@@ -606,7 +545,7 @@
                 app:layout_constraintTop_toTopOf="@+id/popupDraHitButton"
                 app:layout_constraintVertical_bias="0.333"
                 app:srcCompat="@drawable/walking"
-                tools:ignore="ContentDescription" />
+                android:contentDescription="@string/dra_hit_knapp_ikon"/>
 
             <TextView
                 android:id="@+id/popupDraHitButtonText"
@@ -635,7 +574,7 @@
                 app:layout_constraintStart_toEndOf="@+id/popupAlertLevelContent"
                 app:layout_constraintTop_toTopOf="@+id/popupAlertLevelBackground"
                 app:layout_constraintVertical_bias="0.729"
-                tools:ignore="ContentDescription" />
+                android:contentDescription="@string/farevarsel_nivaa_bilde" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/popupAlertVerticalAlignment"
@@ -703,7 +642,7 @@
                 app:layout_constraintVertical_bias="0.142" />
 
             <TextView
-                android:id="@+id/levelsDescModerateTitle"
+                android:id="@+id/levelsDescYellowTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="260dp"
@@ -717,19 +656,19 @@
                 app:layout_constraintTop_toTopOf="@id/levelsDescBackground" />
 
             <ImageView
-                android:id="@+id/levelsDescModerateIcon"
+                android:id="@+id/levelsDescYellowIcon"
                 android:layout_width="50dp"
                 android:layout_height="45dp"
                 android:layout_marginBottom="235dp"
-                android:contentDescription="@string/moderat_skogbrannfare_ikon"
+                android:contentDescription="@string/gul_skogbrannfare_ikon"
                 app:layout_constraintBottom_toBottomOf="@id/levelsDescBackground"
                 app:layout_constraintEnd_toEndOf="@id/levelsDescBackground"
                 app:layout_constraintStart_toStartOf="@id/levelsDescBackground"
-                app:layout_constraintTop_toBottomOf="@id/levelsDescModerateTitle"
+                app:layout_constraintTop_toBottomOf="@id/levelsDescYellowTitle"
                 app:srcCompat="@drawable/yellowwarning" />
 
             <TextView
-                android:id="@+id/levelsDescModerateContent"
+                android:id="@+id/levelsDescYellowContent"
                 android:layout_width="185dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="180dp"
@@ -740,11 +679,11 @@
                 app:layout_constraintBottom_toBottomOf="@id/levelsDescBackground"
                 app:layout_constraintEnd_toEndOf="@id/levelsDescBackground"
                 app:layout_constraintStart_toStartOf="@id/levelsDescBackground"
-                app:layout_constraintTop_toBottomOf="@+id/levelsDescModerateIcon"
+                app:layout_constraintTop_toBottomOf="@+id/levelsDescYellowIcon"
                 app:layout_constraintVertical_bias="0.0" />
 
             <TextView
-                android:id="@+id/levelsDescSevereTitle"
+                android:id="@+id/levelsDescOrangeTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -758,17 +697,17 @@
                 app:layout_constraintTop_toTopOf="@id/levelsDescBackground" />
 
             <ImageView
-                android:id="@+id/levelsDescSevereIcon"
+                android:id="@+id/levelsDescOrangeIcon"
                 android:layout_width="50dp"
                 android:layout_height="45dp"
                 app:layout_constraintEnd_toEndOf="@id/levelsDescBackground"
                 app:layout_constraintStart_toStartOf="@id/levelsDescBackground"
-                app:layout_constraintTop_toBottomOf="@id/levelsDescSevereTitle"
+                app:layout_constraintTop_toBottomOf="@id/levelsDescOrangeTitle"
                 app:srcCompat="@drawable/orangewarning"
-                tools:ignore="ContentDescription" />
+                android:contentDescription="@string/oransj_skogbrannfare_ikon" />
 
             <TextView
-                android:id="@+id/levelsDescSevereContent"
+                android:id="@+id/levelsDescOrangeContent"
                 android:layout_width="185dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -777,21 +716,21 @@
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="@id/levelsDescBackground"
                 app:layout_constraintStart_toStartOf="@id/levelsDescBackground"
-                app:layout_constraintTop_toBottomOf="@id/levelsDescSevereIcon" />
+                app:layout_constraintTop_toBottomOf="@id/levelsDescOrangeIcon" />
 
             <ImageButton
                 android:id="@+id/levelsDescCloseButton"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginBottom="220dp"
-                android:background="@drawable/closepopupbutton"
+                android:background="@drawable/backbutton"
                 app:layout_constraintBottom_toBottomOf="@+id/levelsDescShape"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.934"
                 app:layout_constraintStart_toStartOf="@+id/levelsDescShape"
                 app:layout_constraintTop_toTopOf="@+id/levelsDescShape"
                 app:layout_constraintVertical_bias="0.056"
-                tools:ignore="ContentDescription" />
+                android:contentDescription="@string/nivaaer_tilbake_knapp" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
