@@ -1,7 +1,6 @@
 package com.example.team_23.view
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Resources
@@ -90,7 +89,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var varslerHer: Button
 
 
-    @SuppressLint("UseCompatLoadingForDrawables", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -142,7 +140,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             startActivity(intent)
             if(menuVisible){
                 menu.visibility = View.GONE
-                menuButton.background = resources.getDrawable(R.drawable.menubutton,theme)
+                menuButton.background = ResourcesCompat.getDrawable(resources,R.drawable.menubutton,theme)
                 mMap.uiSettings.isScrollGesturesEnabled = true
                 menuVisible = !menuVisible
             }
@@ -161,7 +159,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             startActivity(intent)
             if(menuVisible){
                 menu.visibility = View.GONE
-                menuButton.background = resources.getDrawable(R.drawable.menubutton,theme)
+                menuButton.background = ResourcesCompat.getDrawable(resources, R.drawable.menubutton,theme)
                 mMap.uiSettings.isScrollGesturesEnabled = true
                 menuVisible = !menuVisible
             }

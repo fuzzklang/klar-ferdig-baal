@@ -35,8 +35,8 @@ class Alert (
     // Sitat ang. Certainty: «MET vil bruke “Observed”, “Likely”, “Possible” og “Unlikely”»
     // Sitat ang. Severity: Det brukes Minor, Moderate, Severe og Extreme.
     fun getAlertColor(): AlertColors {
-        val certainty = infoNo.certainty?.toLowerCase(Locale.US)
-        val severity = infoNo.severity?.toLowerCase(Locale.US)
+        val certainty = infoNo.certainty?.lowercase(Locale.US)
+        val severity = infoNo.severity?.lowercase(Locale.US)
         Log.d("Alert", "Henter farge for varsel. Severity: $severity. Certainty: $certainty")
         val alertColor: AlertColors = when (certainty) {
             "observed" -> when (severity) {

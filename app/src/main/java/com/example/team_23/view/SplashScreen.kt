@@ -6,7 +6,10 @@ import android.os.Handler
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.example.team_23.R
-
+/*
+*Kode hentet fra GeeksForGeeks: https://www.geeksforgeeks.org/how-to-create-a-splash-screen-in-android-using-kotlin/
+*/
+//Er avhengig av @Suppress for at koden skal fungere
 @Suppress("DEPRECATION")
 class SplashScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
