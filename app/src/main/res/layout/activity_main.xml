@@ -182,10 +182,10 @@ for eksempel på bakgrunner.
                 android:id="@+id/menuInfoSectionTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
                 android:text="@string/informasjon"
                 android:textColor="@color/white"
                 android:textSize="18sp"
+                android:layout_marginBottom="5dp"
                 app:layout_constraintBottom_toTopOf="@+id/menuInfoButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -239,7 +239,7 @@ for eksempel på bakgrunner.
                 app:layout_constraintBottom_toTopOf="@+id/switchOverlay"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/menuAlignment"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="1.0" />
 
             <View
@@ -290,24 +290,6 @@ for eksempel på bakgrunner.
                 app:layout_constraintStart_toStartOf="@+id/menuCampfireButtonShape"
                 app:layout_constraintTop_toTopOf="@+id/menuCampfireButtonShape"
                 app:layout_constraintVertical_bias="1.0" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/menuAlignment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_begin="20dp" />
-
-            <androidx.constraintlayout.widget.Barrier
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:barrierDirection="left"
-                app:constraint_referenced_ids="menuCampfireButtonShape" />
-
-            <androidx.constraintlayout.widget.Group
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:constraint_referenced_ids="menuCampfireButtonShape" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ImageButton
@@ -581,13 +563,6 @@ for eksempel på bakgrunner.
                 app:layout_constraintTop_toTopOf="@+id/popupAlertLevelBackground"
                 app:layout_constraintVertical_bias="0.729"
                 android:contentDescription="@string/farevarselNivaaBilde" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/popupAlertVerticalAlignment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_begin="20dp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -738,11 +713,5 @@ for eksempel på bakgrunner.
                 app:layout_constraintVertical_bias="0.056"
                 android:contentDescription="@string/nivaaerTilbakeKnapp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.Guideline
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="20dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </RelativeLayout>

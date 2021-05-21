@@ -269,25 +269,6 @@ for eksempel på bakgrunner.
                 app:layout_constraintStart_toStartOf="@+id/menuCampfireButtonShape"
                 app:layout_constraintTop_toTopOf="@+id/menuCampfireButtonShape"
                 app:layout_constraintVertical_bias="1.0" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/menuAlignment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_begin="20dp" />
-
-            <androidx.constraintlayout.widget.Barrier
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:barrierDirection="left"
-                app:constraint_referenced_ids="menuCampfireButtonShape"
-                tools:layout_editor_absoluteX="182dp" />
-
-            <androidx.constraintlayout.widget.Group
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:constraint_referenced_ids="menuCampfireButtonShape" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ImageButton
