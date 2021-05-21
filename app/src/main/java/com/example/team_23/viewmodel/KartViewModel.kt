@@ -27,7 +27,7 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
     private var _location = MutableLiveData<Location?>()              // Enhetens lokasjon (GPS)
     private var _alertAtPosition = MutableLiveData<Alert?>()          // Varsel for angitt sted.
     private var _candidates = mutableListOf<Candidates>()             //Liste med responsen fra api-kall til Places API
-    private val _place = MutableLiveData<LatLng>()                    //Breddegrad og lengdegard for et sted bruker trykker/soker paa
+    private val _place = MutableLiveData<LatLng>()                    //Breddegrad og lengdegard for et sted bruker trykker/soker på
     private val _placeName = MutableLiveData<String>()                //Navn på stedet bruker soker på
 
     /* Immutable versjoner av LiveDataene over som er tilgjengelig for Viewene */
@@ -100,7 +100,7 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
     }
 
     /* Grensesnitt til View
-    *  Returnerer stedet en bruker soker paa
+    *  Returnerer stedet en bruker soker på
     */
     fun findPlace(place: String) {
         //Kaller på Places API fra Google (via Repository) og oppdaterer places-Livedata
@@ -117,7 +117,7 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
     }
 
     /* Grensesnitt til View
-    * Henter en rute fra naavaerende posisjon til et sted bruker har valgt
+    * Henter en rute fra nåværende posisjon til et sted bruker har valgt
     */
     fun findRoute(origin_lat: Double?, origin_lon: Double?, destination_lat: Double?, destination_lon: Double?) {
         // Kaller på Directions API fra Google (via Repository) og oppdaterer routes-LiveData
