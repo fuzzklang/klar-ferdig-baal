@@ -181,7 +181,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // Setter opp en PlaceSelectionListener for å håndtere responsen
         autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
             override fun onPlaceSelected(place: Place) {
-                Log.d(tag, "latlng onPlaceSelected: ${place.latLng}")
+                Log.d("OnPlaceSelected", "latlng onPlaceSelected: ${place.latLng}")
                 kartViewModel.findPlace(place.name!!)
                 warningArea.text = place.name
 
@@ -229,7 +229,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         switchOverlayButton.isChecked = true
 
         // ===== LOKASJON =====
-        // Sjekk at tilgang til lokasjon (skal også sette mMap.isMyLocationEnabled og oppdaterer lokasjon dersom tilgang)
+        // Sjekk tilgang til lokasjon (skal også sette mMap.isMyLocationEnabled og oppdaterer lokasjon dersom tilgang)
         getLocationAccess()
         Log.d("KartActivity.onMapReady", "mMap.isMyLocationEnabled: ${mMap.isMyLocationEnabled}")
 
@@ -349,12 +349,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                     if(!menuVisible){
                         marker = mMap.addMarker(MarkerOptions().position(it))
                         val markerLatLng = LatLng(marker!!.position.latitude, marker!!.position.longitude)
-                        Log.d("Sara", markerLatLng.toString())
                         resetContentOfAlertPopup()  // Tøm innhold i varsel-popoup
                         togglePopup()               // Vis popup
-                        /*val place = kartViewModel.getPlace(markerLatLng)*/
-                        //Log.d("Tobias", place.toString())
-                        // kartViewModel.findPlace()
                     }
                 }
             } else{togglePopup()}
@@ -368,7 +364,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // Hent en LiveData-instans med lokasjon (fra ViewModel) som deretter blir observert
         // [Denne løsningen kan potensielt føre til en viss delay fra knappen blir klikket til kameraet flytter seg]
         mMap.setOnMyLocationButtonClickListener {
-            Log.d(tag, "Klikk registrert på MyLocationButton")
             myLocationButtonOnClickMethod()
             true
         }
@@ -395,7 +390,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     // ===== HJELPEMETODER =====
     // =========================
 
-    //hjelpemetode for å sentrere kart ved klikk på markører(bålikoner)
+    //Hjelpemetode for å sentrere kart ved klikk på markører(bålikoner)
     private fun centreMarker(marker: Marker) : Boolean{
         val containerHeight = findViewById<RelativeLayout>(R.id.root).height
         val projection = mMap.projection
@@ -436,7 +431,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
     /* Metode kalles når svar ang. lokasjonstilgang kommer tilbake. Sjekker om tillatelse er innvilget */
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        Log.d(tag, "onRequestPermissionsResult er kalt")
         if (requestCode == LOCATION_PERMISSION_REQUEST) {
             if (grantResults.contains(PackageManager.PERMISSION_GRANTED)) {
                 if (ActivityCompat.checkSelfPermission(
@@ -511,6 +505,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         alertLevelsDescVisible = !alertLevelsDescVisible
     }
 
+    //Hjelpemetode som toggler bålikoner basert på om hvor mye du har zoomet på kartet
     private fun toogleCampfireZoomVisibility() {
         //viser kun bålikoner etter et angitt zoom-nivå
         val zoom = this.mMap.cameraPosition.zoom
@@ -525,15 +520,12 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         menuCampfireButtonIsChecked = isChecked
         campfireMarkers.forEach {it.isVisible = isChecked}
         toogleCampfireZoomVisibility()
-
-        Log.d("checked","campfire")
     }
 
     //hjelpemetode for å toggle farge-filterer for områder med skogbrannfare-varsler(overlayet)
     private fun toggleOverlay(isChecked: Boolean) {
         overlayVisible = isChecked
         overlayPolygonList.forEach {it.isVisible = isChecked}
-        Log.d("checked","overlay")
     }
 
     /*
@@ -570,7 +562,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         })
     }
 
-
+    //Hjelpemetode som tegner varselsoner i riktig farge
     private fun allAlertsObserver(alertList: List<Alert>) {
         alertList.forEach { alert ->
             val latLngList = alert.getPolygon()
@@ -594,7 +586,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     //hjelpemetode som henter bålplasser og tegner de opp med bålikon i angitt størrelse på kartet
-
     private fun drawCampfires() {
         val campfireIconHeight = 50   // endrer stoerrelse på campfire ikonet
         val campfireIconWidth = 50    // -- " ---
@@ -647,7 +638,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
     //Hjelpemetode som tegner en rute mellom to steder på kartet
     private fun drawDirectionsPath(paths: MutableList<List<LatLng>>) {
-        Log.d(tag, "drawDirectionsPath: Tegner rute")
         if (paths.size == 0) {
             Toast.makeText(this, "Fant ingen rute", Toast.LENGTH_SHORT).show()
         }
