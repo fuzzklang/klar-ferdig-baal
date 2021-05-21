@@ -273,7 +273,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                         colorLevel = ResourcesCompat.getDrawable(resources, R.color.alertYellow, theme)!!
                     }
                     AlertColors.ORANGE -> {
-                        warningText = getString(R.string.storSkogbrannfare)
+                        warningText = getString(R.string.oransjeSkogbrannfare)
                         background = ResourcesCompat.getDrawable(resources, R.drawable.orangewarning, theme)!!
                         colorLevel = ResourcesCompat.getDrawable(resources, R.color.alertOrange, theme)!!
                     }
