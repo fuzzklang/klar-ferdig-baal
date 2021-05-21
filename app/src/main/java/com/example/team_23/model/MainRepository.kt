@@ -25,8 +25,7 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
 
     // API-Dokumentasjon: https://in2000-apiproxy.ifi.uio.no/weatherapi/metalerts/1.1/documentation
     private val endpoint = "https://in2000-apiproxy.ifi.uio.no/weatherapi/metalerts/1.1/"
-    // Opsjonene i permanentOptions-listen blir med i alle API-kall til MetAlerts.
-    // Legg til evt. flere options i denne listen
+    // Options i permanentOptions-listen blir med i alle API-kall til MetAlerts.
     private val permanentOptions = listOf("event=forestFire")
 
     // Directions API
@@ -49,7 +48,6 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
     suspend fun getPlaceNameFromLocation(latlng: LatLng): String? {
         Log.d(tag, "Soker etter sted fra Geocode API")
         val geocodePath = "${placesURL}latlng=${latlng.latitude},${latlng.longitude}&key=${key}"
-        Log.d(tag, "url: $geocodePath")
         var placeName: String? = null
         try {
             val httpResponse = apiService.fetchData(geocodePath) ?: throw IOException()
@@ -60,7 +58,6 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
                 if (addressComponentList != null && addressComponentList.size > 2)
                     placeName = addressComponentList[1].long_name  // Mangler sjekk for antall returnerte resultater
             }
-            Log.d(tag, "Parsed JSON. Returned long name: $placeName")
         } catch (exception: IOException) {
             Log.w(tag, "Feil under henting av types til sted: ${exception.message}")
         }
@@ -79,7 +76,6 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
             Log.d(tag, "Fikk respons fra Geocode API. Respons-streng: ${httpResponse.subSequence(0, 30)}")
             val response = gson.fromJson(httpResponse, MainBase::class.java)
             places = response.candidates
-            Log.d("places", places.toString())
         } catch (exception: IOException) {
             Log.w(tag, "Feil under henting av latlng til sted: ${exception.message}")
         }
@@ -144,10 +140,8 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
             alert = CapParser().parse(bytestream)
         } catch (ex : XmlPullParserException) {
             Log.w(tag, "Feil under parsing av CAP Alert:\n$ex")
-            // Print toast?
         } catch (ex: IOException) {
             Log.w(tag, "IO-feil under parsing av CAP alert:\n$ex")
-            // Print toast?
         }
         return alert
     }
@@ -173,7 +167,7 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
                 liveDataLocation.postValue(it)
             }
         } catch (ex: SecurityException) {
-            Log.w("MainRepo.getLocation", "Error when getting location")
+            Log.w(tag, "Error when getting location")
         }
         return liveDataLocation
     }
