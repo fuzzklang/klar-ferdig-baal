@@ -21,10 +21,11 @@ import java.util.*
 class MainRepository(private val apiService: ApiServiceImpl, private val fusedLocationProviderClient: FusedLocationProviderClient) {
     private val tag = "MainRepository"
 
+    private val gson = Gson()
+
     // API-Dokumentasjon: https://in2000-apiproxy.ifi.uio.no/weatherapi/metalerts/1.1/documentation
     private val endpoint = "https://in2000-apiproxy.ifi.uio.no/weatherapi/metalerts/1.1/"
-    // Opsjonene i permanentOptions-listen blir med i alle API-kall til MetAlerts.
-    // Legg til evt. flere options i denne listen
+    // Options i permanentOptions-listen blir med i alle API-kall til MetAlerts.
     private val permanentOptions = listOf("event=forestFire")
 
     // Directions API
@@ -32,7 +33,6 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
     private val directionsUrlDestination = "&destination="
     private val mode = "&mode=walking"
     private val directionsUrlKey = "&key=AIzaSyAyK0NkgPMxOOTnWR5EFKdy2DzfDXGh-HI"
-    private val gson = Gson()
 
     //Places API
     private val placesUrlStart = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input="
@@ -42,27 +42,31 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
     private val placesURL = "https://maps.googleapis.com/maps/api/geocode/json?"
     private val key = "AIzaSyAyK0NkgPMxOOTnWR5EFKdy2DzfDXGh-HI"
 
+    /* Henter stedsnavn fra Geocode API basert på lokasjon (LatLng)
+    * API-responsens parses til dataklasser av Gson
+    */
     suspend fun getPlaceNameFromLocation(latlng: LatLng): String? {
         Log.d(tag, "Soker etter sted fra Geocode API")
         val geocodePath = "${placesURL}latlng=${latlng.latitude},${latlng.longitude}&key=${key}"
-        Log.d(tag, "url: $geocodePath")
         var placeName: String? = null
         try {
             val httpResponse = apiService.fetchData(geocodePath) ?: throw IOException()
             Log.d(tag, "Fikk respons fra Geocode API. Respons-streng (delstreng): ${httpResponse.subSequence(0, 30)}")
             val parsedResponse: GeocodeBase = gson.fromJson(httpResponse, GeocodeBase::class.java)
             if (parsedResponse.results != null && parsedResponse.results.isNotEmpty()) {
-                val addressComponentList = parsedResponse.results.get(1).address_components
+                val addressComponentList = parsedResponse.results[1].address_components
                 if (addressComponentList != null && addressComponentList.size > 2)
-                    placeName = addressComponentList.get(1).long_name  // Mangler sjekk for antall returnerte resultater
+                    placeName = addressComponentList[1].long_name  // Mangler sjekk for antall returnerte resultater
             }
-            Log.d(tag, "Parsed JSON. Returned long name: ${placeName}")
         } catch (exception: IOException) {
             Log.w(tag, "Feil under henting av types til sted: ${exception.message}")
         }
         return placeName
     }
 
+    /* Returnerer lokasjon for angitt stedsnavn. Brukes blant annet til søkefunksjonen.
+    * API-responsens parses til dataklasser av Gson
+    */
     suspend fun getLocationFromPlacename(place: String): List<Candidates>?{
         Log.d(tag, "Soker etter sted fra Google!")
         var places: List<Candidates>? = null
@@ -72,7 +76,6 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
             Log.d(tag, "Fikk respons fra Geocode API. Respons-streng: ${httpResponse.subSequence(0, 30)}")
             val response = gson.fromJson(httpResponse, MainBase::class.java)
             places = response.candidates
-            Log.d("places", places.toString())
         } catch (exception: IOException) {
             Log.w(tag, "Feil under henting av latlng til sted: ${exception.message}")
         }
@@ -97,6 +100,7 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
 
     /* Henter XML-data (RSS-feed) fra MetAlerts-proxyen (IN2000) og parser responsen.
      * @return liste med RssItem eller null
+     * Suppresser varsel fra Kotlin kallet til parseren tolkes som blokkerende (IO) selv om det ikke er det.
      */
     @Suppress("BlockingMethodInNonBlockingContext")
     suspend fun getRssFeed(lat: Double?, lon: Double?) : List<RssItem>? {
@@ -125,6 +129,7 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
 
     /* Henter XML-data (CAP Alert) fra MetAlerts-proxyen (IN2000) og parser responsen.
      * @return instans av Alert eller null.
+     * Suppresser varsel fra Kotlin kallet til parseren tolkes som blokkerende (IO) selv om det ikke er det.
      */
     @Suppress("BlockingMethodInNonBlockingContext")
     suspend fun getCapAlert(url : String) : Alert? {
@@ -135,10 +140,8 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
             alert = CapParser().parse(bytestream)
         } catch (ex : XmlPullParserException) {
             Log.w(tag, "Feil under parsing av CAP Alert:\n$ex")
-            // Print toast?
         } catch (ex: IOException) {
             Log.w(tag, "IO-feil under parsing av CAP alert:\n$ex")
-            // Print toast?
         }
         return alert
     }
@@ -164,7 +167,7 @@ class MainRepository(private val apiService: ApiServiceImpl, private val fusedLo
                 liveDataLocation.postValue(it)
             }
         } catch (ex: SecurityException) {
-            Log.w("MainRepo.getLocation", "Error when getting location")
+            Log.w(tag, "Error when getting location")
         }
         return liveDataLocation
     }

@@ -27,8 +27,8 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
     private var _location = MutableLiveData<Location?>()              // Enhetens lokasjon (GPS)
     private var _alertAtPosition = MutableLiveData<Alert?>()          // Varsel for angitt sted.
     private var _candidates = mutableListOf<Candidates>()             //Liste med responsen fra api-kall til Places API
-    private val _place = MutableLiveData<LatLng>()                    //Breddegrad og lengdegard for et sted bruker trykker/soker paa
-    private val _placeName = MutableLiveData<String>()                //Navn på stedet bruker soker på
+    private val _place = MutableLiveData<LatLng>()                    //Breddegrad og lengdegard for et sted bruker trykker/soker på
+    private val _placeName = MutableLiveData<String>()                //Navn på stedet bruker søker på
 
     /* Immutable versjoner av LiveDataene over som er tilgjengelig for Viewene */
     val allAlerts: LiveData<MutableList<Alert>> = _allAlerts
@@ -41,16 +41,12 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
      * Henter varsler for nåværende sted.
      * Er avhengig av at lokasjon (livedata 'location') er tilgjengelig og oppdatert.
      */
-
     fun getAlertCurrentLocation() {
         val lat = _location.value?.latitude
         val lon = _location.value?.longitude
         // Feilsjekking i tilfelle ikke lokasjon tilgjengelig?
         if (lat == null || lon == null) {
-            Log.w(
-                "KartViewModel",
-                "Advarsel: getAlertsCurrentLocation() ble kalt men lokasjon er ikke tilgjengelig."
-            )
+            Log.w("KartViewModel", "Advarsel: getAlertsCurrentLocation() ble kalt men lokasjon er ikke tilgjengelig.")
         } else {
             getAlert(lat, lon)
         }
@@ -58,18 +54,14 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
 
     /* Grensesnitt til View.
      * Henter varsler for sted angitt ved latitude og longitude.
+     * Oppdaterer stedsnavn for der varsel hentes slik at stedsnavn kan vises der det ikke er varsler.
      */
     fun getAlert(lat: Double, lng: Double) {
         CoroutineScope(Dispatchers.Default).launch {
             var alert: Alert? = null
-            // Oppdaterer stedsnavn for der varsel hentes slik at stedsnavn kan vises der det ikke er varsler.
-            // Viewsene i KartActivity observerer placeName.
             val rssItemList = repo.getRssFeed(lat, lng)
             if (rssItemList != null && rssItemList.isNotEmpty()) {
-                Log.d(
-                    "KartViewModel.getAlert",
-                    "Antall RSS-items returnert fra API: ${rssItemList.size}"
-                )
+                Log.d("KartViewModel.getAlert", "Antall RSS-items returnert fra API: ${rssItemList.size}")
                 alert = repo.getCapAlert(rssItemList[0].link!!)
             } else {
                 Log.d("KartActivity.getAlert", "Ingen varsel ble funnet")
@@ -80,20 +72,16 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
     }
 
     /* Grensesnitt til View
-     * Returnerer en instans av livedata med lokasjon.
+     * Returnerer en instans av livedata som skal gis lokasjon.
      */
     fun getLocation(): LiveData<Location?> {
-        Log.d(
-            "KartViewModel",
-            "getLocation: ${_location.value?.latitude}, ${_location.value?.longitude}"
-        )
+        Log.d("KartViewModel", "getLocation: ${_location.value?.latitude}, ${_location.value?.longitude}")
         return _location
     }
 
     /*
-    *Oppdaterer navn til sted uten varsel
+    * Oppdaterer navnet til et sted uten varsel
     */
-
     private fun updatePlaceNameForNoAlert(lat: Double, lng: Double) {
         // Kaller på Geocode API (via Repository) og oppdaterer PlaceName-Livedata
         _placeName.postValue("")
@@ -111,9 +99,8 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
     }
 
     /* Grensesnitt til View
-    *Finner stedet en bruker soker paa
+    *  Returnerer stedet en bruker søker på
     */
-
     fun findPlace(place: String) {
         //Kaller på Places API fra Google (via Repository) og oppdaterer places-Livedata
         CoroutineScope(Dispatchers.Default).launch {
@@ -128,30 +115,21 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
         }
     }
 
-    /*Grensesnitt til View
-    *Henter en rute fra naavaerende posisjon til et sted bruker har valgt
+    /* Grensesnitt til View
+    * Henter en rute fra nåværende posisjon til et sted bruker har valgt
     */
-
-    fun findRoute(
-        origin_lat: Double?,
-        origin_lon: Double?,
-        destination_lat: Double?,
-        destination_lon: Double?
-    ) {
+    fun findRoute(origin_lat: Double?, origin_lon: Double?, destination_lat: Double?, destination_lon: Double?) {
         // Kaller på Directions API fra Google (via Repository) og oppdaterer routes-LiveData
         CoroutineScope(Dispatchers.Default).launch {
-            val routesFromApi =
-                repo.getRoutes(origin_lat, origin_lon, destination_lat, destination_lon)
+            val routesFromApi = repo.getRoutes(origin_lat, origin_lon, destination_lat, destination_lon)
             Log.d("KartViewModel.findRoute", routesFromApi.toString())
             if (routesFromApi != null) {
-                _routes =
-                    routesFromApi as MutableList<Routes>              // Oppdater routes (hentet fra API)
-                _path.postValue(getPolylinePoints(_routes)) // Oppdater _path (lat/lng-punkter) basert på ny rute
+                _routes = routesFromApi as MutableList<Routes>   // Oppdater routes (hentet fra API)
+                _path.postValue(getPolylinePoints(_routes))      // Oppdater _path (lat/lng-punkter) basert på ny rute
                 Log.d("KartViewModel.findRoute", "Path oppdatert")
             }
         }
     }
-
 
     // Oppdaterer nåværende posisjon ved kall til repository.
     // Antar at appen har tilgang til lokasjon.
@@ -224,7 +202,6 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
      * Må gå gjennom dataklasse for dataklasse (MainBase, Candidates, Geometry og PlaceLocation)
      * for å få tak i informasjonen programmet trenger (latitude og longitude i PlaceLocation) for å finne stedet bruker soker på
      */
-
     private fun getPlacesLatLng(places: List<Candidates>?): LatLng? {
         val location = places?.get(0)?.geometry?.location
         var latlng: LatLng? = null

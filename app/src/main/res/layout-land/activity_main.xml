@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--
+ContentDescription blir "Supressed" på Views hvor brukere som tar i
+bruk skjermlesere ikke vil ha nytte av en slik beskrivelse, som
+for eksempel på bakgrunner.
+-->
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.KartActivity"
-    tools:ignore="ExtraText"
     android:id="@+id/root">
 
     <fragment
@@ -21,6 +27,7 @@
         tools:context=".MapsActivity" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mainConstraintLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
@@ -33,7 +40,7 @@
 
 
         <TextView
-            android:id="@+id/imageView"
+            android:id="@+id/searchbarButton"
             android:layout_width="200dp"
             android:layout_height="30dp"
             android:layout_marginTop="60dp"
@@ -44,7 +51,7 @@
             android:text="@string/sok"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="@+id/topBar"
-            app:layout_constraintEnd_toEndOf="@+id/cardView"
+            app:layout_constraintEnd_toEndOf="@+id/SearchbarCardView"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -55,7 +62,7 @@
             android:layout_height="60dp"
             android:layout_marginBottom="2dp"
             android:backgroundTint="@color/mainColor"
-            android:text="@string/varsler_her"
+            android:text="@string/varslerHer"
             android:textAllCaps="false"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -66,7 +73,7 @@
 
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/cardView"
+            android:id="@+id/SearchbarCardView"
             android:layout_width="0dp"
             android:layout_height="107dp"
             android:elevation="4dp"
@@ -79,7 +86,7 @@
             app:layout_constraintVertical_bias="0.0">
 
             <fragment
-                android:id="@+id/search"
+                android:id="@+id/searchbarFragment"
                 android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
                 android:layout_width="190dp"
                 android:layout_height="168dp"
@@ -120,10 +127,10 @@
             android:layout_marginBottom="36dp"
             android:elevation="3dp"
             android:translationZ="3dp"
-            android:text="@string/app_title"
+            android:text="@string/appTittel"
             android:textColor="@color/white"
             android:textSize="25sp"
-            app:layout_constraintBottom_toBottomOf="@+id/cardView"
+            app:layout_constraintBottom_toBottomOf="@+id/SearchbarCardView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -243,7 +250,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="1dp"
-                android:text="@string/overlay"
+                android:text="@string/varselsoner"
                 app:layout_constraintBottom_toBottomOf="@+id/menuOverlayButtonShape"
                 app:layout_constraintEnd_toEndOf="@+id/menuOverlayButtonShape"
                 app:layout_constraintHorizontal_bias="0.56"
@@ -262,27 +269,6 @@
                 app:layout_constraintStart_toStartOf="@+id/menuCampfireButtonShape"
                 app:layout_constraintTop_toTopOf="@+id/menuCampfireButtonShape"
                 app:layout_constraintVertical_bias="1.0" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/menuAlignment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_begin="20dp" />
-
-            <androidx.constraintlayout.widget.Barrier
-                android:id="@+id/barrier2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:barrierDirection="left"
-                app:constraint_referenced_ids="menuCampfireButtonShape"
-                tools:layout_editor_absoluteX="182dp" />
-
-            <androidx.constraintlayout.widget.Group
-                android:id="@+id/group"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:constraint_referenced_ids="menuCampfireButtonShape" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ImageButton
@@ -373,7 +359,7 @@
                     android:layout_width="180dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="@string/loading"
+                    android:text="@string/laster"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
 
@@ -409,7 +395,7 @@
                 android:id="@+id/popupAlertLevelTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/farevarselniva"
+                android:text="@string/farevarselNivaa"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="@+id/popupAlertLevelBackground"
@@ -423,7 +409,7 @@
                 android:id="@+id/popupAlertLevelContent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/loading"
+                android:text="@string/laster"
                 android:textColor="@color/white"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="@+id/popupAlertLevelBackground"
@@ -461,7 +447,7 @@
                 app:layout_constraintTop_toTopOf="@+id/popupAlertDescButton"
                 app:layout_constraintVertical_bias="0.0"
                 app:srcCompat="@drawable/questionmark"
-                android:contentDescription="@string/nivaaer_ikon" />
+                android:contentDescription="@string/nivaaerIkon" />
 
             <TextView
                 android:id="@+id/popupAlertInfoTitle"
@@ -479,7 +465,7 @@
 
 
             <ScrollView
-                android:id="@+id/scrollView2"
+                android:id="@+id/popupAlertInfoContentScroll"
                 android:layout_width="190dp"
                 android:layout_height="96dp"
                 android:layout_marginTop="5dp"
@@ -495,7 +481,7 @@
                     android:layout_width="190dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="@string/loading"
+                    android:text="@string/laster"
                     android:textColor="@color/white"
                     android:textSize="14sp" />
             </ScrollView>
@@ -511,7 +497,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/popupShape"
                 app:layout_constraintVertical_bias="0.982"
-                android:contentDescription="@string/dra_hit_knapp" />
+                android:contentDescription="@string/draHitKnapp" />
 
             <ImageView
                 android:id="@+id/popupDraHitButtonIcon"
@@ -528,14 +514,14 @@
                 app:layout_constraintTop_toTopOf="@+id/popupDraHitButton"
                 app:layout_constraintVertical_bias="0.333"
                 app:srcCompat="@drawable/walking"
-                android:contentDescription="@string/dra_hit_knapp_ikon"/>
+                android:contentDescription="@string/draHitKnappIkon"/>
 
             <TextView
                 android:id="@+id/popupDraHitButtonText"
                 android:layout_width="92dp"
                 android:layout_height="48dp"
                 android:gravity="center"
-                android:text="@string/dra_hit"
+                android:text="@string/draHit"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toTopOf="@+id/popupDraHitButton"
@@ -557,7 +543,7 @@
                 app:layout_constraintStart_toEndOf="@+id/popupAlertLevelContent"
                 app:layout_constraintTop_toTopOf="@+id/popupAlertLevelBackground"
                 app:layout_constraintVertical_bias="0.729"
-                android:contentDescription="@string/farevarsel_nivaa_bilde" />
+                android:contentDescription="@string/farevarselNivaaBilde" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/popupAlertVerticalAlignment"
@@ -619,14 +605,14 @@
                 app:layout_constraintTop_toBottomOf="@+id/levelsDescTitle"
                 app:layout_constraintVertical_bias="1.0"
                 app:srcCompat="@drawable/orangewarning"
-                android:contentDescription="@string/oransj_skogbrannfare_ikon" />
+                android:contentDescription="@string/oransjeSkogbrannfareIkon" />
 
             <TextView
                 android:id="@+id/levelsDescOrangeContent"
                 android:layout_width="185dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="@string/severe_description"
+                android:text="@string/rodBeskrivelse"
                 android:textColor="@color/white"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="@+id/levelsDescBackground"
@@ -642,7 +628,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
                 android:gravity="center"
-                android:text="@string/levels"
+                android:text="@string/fareNivaaer"
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="@+id/levelsDescBackground"
@@ -657,7 +643,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="@string/moderat_skogbrannfare"
+                android:text="@string/gulSkogbrannfare"
                 android:textColor="@color/white"
                 android:textSize="17sp"
                 app:layout_constraintBottom_toBottomOf="@id/levelsDescBackground"
@@ -671,7 +657,7 @@
                 android:id="@+id/levelsDescYellowIcon"
                 android:layout_width="50dp"
                 android:layout_height="45dp"
-                android:contentDescription="@string/gul_skogbrannfare_ikon"
+                android:contentDescription="@string/gulSkogbrannfareIkon"
                 app:layout_constraintBottom_toTopOf="@+id/levelsDescOrangeTitle"
                 app:layout_constraintEnd_toEndOf="@id/levelsDescBackground"
                 app:layout_constraintHorizontal_bias="0.818"
@@ -686,7 +672,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
                 android:gravity="center"
-                android:text="@string/moderate_description"
+                android:text="@string/gulBeskrivelse"
                 android:textColor="@color/white"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="@id/levelsDescBackground"
@@ -702,7 +688,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:gravity="center"
-                android:text="@string/stor_skogbrannfare"
+                android:text="@string/oransjeSkogbrannfare"
                 android:textColor="@color/white"
                 android:textSize="17sp"
                 app:layout_constraintBottom_toBottomOf="@id/levelsDescBackground"
@@ -723,13 +709,12 @@
                 app:layout_constraintStart_toStartOf="@+id/levelsDescShape"
                 app:layout_constraintTop_toTopOf="@+id/levelsDescShape"
                 app:layout_constraintVertical_bias="0.03"
-                android:contentDescription="@string/nivaaer_tilbake_knapp"/>
+                android:contentDescription="@string/nivaaerTilbakeKnapp"/>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"

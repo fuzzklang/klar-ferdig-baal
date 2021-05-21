@@ -1,7 +1,6 @@
 package com.example.team_23.view
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Resources
@@ -90,7 +89,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var varslerHer: Button
 
 
-    @SuppressLint("UseCompatLoadingForDrawables", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -142,7 +140,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             startActivity(intent)
             if(menuVisible){
                 menu.visibility = View.GONE
-                menuButton.background = resources.getDrawable(R.drawable.menubutton,theme)
+                menuButton.background = ResourcesCompat.getDrawable(resources,R.drawable.menubutton,theme)
                 mMap.uiSettings.isScrollGesturesEnabled = true
                 menuVisible = !menuVisible
             }
@@ -161,7 +159,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
             startActivity(intent)
             if(menuVisible){
                 menu.visibility = View.GONE
-                menuButton.background = resources.getDrawable(R.drawable.menubutton,theme)
+                menuButton.background = ResourcesCompat.getDrawable(resources, R.drawable.menubutton,theme)
                 mMap.uiSettings.isScrollGesturesEnabled = true
                 menuVisible = !menuVisible
             }
@@ -169,12 +167,12 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // ===== OBSERVERS =====
         if (!Places.isInitialized()) {
-            Places.initialize(applicationContext, getString(R.string.api_key))
+            Places.initialize(applicationContext, getString(R.string.apiNokkel))
         }
 
         // Initialize the AutocompleteSupportFragment.
         val autocompleteFragment =
-            supportFragmentManager.findFragmentById(R.id.search)
+            supportFragmentManager.findFragmentById(R.id.searchbarFragment)
                     as AutocompleteSupportFragment
 
         // Spesifiserer typen data som returneres
@@ -183,7 +181,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // Setter opp en PlaceSelectionListener for å håndtere responsen
         autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
             override fun onPlaceSelected(place: Place) {
-                Log.d(tag, "latlng onPlaceSelected: ${place.latLng}")
+                Log.d("OnPlaceSelected", "latlng onPlaceSelected: ${place.latLng}")
                 kartViewModel.findPlace(place.name!!)
                 warningArea.text = place.name
 
@@ -231,7 +229,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         switchOverlayButton.isChecked = true
 
         // ===== LOKASJON =====
-        // Sjekk at tilgang til lokasjon (skal også sette mMap.isMyLocationEnabled og oppdaterer lokasjon dersom tilgang)
+        // Sjekk tilgang til lokasjon (skal også sette mMap.isMyLocationEnabled og oppdaterer lokasjon dersom tilgang)
         getLocationAccess()
         Log.d("KartActivity.onMapReady", "mMap.isMyLocationEnabled: ${mMap.isMyLocationEnabled}")
 
@@ -269,54 +267,35 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
                 when (alertColorLevel) {
                     AlertColors.YELLOW -> {
-                        warningText = getString(R.string.moderat_skogbrannfare)
-                        background = ResourcesCompat.getDrawable(
-                            resources,
-                            R.drawable.yellowwarning,
-                            theme
-                        )!!
-                        colorLevel =
-                            ResourcesCompat.getDrawable(resources, R.color.alertYellow, theme)!!
+                        warningText = getString(R.string.gulSkogbrannfare)
+                        background = ResourcesCompat.getDrawable(resources, R.drawable.yellowwarning, theme)!!
+                        colorLevel = ResourcesCompat.getDrawable(resources, R.color.alertYellow, theme)!!
                     }
                     AlertColors.ORANGE -> {
-                        warningText = getString(R.string.stor_skogbrannfare)
-                        background = ResourcesCompat.getDrawable(
-                            resources,
-                            R.drawable.orangewarning,
-                            theme
-                        )!!
-                        colorLevel =
-                            ResourcesCompat.getDrawable(resources, R.color.alertOrange, theme)!!
+                        warningText = getString(R.string.oransjeSkogbrannfare)
+                        background = ResourcesCompat.getDrawable(resources, R.drawable.orangewarning, theme)!!
+                        colorLevel = ResourcesCompat.getDrawable(resources, R.color.alertOrange, theme)!!
                     }
                     AlertColors.RED -> {
-                        warningText = getString(R.string.moderat_skogbrannfare)
-                        background = ResourcesCompat.getDrawable(
-                            resources,
-                            R.drawable.orangewarning,
-                            theme
-                        )!!  // TODO: hent rød varsel fra Githuben til YR!
-                        colorLevel =
-                            ResourcesCompat.getDrawable(resources, R.color.alertRed, theme)!!
-                        Log.w(
-                            tag,
-                            "Returnert alertColor er RED. Ikke forventet. Fortsetter kjøring."
-                        )
+                        warningText = getString(R.string.gulSkogbrannfare)
+                        background = ResourcesCompat.getDrawable(resources, R.drawable.orangewarning, theme)!!  // TODO: hent rød varsel fra Githuben til YR!
+                        colorLevel = ResourcesCompat.getDrawable(resources, R.color.alertRed, theme)!!
+                        Log.w(tag, "Returnert alertColor er RED. Ikke forventet. Fortsetter kjøring.")
                     }
                     AlertColors.UNKNOWN -> {
                         Log.w(tag, "Returnert alertColor er Unkown.")
                         warningText = "?"
                         colorLevel = ResourcesCompat.getDrawable(resources, R.color.black, theme)!!
-                        background =
-                            ResourcesCompat.getDrawable(resources, R.drawable.questionmark, theme)!!
+                        background = ResourcesCompat.getDrawable(resources, R.drawable.questionmark, theme)!!
                     }
                 }
             } else {
                 // Ingen varsel (alert er null)
-                warningText = getString(R.string.ingen_varsel)
+                warningText = getString(R.string.ingenVarsel)
                 background = ResourcesCompat.getDrawable(resources, R.drawable.shape, theme)!!
                 // Usikker på hvor stabil observeringen er. Oppstår mulige race conditions?
                 kartViewModel.placeName.observe(this, { placeName -> warningArea.text = placeName })
-                warningInfo.text = getString(R.string.ingen_varsel_området)
+                warningInfo.text = getString(R.string.ingenVarselOmrådet)
                 colorLevel = ResourcesCompat.getDrawable(resources, R.color.green, theme)!!
             }
             warningLevel.text = warningText
@@ -370,12 +349,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                     if(!menuVisible){
                         marker = mMap.addMarker(MarkerOptions().position(it))
                         val markerLatLng = LatLng(marker!!.position.latitude, marker!!.position.longitude)
-                        Log.d("Sara", markerLatLng.toString())
                         resetContentOfAlertPopup()  // Tøm innhold i varsel-popoup
                         togglePopup()               // Vis popup
-                        /*val place = kartViewModel.getPlace(markerLatLng)*/
-                        //Log.d("Tobias", place.toString())
-                        // kartViewModel.findPlace()
                     }
                 }
             } else{togglePopup()}
@@ -389,7 +364,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         // Hent en LiveData-instans med lokasjon (fra ViewModel) som deretter blir observert
         // [Denne løsningen kan potensielt føre til en viss delay fra knappen blir klikket til kameraet flytter seg]
         mMap.setOnMyLocationButtonClickListener {
-            Log.d(tag, "Klikk registrert på MyLocationButton")
             myLocationButtonOnClickMethod()
             true
         }
@@ -416,16 +390,13 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     // ===== HJELPEMETODER =====
     // =========================
 
-    //hjelpemetode for å sentrere kart ved klikk på markører(bålikoner)
+    //Hjelpemetode for å sentrere kart ved klikk på markører(bålikoner)
     private fun centreMarker(marker: Marker) : Boolean{
         val containerHeight = findViewById<RelativeLayout>(R.id.root).height
         val projection = mMap.projection
         val markerLatLng = LatLng(marker.position.latitude, marker.position.longitude)
         val markerScreenPosition: Point = projection.toScreenLocation(markerLatLng)
-        val pointHalfScreenAbove = Point(
-            markerScreenPosition.x,
-            markerScreenPosition.y +(containerHeight / 3)
-        )
+        val pointHalfScreenAbove = Point(markerScreenPosition.x, markerScreenPosition.y + (containerHeight / 3))
 
         val aboveMarkerLatLng = projection
             .fromScreenLocation(pointHalfScreenAbove)
@@ -460,7 +431,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
     /* Metode kalles når svar ang. lokasjonstilgang kommer tilbake. Sjekker om tillatelse er innvilget */
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        Log.d(tag, "onRequestPermissionsResult er kalt")
         if (requestCode == LOCATION_PERMISSION_REQUEST) {
             if (grantResults.contains(PackageManager.PERMISSION_GRANTED)) {
                 if (ActivityCompat.checkSelfPermission(
@@ -535,8 +505,9 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         alertLevelsDescVisible = !alertLevelsDescVisible
     }
 
+    //Hjelpemetode som toggler bålikoner basert på om hvor mye du har zoomet på kartet
     private fun toogleCampfireZoomVisibility() {
-        //viser kun baalikoner etter et angitt zoom-nivaa
+        //viser kun bålikoner etter et angitt zoom-nivå
         val zoom = this.mMap.cameraPosition.zoom
         if (zoom > ZOOM_LEVEL_SHOW_CAMPFIRES && menuCampfireButtonIsChecked)
             campfireMarkers.forEach { it.isVisible = true }  // Vis bålplasser dersom Zoom langt inne nok og visning av bålplasser aktivert
@@ -549,15 +520,12 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         menuCampfireButtonIsChecked = isChecked
         campfireMarkers.forEach {it.isVisible = isChecked}
         toogleCampfireZoomVisibility()
-
-        Log.d("checked","campfire")
     }
 
     //hjelpemetode for å toggle farge-filterer for områder med skogbrannfare-varsler(overlayet)
     private fun toggleOverlay(isChecked: Boolean) {
         overlayVisible = isChecked
         overlayPolygonList.forEach {it.isVisible = isChecked}
-        Log.d("checked","overlay")
     }
 
     /*
@@ -594,15 +562,15 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
         })
     }
 
-
+    //Hjelpemetode som tegner varselsoner i riktig farge
     private fun allAlertsObserver(alertList: List<Alert>) {
         alertList.forEach { alert ->
             val latLngList = alert.getPolygon()
             // Hent riktig farge basert på faregrad
             val color = when (alert.getAlertColor()) {
-                AlertColors.YELLOW -> getColor(R.color.alertYellowTransparent)
-                AlertColors.ORANGE -> getColor(R.color.alertOrangeTransparent)
-                AlertColors.RED    -> getColor(R.color.alertRedTransparent)
+                AlertColors.YELLOW  -> getColor(R.color.alertYellowTransparent)
+                AlertColors.ORANGE  -> getColor(R.color.alertOrangeTransparent)
+                AlertColors.RED     -> getColor(R.color.alertRedTransparent)
                 AlertColors.UNKNOWN -> {getColor(R.color.grey); Log.w(tag, "En feil har oppstått! Ukjent farge/nivå for varsel!")}
             }
             val polygonOptions = PolygonOptions()
@@ -618,9 +586,8 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     //hjelpemetode som henter bålplasser og tegner de opp med bålikon i angitt størrelse på kartet
-
     private fun drawCampfires() {
-        val campfireIconHeight = 50   // endrer stoerrelse paa campfire ikonet
+        val campfireIconHeight = 50   // endrer stoerrelse på campfire ikonet
         val campfireIconWidth = 50    // -- " ---
         val campfireIcon = ContextCompat.getDrawable(this, R.drawable.campfire) as BitmapDrawable
         val smallCampfireMarkerBitmap = Bitmap.createScaledBitmap(campfireIcon.bitmap, campfireIconWidth, campfireIconHeight, false) // Brukes når markørene lages under
@@ -671,7 +638,6 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
     //Hjelpemetode som tegner en rute mellom to steder på kartet
     private fun drawDirectionsPath(paths: MutableList<List<LatLng>>) {
-        Log.d(tag, "drawDirectionsPath: Tegner rute")
         if (paths.size == 0) {
             Toast.makeText(this, "Fant ingen rute", Toast.LENGTH_SHORT).show()
         }
