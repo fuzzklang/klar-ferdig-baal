@@ -28,7 +28,7 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
     private var _alertAtPosition = MutableLiveData<Alert?>()          // Varsel for angitt sted.
     private var _candidates = mutableListOf<Candidates>()             //Liste med responsen fra api-kall til Places API
     private val _place = MutableLiveData<LatLng>()                    //Breddegrad og lengdegard for et sted bruker trykker/soker på
-    private val _placeName = MutableLiveData<String>()                //Navn på stedet bruker soker på
+    private val _placeName = MutableLiveData<String>()                //Navn på stedet bruker søker på
 
     /* Immutable versjoner av LiveDataene over som er tilgjengelig for Viewene */
     val allAlerts: LiveData<MutableList<Alert>> = _allAlerts
@@ -59,7 +59,6 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
     fun getAlert(lat: Double, lng: Double) {
         CoroutineScope(Dispatchers.Default).launch {
             var alert: Alert? = null
-            // Viewene i KartActivity observerer placeName.
             val rssItemList = repo.getRssFeed(lat, lng)
             if (rssItemList != null && rssItemList.isNotEmpty()) {
                 Log.d("KartViewModel.getAlert", "Antall RSS-items returnert fra API: ${rssItemList.size}")
@@ -100,7 +99,7 @@ class KartViewModel(private val repo: MainRepository): ViewModel() {
     }
 
     /* Grensesnitt til View
-    *  Returnerer stedet en bruker soker på
+    *  Returnerer stedet en bruker søker på
     */
     fun findPlace(place: String) {
         //Kaller på Places API fra Google (via Repository) og oppdaterer places-Livedata
