@@ -272,7 +272,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
                         colorLevel = ResourcesCompat.getDrawable(resources, R.color.alertYellow, theme)!!
                     }
                     AlertColors.ORANGE -> {
-                        warningText = getString(R.string.storSkogbrannfare)
+                        warningText = getString(R.string.oransjeSkogbrannfare)
                         background = ResourcesCompat.getDrawable(resources, R.drawable.orangewarning, theme)!!
                         colorLevel = ResourcesCompat.getDrawable(resources, R.color.alertOrange, theme)!!
                     }
@@ -512,7 +512,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun toogleCampfireZoomVisibility() {
-        //viser kun baalikoner etter et angitt zoom-nivaa
+        //viser kun bålikoner etter et angitt zoom-nivå
         val zoom = this.mMap.cameraPosition.zoom
         if (zoom > ZOOM_LEVEL_SHOW_CAMPFIRES && menuCampfireButtonIsChecked)
             campfireMarkers.forEach { it.isVisible = true }  // Vis bålplasser dersom Zoom langt inne nok og visning av bålplasser aktivert
@@ -596,7 +596,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
     //hjelpemetode som henter bålplasser og tegner de opp med bålikon i angitt størrelse på kartet
 
     private fun drawCampfires() {
-        val campfireIconHeight = 50   // endrer stoerrelse paa campfire ikonet
+        val campfireIconHeight = 50   // endrer stoerrelse på campfire ikonet
         val campfireIconWidth = 50    // -- " ---
         val campfireIcon = ContextCompat.getDrawable(this, R.drawable.campfire) as BitmapDrawable
         val smallCampfireMarkerBitmap = Bitmap.createScaledBitmap(campfireIcon.bitmap, campfireIconWidth, campfireIconHeight, false) // Brukes når markørene lages under

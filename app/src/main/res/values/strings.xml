@@ -71,7 +71,7 @@
     <!-->Se https://www.met.no/vaer-og-klima/ekstremvaervarsler-og-andre-farevarsler/vaerfenomener-som-kan-gi-farevarsel-fra-met/varsel-om-skogbrannfare</-->
     <string name="gulSkogbrannfare"> Gul skogbrannfare</string>
     <string name="gulSkogbrannfareIkon">Skogbrannfare ikon</string>
-    <string name="storSkogbrannfare">Stor skogbrannfare</string>
+    <string name="oransjeSkogbrannfare">Oransje skogbrannfare</string>
     <string name="logo">Logo</string>
     <string name="ingenVarsel">Ingen varsel funnet</string>
     <string name="ingenVarselOmrådet">Ingen varsel i dette området</string>
