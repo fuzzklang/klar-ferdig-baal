@@ -28,6 +28,7 @@ for eksempel på bakgrunner.
         tools:context=".MapsActivity" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mainConstraintLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
@@ -38,7 +39,7 @@ for eksempel på bakgrunner.
 
 
         <TextView
-            android:id="@+id/imageView"
+            android:id="@+id/searchbarButton"
             android:layout_width="200dp"
             android:layout_height="30dp"
             android:layout_marginTop="60dp"
@@ -49,7 +50,7 @@ for eksempel på bakgrunner.
             android:text="@string/sok"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="@+id/topBar"
-            app:layout_constraintEnd_toEndOf="@+id/cardView"
+            app:layout_constraintEnd_toEndOf="@+id/SearchbarCardView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -70,7 +71,7 @@ for eksempel på bakgrunner.
 
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/cardView"
+            android:id="@+id/SearchbarCardView"
             android:layout_width="0dp"
             android:layout_height="107dp"
             android:elevation="4dp"
@@ -83,7 +84,7 @@ for eksempel på bakgrunner.
             app:layout_constraintVertical_bias="0.0">
 
             <fragment
-                android:id="@+id/search"
+                android:id="@+id/searchbarFragment"
                 android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
                 android:layout_width="190dp"
                 android:layout_height="168dp"
@@ -100,7 +101,6 @@ for eksempel på bakgrunner.
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0" />
-
         </androidx.cardview.widget.CardView>
 
         <ImageButton
@@ -127,7 +127,7 @@ for eksempel på bakgrunner.
             android:text="@string/appTittel"
             android:textColor="@color/white"
             android:textSize="25sp"
-            app:layout_constraintBottom_toBottomOf="@+id/cardView"
+            app:layout_constraintBottom_toBottomOf="@+id/SearchbarCardView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.6"
             app:layout_constraintStart_toStartOf="parent"
@@ -299,14 +299,12 @@ for eksempel på bakgrunner.
                 app:layout_constraintGuide_begin="20dp" />
 
             <androidx.constraintlayout.widget.Barrier
-                android:id="@+id/barrier2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:barrierDirection="left"
                 app:constraint_referenced_ids="menuCampfireButtonShape" />
 
             <androidx.constraintlayout.widget.Group
-                android:id="@+id/group"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:constraint_referenced_ids="menuCampfireButtonShape" />
@@ -505,6 +503,7 @@ for eksempel på bakgrunner.
                 app:layout_constraintVertical_bias="0.094" />
 
             <ScrollView
+                android:id="@+id/popupAlertLevelContentScroll"
                 android:layout_marginTop="5dp"
                 android:layout_width="190dp"
                 android:layout_height="110dp"
@@ -738,12 +737,9 @@ for eksempel på bakgrunner.
                 app:layout_constraintTop_toTopOf="@+id/levelsDescShape"
                 app:layout_constraintVertical_bias="0.056"
                 android:contentDescription="@string/nivaaerTilbakeKnapp" />
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"

@@ -172,7 +172,7 @@ class KartActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // Initialize the AutocompleteSupportFragment.
         val autocompleteFragment =
-            supportFragmentManager.findFragmentById(R.id.search)
+            supportFragmentManager.findFragmentById(R.id.searchbarFragment)
                     as AutocompleteSupportFragment
 
         // Spesifiserer typen data som returneres
