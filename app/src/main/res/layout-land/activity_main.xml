@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--
-ContentDescription blir "Supressed" på Views hvor brukere som tar i
+ContentDescription blir "Ignored" på Views hvor brukere som tar i
 bruk skjermlesere ikke vil ha nytte av en slik beskrivelse, som
 for eksempel på bakgrunner.
 -->
