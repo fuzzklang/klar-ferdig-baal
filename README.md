@@ -1,3 +1,3 @@
 # Team 23 - Farevarsling av skogbrann
 
-Beskrivelse av kode/app her.
+App som viser skogbrannfare. Prosjektoppgave i emnet IN2000 ved Universitetet i Oslo våren 2021.
